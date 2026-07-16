@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OzBookings — Book Australian hotels direct & save | Stays + experiences</title>
+<meta name="description" content="Book hotels across Australia direct at live rates — Sydney, Melbourne, Cairns & more, plus top-rated experiences. See each hotel's typical selling price next to your direct price.">
+<link rel="canonical" href="https://ozbookings.com/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="stylesheet" href="styles.css?v=20260703b">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="icon" href="/favicon.svg">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="OzBookings">
+  <meta property="og:url" content="https://ozbookings.com/">
+  <meta property="og:title" content="Book Australian hotels direct & save — OzBookings">
+  <meta property="og:description" content="Book direct across Australia at live rates, and unlock member rates when you sign in. Stays + real experiences.">
+  <meta property="og:image" content="https://pub.hyperagent.com/api/published/pbf01KWVH07P1_YSHJDMY05643K9FF/eb55320c-cad3-4125-b54c-1665e3028e3b.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Book Australian hotels direct & save — OzBookings">
+  <meta name="twitter:description" content="Book direct across Australia at live rates, and unlock member rates when you sign in. Stays + real experiences.">
+  <meta name="twitter:image" content="https://pub.hyperagent.com/api/published/pbf01KWVH07P1_YSHJDMY05643K9FF/eb55320c-cad3-4125-b54c-1665e3028e3b.png">
+  <meta name="theme-color" content="#14171A">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://ozbookings.com/#org","name":"OzBookings","url":"https://ozbookings.com/","logo":"https://ozbookings.com/favicon.svg","description":"Australian hotel-booking service — book direct and save, plus top-rated experiences.","areaServed":"AU","sameAs":["https://www.instagram.com/ozbookings","https://www.tiktok.com/@ozbookings"]},{"@type":"WebSite","@id":"https://ozbookings.com/#website","url":"https://ozbookings.com/","name":"OzBookings","publisher":{"@id":"https://ozbookings.com/#org"},"inLanguage":["en-AU","zh-CN"],"potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://ozbookings.com/search.html?city={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
+<style>
+  /* ===== HERO ===== */
+  .hero{position:relative;min-height:100dvh;display:flex;align-items:flex-end;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;z-index:0}
+  .hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);animation:kb 16s var(--ease-2) forwards}
+  @keyframes kb{to{transform:scale(1)}}
+  .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,18,.34),rgba(10,13,18,.04) 34%,rgba(10,13,18,.52))}
+  .hero-inner{position:relative;z-index:3;width:100%;padding-bottom:clamp(34px,5vh,60px);padding-top:150px}
+  .hero .eyebrow{color:#fff}
+  .hero h1{color:#fff;font-size:clamp(42px,7vw,90px);max-width:15ch;text-shadow:0 2px 30px rgba(0,0,0,.25)}
+  .hero h1 .u{position:relative;white-space:nowrap}
+  .hero h1 .u::after{content:"";position:absolute;left:0;right:0;bottom:.06em;height:.09em;background:var(--ac-strong);border-radius:2px}
+  .hero-lead{color:rgba(255,255,255,.92);font-size:clamp(16px,1.6vw,20px);max-width:48ch;margin-top:18px;text-shadow:0 1px 14px rgba(0,0,0,.3)}
+  /* search bezel */
+  .hsearch{margin-top:28px;max-width:940px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.5);padding:7px;border-radius:var(--rc);box-shadow:var(--s2)}
+  .hsearch-in{background:var(--bg-el);border-radius:calc(var(--rc) - 6px);display:grid;grid-template-columns:1.4fr 1fr 1fr .9fr auto;gap:0;box-shadow:inset 0 1px 1px rgba(255,255,255,.6)}
+  .hfield{display:flex;flex-direction:column;gap:3px;padding:14px 18px;position:relative;text-align:left}
+  .hfield+.hfield::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:1px;background:var(--bd)}
+  .hfield label{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--tx3);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+  .hfield label i{color:var(--ac-strong);font-size:14px}
+  .hfield input,.hfield select{border:0;outline:0;background:transparent;font-family:var(--sans);font-size:15px;font-weight:500;color:var(--tx);width:100%;padding:2px 0}
+  .hfield input::placeholder{color:var(--tx3);font-weight:400}
+  .hsearch-btn{display:flex;align-items:center;padding:8px}
+  .hsearch-btn .btn{width:100%;justify-content:center;border-radius:16px;padding-top:15px;padding-bottom:15px}
+  .hero-foot{display:flex;align-items:center;gap:9px;margin-top:14px;color:rgba(255,255,255,.9);font-size:13.5px}
+  .hero-foot i{background:var(--ac-strong);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;color:#fff}
+  /* hero offer pill */
+  .hero-offer{display:inline-flex;align-items:center;gap:12px;margin-top:20px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;padding:8px 16px 8px 8px;border-radius:var(--rp);cursor:pointer;font-family:var(--sans);font-size:14.5px;font-weight:500;box-shadow:0 12px 30px -18px rgba(0,0,0,.5);transition:transform .5s var(--ease),background .4s var(--ease)}
+  .hero-offer:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+  .hero-offer .ho-badge{background:var(--ac-strong);color:#fff;font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.03em;text-transform:uppercase;padding:6px 12px;border-radius:var(--rp);line-height:1}
+  .hero-offer i{font-size:15px;opacity:.9;transition:transform .5s var(--ease)}
+  .hero-offer:hover i{transform:translateX(3px)}
+
+  /* ===== LOGOS ===== */
+  .logos{padding-top:38px;padding-bottom:4px}
+  .logos-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:clamp(24px,4vw,56px)}
+  .logos-cap{font-size:12.5px;color:var(--tx3)}
+  .logo{height:26px;display:flex;align-items:center;opacity:.6;transition:opacity .4s var(--ease)}
+  .logo:hover{opacity:1}
+  .logo img{height:21px;width:auto;filter:grayscale(1)}
+  .logo .wm{font-family:var(--display);font-weight:600;font-size:17px;color:var(--tx2)}
+
+  /* ===== STATS ===== */
+  .stats{border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);margin-top:42px}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:38px clamp(14px,3vw,40px);position:relative}
+  .stat+.stat::before{content:"";position:absolute;left:0;top:32px;bottom:32px;width:1px;background:var(--bd)}
+  .stat .n{font-family:var(--display);font-weight:600;font-size:clamp(32px,4.2vw,50px);letter-spacing:-.03em}
+  .stat .n span{color:var(--ac-strong)}
+  .stat .l{color:var(--tx2);font-size:14px;margin-top:2px}
+
+  /* ===== SECTION HEAD ===== */
+  .section{padding-block:clamp(70px,10vh,128px)}
+  .shead{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;margin-bottom:42px}
+  .shead h2{font-size:clamp(30px,4.2vw,52px);max-width:16ch}
+  .shead .eyebrow{margin-bottom:15px}
+  .h-sub{color:var(--tx2);font-size:clamp(15px,1.4vw,18px);max-width:52ch}
+
+  /* ===== BENTO ===== */
+  .bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(184px,auto);gap:15px}
+  .tile{position:relative;border-radius:var(--rc);overflow:hidden;min-height:184px;cursor:pointer;box-shadow:var(--s1);border:0;display:block;text-align:left}
+  .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;transition:transform 1s var(--ease-2)}
+  .tile:hover img{transform:scale(1.07)}
+  .tile::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,13,18,0) 32%,rgba(10,13,18,.72))}
+  .tile .tbody{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;color:#fff}
+  .tile h3{font-size:23px;color:#fff}
+  .tile .p{font-size:13px;color:rgba(255,255,255,.88);margin-top:2px}
+  .tile .p b{font-family:var(--mono);font-weight:500}
+  .tile .chip{position:absolute;top:14px;left:14px;z-index:2;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.28);color:#fff;font-size:11px;font-weight:600;padding:6px 11px;border-radius:var(--rp)}
+  .big{grid-column:span 2;grid-row:span 2}.big h3{font-size:clamp(28px,3vw,42px)}
+  .wide{grid-column:span 2}
+  .tile-cta{grid-column:span 2;background:var(--tx);border-radius:var(--rc);color:#fff;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:28px;min-height:184px}
+  .tile-cta h3{color:#fff;font-size:25px;max-width:12ch}
+  .tile-cta p{color:rgba(255,255,255,.6);font-size:14px}
+
+  /* ===== RAIL ===== */
+  .rail-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:34px}
+  .rail-nav{display:flex;gap:10px}
+  .rnav{width:46px;height:46px;border-radius:50%;background:var(--bg-el);border:1px solid var(--bd);cursor:pointer;display:grid;place-items:center;font-size:19px;transition:transform .5s var(--ease),background .4s,color .4s}
+  .rnav:hover{background:var(--tx);color:#fff}.rnav:active{transform:scale(.94)}
+  .rail{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px clamp(20px,5vw,56px) 24px;scroll-padding-left:clamp(20px,5vw,56px);scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .rcard{flex:0 0 320px;scroll-snap-align:start;background:var(--bg-el);border-radius:var(--rc);overflow:hidden;box-shadow:var(--s1);border:1px solid var(--bd-2);cursor:pointer;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+  .rcard:hover{transform:translateY(-6px);box-shadow:var(--s2)}
+  .rc-img{position:relative;aspect-ratio:4/3;overflow:hidden}
+  .rc-img img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease-2)}
+  .rcard:hover .rc-img img{transform:scale(1.06)}
+  .rc-body{padding:16px 18px 20px}
+  .rc-body h3{font-size:19px}
+  .rc-loc{color:var(--tx2);font-size:13px;margin-top:3px;display:flex;align-items:center;gap:5px}
+  .rc-loc i{font-size:14px;color:var(--tx3)}
+  .rc-pr{display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid var(--bd);padding-top:13px;margin-top:14px}
+
+  /* ===== EXPERIENCES ===== */
+  .exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .exp{position:relative;border-radius:var(--rc);overflow:hidden;aspect-ratio:3/4;box-shadow:var(--s1);cursor:pointer;display:block}
+  .exp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease-2)}
+  .exp:hover img{transform:scale(1.07)}
+  .exp::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,18,0) 40%,rgba(10,13,18,.78))}
+  .exp .ebody{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;color:#fff}
+  .exp .erate{align-self:flex-start;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.26);color:#fff;font-size:12px;font-weight:600;padding:6px 11px;border-radius:var(--rp);display:flex;align-items:center;gap:5px;margin-bottom:auto}
+  .exp .erate i{color:#ffd15c}
+  .exp h3{color:#fff;font-size:21px}
+  .exp .emeta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;color:rgba(255,255,255,.9);font-size:13.5px}
+  .exp .emeta b{font-family:var(--mono);font-weight:500;font-size:15px}
+
+  /* ===== HOME EXPERIENCES ===== */
+  .hx-grid{display:grid;grid-template-columns:1fr;gap:18px}
+  @media(min-width:560px){.hx-grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:960px){.hx-grid{grid-template-columns:repeat(4,1fr)}}
+  .hx-card{display:flex;flex-direction:column;background:var(--bg-el);border:1px solid var(--bd-2);border-radius:var(--rc);overflow:hidden;box-shadow:var(--s1);text-decoration:none;color:inherit;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+  .hx-card:hover{transform:translateY(-6px);box-shadow:var(--s2)}
+  .hx-img{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--bg-sub)}
+  .hx-img img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease-2)}
+  .hx-card:hover .hx-img img{transform:scale(1.06)}
+  .hx-free{position:absolute;top:12px;left:12px;background:rgba(21,128,61,.92);color:#fff;font-size:11px;font-weight:600;padding:5px 9px;border-radius:var(--rp);backdrop-filter:blur(6px)}
+  .hx-rate{position:absolute;top:12px;right:12px;background:rgba(20,23,26,.82);color:#fff;font-family:var(--display);font-weight:600;font-size:12px;padding:5px 9px;border-radius:8px;display:flex;align-items:center;gap:4px;backdrop-filter:blur(6px)}
+  .hx-rate i{color:#ffd15c;font-size:12px}
+  .hx-b{padding:15px 16px 17px;display:flex;flex-direction:column;flex:1}
+  .hx-b h3{font-size:15px;line-height:1.3;font-family:var(--display);font-weight:600;letter-spacing:-.01em}
+  .hx-m{color:var(--tx2);font-size:12px;margin-top:8px;display:flex;align-items:center;gap:10px}
+  .hx-m i{font-size:13px;color:var(--tx3)}
+  .hx-foot{margin-top:auto;padding-top:12px;display:flex;align-items:center;justify-content:space-between}
+  .hx-p{font-size:12px;color:var(--tx3)}
+  .hx-p b{font-family:var(--display);font-weight:600;font-size:18px;color:var(--tx);margin-left:3px}
+  .hx-go{width:32px;height:32px;border-radius:50%;background:var(--bg-sub);display:grid;place-items:center;font-size:14px;transition:background .4s var(--ease),color .4s}
+  .hx-card:hover .hx-go{background:var(--ac);color:#fff}
+  .hx-skel{aspect-ratio:4/3;border-radius:var(--rc);background:linear-gradient(90deg,var(--bg-sub) 25%,#e4e5e1 37%,var(--bg-sub) 63%);background-size:400% 100%;animation:kb2 1.4s ease infinite}
+  @keyframes kb2{0%{background-position:100% 0}100%{background-position:0 0}}
+
+  /* ===== HOW IT WORKS ===== */
+  .how{background:var(--bg-el);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+  .how-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+  .step{padding:10px clamp(18px,3vw,44px);position:relative}
+  .step+.step::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:1px;background:var(--bd)}
+  .step .num{font-family:var(--mono);font-size:13px;color:var(--ac-ink);font-weight:500}
+  .step h3{font-size:22px;margin:14px 0 8px}
+  .step p{color:var(--tx2);font-size:14.5px;max-width:32ch}
+  .step .si{margin-top:16px;width:46px;height:46px;border-radius:50%;background:var(--ac-l);color:var(--ac);display:grid;place-items:center;font-size:23px}
+
+  /* ===== VALUE ===== */
+  .value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .vitem{padding:8px clamp(18px,3vw,42px);position:relative}
+  .vitem+.vitem::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:1px;background:var(--bd)}
+  .vitem .vico{width:52px;height:52px;border-radius:50%;background:var(--ac-l);color:var(--ac);display:grid;place-items:center;font-size:26px;margin-bottom:18px}
+  .vitem h3{font-size:21px}
+  .vitem p{color:var(--tx2);font-size:14.5px;margin-top:8px;max-width:34ch}
+
+  @media(max-width:1024px){
+    .bento{grid-template-columns:repeat(2,1fr)}.big{grid-column:span 2;grid-row:span 1}.wide,.tile-cta{grid-column:span 2}
+    .exp-grid{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:720px){
+    .hsearch-in{grid-template-columns:1fr 1fr}
+    .hfield+.hfield::before{display:none}
+    .hfield:nth-child(3),.hfield:nth-child(4){border-top:1px solid var(--bd)}
+    .hsearch-btn{grid-column:span 2}
+    .stats-grid{grid-template-columns:1fr 1fr}
+    .stat:nth-child(3)::before,.stat:nth-child(4)::before{display:none}
+    .stat:nth-child(3),.stat:nth-child(4){border-top:1px solid var(--bd)}
+    .shead{flex-direction:column;align-items:flex-start}
+    .bento{grid-template-columns:1fr}.big,.wide,.tile-cta{grid-column:span 1}
+    .exp-grid{grid-template-columns:1fr}
+    .how-grid,.value-grid{grid-template-columns:1fr}
+    .step+.step::before,.vitem+.vitem::before{display:none}
+    .step,.vitem{padding:26px 0;border-top:1px solid var(--bd)}
+    .step:first-child,.vitem:first-child{border-top:0}
+    .hero-inner{padding-top:120px}
+  }
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div id="nav-mount"></div>
+
+<!-- HERO -->
+<header class="hero" id="hero-search">
+  <div class="hero-bg"><img src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=2400&q=82" alt="Sydney Opera House and harbour at sunset"></div>
+  <div class="hero-inner wrap">
+    <span class="eyebrow">Australia · Direct rates</span>
+    <button class="hero-offer" id="heroOffer" onclick="BA.claimOffer()"><span class="ho-badge" id="hoBadge">Members</span><span id="hoText">Join free — unlock member rates</span><i class="ph-bold ph-arrow-right"></i></button>
+    <h1>Find your perfect <span class="u">stay in Australia</span></h1>
+    <p class="hero-lead">Search live rates across Australia and book direct to save on the typical rate.</p>
+    <form class="hsearch" id="searchForm" onsubmit="handleSearch(event)">
+      <div class="hsearch-in">
+        <div class="hfield"><label><i class="ph-light ph-map-pin"></i>Destination</label>
+          <input list="cities" id="dest" placeholder="Where to?" value="Sydney" autocomplete="off">
+          <datalist id="cities"><option>Sydney</option><option>Melbourne</option><option>Gold Coast</option><option>Cairns</option><option>Brisbane</option><option>Perth</option><option>Adelaide</option><option>Hobart</option></datalist>
+        </div>
+        <div class="hfield"><label><i class="ph-light ph-calendar-blank"></i>Check in</label><input type="date" id="ci"></div>
+        <div class="hfield"><label><i class="ph-light ph-calendar-check"></i>Check out</label><input type="date" id="co"></div>
+        <div class="hfield"><label><i class="ph-light ph-user"></i>Guests</label><select id="gu"><option value="1">1 Guest</option><option value="2" selected>2 Guests</option><option value="3">3 Guests</option><option value="4">4 Guests</option></select></div>
+        <div class="hsearch-btn"><button type="submit" class="btn btn-coral">Search hotels<span class="btn-i"><i class="ph-bold ph-magnifying-glass"></i></span></button></div>
+      </div>
+    </form>
+    <div class="hero-foot"><i class="ph-bold ph-check"></i>Free cancellation on most bookings</div>
+  </div>
+</header>
+
+<!-- TRUST STRIP (OTA-comparison logo row removed: site does not perform live OTA price comparison) -->
+<section class="logos wrap">
+  <div class="logos-row reveal">
+    <span class="logos-cap">Live rates from our global supply network · updated in real time</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats"><div class="wrap"><div class="stats-grid">
+  <div class="stat reveal"><div class="n">2M<span>+</span></div><div class="l">Hotels in our network</div></div>
+  <div class="stat reveal rd1"><div class="n">Live</div><div class="l">Real-time rates</div></div>
+  <div class="stat reveal rd2"><div class="n">24/7</div><div class="l">Customer support</div></div>
+  <div class="stat reveal rd3"><div class="n">Free</div><div class="l">Cancellation on most stays</div></div>
+</div></div></section>
+
+<!-- DESTINATIONS -->
+<section class="section wrap" id="destinations">
+  <div class="shead reveal">
+    <div><span class="eyebrow">Popular destinations</span><h2>Where in Australia?</h2></div>
+    <p class="h-sub">From harbour city skylines to reef-fringed coastlines, find the stay that fits your trip.</p>
+  </div>
+  <div class="bento">
+    <button class="tile big reveal" onclick="setDest('Sydney')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg/1280px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg" alt="Sydney" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80'"><div class="tbody"><h3>Sydney</h3><div class="p">Explore stays</div></div></button>
+    <button class="tile wide reveal rd1" onclick="setDest('Melbourne')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Melbourne_skyline_sor.jpg/1280px-Melbourne_skyline_sor.jpg" alt="Melbourne" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80'"><div class="tbody"><h3>Melbourne</h3><div class="p">Explore stays</div></div></button>
+    <button class="tile reveal rd2" onclick="setDest('Gold Coast')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Gold_Coast_skyline_%28Unsplash%29.jpg/1280px-Gold_Coast_skyline_%28Unsplash%29.jpg" alt="Gold Coast" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80'"><div class="tbody"><h3>Gold Coast</h3><div class="p">Explore stays</div></div></button>
+    <button class="tile reveal rd3" onclick="setDest('Cairns')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Cairns_%28Queensland%29_%28cropped%29.jpg/1280px-Cairns_%28Queensland%29_%28cropped%29.jpg" alt="Cairns" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80'"><div class="tbody"><h3>Cairns</h3><div class="p">Explore stays</div></div></button>
+    <button class="tile wide reveal" onclick="setDest('Brisbane')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Brisbane_CBD_seen_from_Kangaroo_Point%2C_2024%2C_01_%282%29.jpg/1280px-Brisbane_CBD_seen_from_Kangaroo_Point%2C_2024%2C_01_%282%29.jpg" alt="Brisbane" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80'"><div class="tbody"><h3>Brisbane</h3><div class="p">Explore stays</div></div></button>
+    <button class="tile reveal rd1" onclick="setDest('Perth')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Perth_CBD_skyline_from_State_War_Memorial_Lookout%2C_2023%2C_04_b.jpg/1280px-Perth_CBD_skyline_from_State_War_Memorial_Lookout%2C_2023%2C_04_b.jpg" alt="Perth" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80'"><div class="tbody"><h3>Perth</h3><div class="p">Explore stays</div></div></button>
+    <button class="tile reveal rd2" onclick="setDest('Adelaide')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Adelaide_skyline%2C_December_2022_b.jpg/1280px-Adelaide_skyline%2C_December_2022_b.jpg" alt="Adelaide" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80'"><div class="tbody"><h3>Adelaide</h3><div class="p">Explore stays</div></div></button>
+    <button class="tile wide reveal rd3" onclick="setDest('Hobart')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Franklin_Wharf_2015_b_%28cropped%29.jpg/1280px-Franklin_Wharf_2015_b_%28cropped%29.jpg" alt="Hobart" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80'"><div class="tbody"><h3>Hobart</h3><div class="p">Explore stays</div></div></button>
+    <div class="tile-cta reveal"><h3>Explore all 8 cities</h3><p>Every Australian capital, one direct-rate search.</p><button class="btn btn-coral" onclick="setDest('Sydney')" style="align-self:flex-start">Browse stays<span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></button></div>
+  </div>
+</section>
+
+<!-- FEATURED STAYS -->
+<section class="section" id="hotels" style="padding-top:0">
+  <div class="wrap">
+    <div class="rail-head reveal">
+      <div><h2 style="font-size:clamp(30px,4.2vw,50px)">Featured stays in Sydney</h2><p class="h-sub" style="margin-top:12px">Live rates for Sydney, updated in real time.</p></div>
+      <div class="rail-nav"><button class="rnav" onclick="railScroll(-1)" aria-label="Previous"><i class="ph ph-arrow-left"></i></button><button class="rnav" onclick="railScroll(1)" aria-label="Next"><i class="ph ph-arrow-right"></i></button></div>
+    </div>
+  </div>
+  <div class="rail wrap" id="rail" style="max-width:none">
+  </div>
+</section>
+
+
+<!-- EXPERIENCES -->
+<section class="section wrap" id="experiences-home" style="padding-top:0">
+  <div class="shead reveal">
+    <div><span class="eyebrow" id="hxEyebrow">Things to do</span><h2 id="hxTitle" style="font-size:clamp(30px,4.2vw,50px);margin-top:15px">More than a place to sleep</h2></div>
+    <a href="experiences.html" class="btn btn-outline" id="hxAll"><span>All experiences</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></a>
+  </div>
+  <p class="h-sub reveal" id="hxSub" style="margin:-22px 0 34px">Book unforgettable, top-rated tours and activities across Australia — reef cruises, food walks, day trips.</p>
+  <div class="hx-grid" id="homeExp"></div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how-it-works">
+  <div class="wrap section" style="padding-top:clamp(58px,8vh,96px);padding-bottom:clamp(58px,8vh,96px)">
+    <div class="reveal" style="margin-bottom:40px"><span class="eyebrow">How it works</span><h2 style="font-size:clamp(30px,4.2vw,50px);margin-top:15px;max-width:16ch">Three steps to a better rate.</h2></div>
+    <div class="how-grid">
+      <div class="step reveal"><div class="num">01</div><h3>Search once</h3><p>Tell us where and when. We search live rates across our global hotel network.</p><div class="si"><i class="ph-light ph-magnifying-glass"></i></div></div>
+      <div class="step reveal rd1"><div class="num">02</div><h3>Compare instantly</h3><p>See each stay's direct rate next to the hotel's typical selling price, side by side.</p><div class="si"><i class="ph-light ph-scales"></i></div></div>
+      <div class="step reveal rd2"><div class="num">03</div><h3>Book direct</h3><p>Reserve at the direct rate and skip the extra booking-site markup.</p><div class="si"><i class="ph-light ph-seal-check"></i></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section class="section wrap" id="value">
+  <div class="reveal" style="margin-bottom:42px"><span class="eyebrow">Why book direct</span><h2 style="font-size:clamp(30px,4.2vw,50px);max-width:18ch;margin-top:15px">Skip the markup. Keep the savings.</h2></div>
+  <div class="value-grid">
+    <div class="vitem reveal"><div class="vico"><i class="ph-light ph-scales"></i></div><h3>One search, live rates</h3><p>We pull live rates from our global supply network and show each hotel's typical selling price next to your direct price.</p></div>
+    <div class="vitem reveal rd1"><div class="vico"><i class="ph-light ph-piggy-bank"></i></div><h3>Book direct, save more</h3><p>Reserve straight with the property at the direct rate and keep the commission OTAs would take.</p></div>
+    <div class="vitem reveal rd2"><div class="vico"><i class="ph-light ph-shield-check"></i></div><h3>Free cancellation</h3><p>Most stays include free cancellation and 24/7 support, so your plans stay flexible up to check in.</p></div>
+  </div>
+</section>
+
+<div id="footer-mount"></div>
+
+<script src="shared.js?v=20260703b"></script>
+<script>
+  document.getElementById('nav-mount').innerHTML = BA.renderNav('home');
+  document.getElementById('footer-mount').innerHTML = BA.renderFooter();
+  // default dates
+  document.getElementById('ci').value = BA.defaultCheckin();
+  document.getElementById('co').value = BA.defaultCheckout();
+
+  function handleSearch(e){
+    e.preventDefault();
+    const d = document.getElementById('dest').value.trim() || 'Sydney';
+    const ci = document.getElementById('ci').value, co = document.getElementById('co').value, g = document.getElementById('gu').value;
+    location.href = `search.html?city=${encodeURIComponent(d)}&ci=${ci}&co=${co}&gu=${g}`;
+  }
+  function setDest(c){
+    const ci = document.getElementById('ci').value || BA.defaultCheckin();
+    const co = document.getElementById('co').value || BA.defaultCheckout();
+    const g = document.getElementById('gu').value || '2';
+    location.href = `search.html?city=${encodeURIComponent(c)}&ci=${ci}&co=${co}&gu=${g}`;
+  }
+  function railScroll(dir){ document.getElementById('rail').scrollBy({left:dir*340,behavior:'smooth'}); }
+  // Live featured listings (real LiteAPI data). Click -> real hotel page.
+  const _uns = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80';
+  let _featured = [];
+  async function renderFeatured(){
+    const rail = document.getElementById('rail'); if(!rail) return;
+    const sec = document.getElementById('hotels');
+    if(!_featured.length) rail.innerHTML = '<div style="color:var(--tx3);padding:18px 4px;font-size:14px">Loading live stays…</div>';
+    const ci = BA.defaultCheckin(), co = BA.defaultCheckout(), nights = BA.nightsBetween(ci, co);
+    let hotels = [];
+    try { hotels = await BA.searchHotels({ city:'Sydney', checkin:ci, checkout:co, guests:2 }); } catch(e){}
+    _featured = hotels.slice(0, 8);
+    if(!_featured.length){ if(sec) sec.style.display='none'; return; }
+    if(sec) sec.style.display='';
+    rail.innerHTML = _featured.map((h,i)=>{
+      const yp=h.retail, mp=h.memberPrice, eff=(mp!=null?mp:yp), sv=BA.getSavings(h);
+      const per = eff ? Math.round(eff/nights) : null;
+      const img = h.mainPhoto || _uns;
+      return `<div class="rcard reveal rd${(i%4)+1}" onclick="openFeatured(${i})">
+        <div class="rc-img"><img src="${img}" alt="${h.hotelName}" loading="lazy" onerror="this.src='${_uns}'">${h.rating?`<span class="badge-rate" style="position:absolute;top:14px;right:14px">${h.rating}</span>`:''}${mp!=null?`<span class="badge" style="position:absolute;top:14px;left:14px"><i class="ph-fill ph-heart"></i>Member price</span>`:''}</div>
+        <div class="rc-body"><h3>${h.hotelName}</h3><div class="rc-loc"><i class="ph-light ph-map-pin"></i>${h.address||'Sydney'}</div>
+          <div class="rc-pr"><div>${per?`<div class="${mp!=null?'price-member':'price-now'}">A$${per}<small>/nt</small></div>`:''}${eff?`<div class="price-total" style="font-size:12.5px;color:var(--tx2)">A$${eff} total</div>`:''}</div>${sv?`<span class="badge-save">Save ${sv}%</span>`:''}</div>
+        </div></div>`;
+    }).join('');
+    BA.init();
+  }
+  function openFeatured(i){
+    const h=_featured[i]; if(!h) return;
+    BA.storeHotel({ hotelId:h.hotelId, hotelName:h.hotelName, mainPhoto:h.mainPhoto, address:h.address, stars:h.stars });
+    const ci=BA.defaultCheckin(), co=BA.defaultCheckout();
+    location.href = `hotel.html?hotelId=${encodeURIComponent(h.hotelId)}&city=Sydney&ci=${ci}&co=${co}&gu=2`;
+  }
+  document.addEventListener('ba-auth', renderFeatured);
+  BA.init();
+  renderFeatured();
+
+  // ---- Home experiences (real Viator; card -> book on Viator, section CTA -> guide) ----
+  (function setExpLabels(){
+    const ho=document.getElementById('hoBadge'), ht=document.getElementById('hoText');
+    if(ho) ho.textContent = BA.t('Members','会员');
+    if(ht) ht.textContent = BA.t('Join free — unlock member rates','免费加入 — 解锁会员价');
+    document.getElementById('hxEyebrow').textContent = BA.t('Things to do','精彩体验');
+    document.getElementById('hxTitle').textContent = BA.t('More than a place to sleep','不只是住宿');
+    document.getElementById('hxSub').textContent = BA.t('Book unforgettable, top-rated tours and activities across Australia — reef cruises, food walks, day trips.','预订澳大利亚各地高评分的难忘行程与活动——堡礁游船、美食漫步、一日游。');
+    document.getElementById('hxAll').querySelector('span').textContent = BA.t('All experiences','全部体验');
+  })();
+  async function renderHomeExperiences(){
+    const el=document.getElementById('homeExp'); if(!el) return;
+    el.innerHTML = '<div class="hx-skel"></div><div class="hx-skel"></div><div class="hx-skel"></div><div class="hx-skel"></div>';
+    let list=[];
+    try{ const r=await fetch('/api/experiences?dest=357&count=4'); const j=await r.json(); list=j.experiences||[]; }catch(e){}
+    if(!list.length){ const s=document.getElementById('experiences-home'); if(s) s.style.display='none'; return; }
+    const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    el.innerHTML = list.map((x,i)=>`<a class="hx-card reveal rd${(i%4)+1}" href="experience.html?code=${encodeURIComponent(x.code)}&price=${x.fromPrice}&city=sydney">
+      <div class="hx-img"><img src="${x.img}" alt="${esc(x.title)}" loading="lazy" onerror="this.src='${_uns}'">${x.freeCancel?`<span class="hx-free">${BA.t('Free cancellation','免费取消')}</span>`:''}${x.rating?`<span class="hx-rate"><i class="ph-fill ph-star"></i>${x.rating}</span>`:''}</div>
+      <div class="hx-b"><h3>${esc(x.title)}</h3>
+        <div class="hx-m">${x.rating?`<span><i class="ph-fill ph-star" style="color:var(--star)"></i> ${x.rating} (${x.reviews.toLocaleString()})</span>`:''}${x.duration?`<span><i class="ph ph-clock"></i>${x.duration}</span>`:''}</div>
+        <div class="hx-foot"><div class="hx-p">${BA.t('from','起')}<b>A$${x.fromPrice}</b></div><span class="hx-go"><i class="ph-bold ph-arrow-up-right"></i></span></div>
+      </div></a>`).join('');
+    BA.init();
+  }
+  renderHomeExperiences();
+</script>
+</body>
+</html>

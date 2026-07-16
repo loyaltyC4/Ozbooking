@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Confirmed — OzBookings</title>
+  <link rel="stylesheet" href="styles.css?v=20260703b">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="icon" href="/favicon.svg">
+  <meta property="og:title" content="OzBookings — Book direct across Australia">
+  <meta property="og:description" content="Compare hotel prices across Australia and book direct. Members save more.">
+  <meta name="theme-color" content="#14171A">
+  <style>
+    .conf-wrap{max-width:720px;margin:0 auto;padding:0 24px}
+    .conf-hero{text-align:center;padding:140px 0 44px}
+    .conf-check{width:82px;height:82px;border-radius:50%;background:var(--ok-l);display:grid;place-items:center;margin:0 auto 22px;animation:pop .6s var(--ease)}
+    .conf-check i{font-size:40px;color:var(--ok)}
+    @keyframes pop{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+    .conf-hero h1{font-size:clamp(30px,4.5vw,46px)}
+    .conf-hero p{margin-top:10px;color:var(--tx2);font-size:16px}
+    .conf-id{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:var(--tx);color:#fff;border-radius:var(--rp);margin-top:18px;font-family:var(--mono);font-size:14px;font-weight:500;letter-spacing:.04em}
+    .conf-id i{color:var(--ac-strong)}
+    .conf-card{border:1px solid var(--bd);border-radius:var(--rc);background:var(--bg-el);overflow:hidden;margin-bottom:20px;box-shadow:var(--s1)}
+    .cc-header{padding:18px 24px;background:var(--bg-sub);border-bottom:1px solid var(--bd);font-size:14px;font-weight:600;display:flex;align-items:center;gap:9px;font-family:var(--display)}
+    .cc-header i{color:var(--ac);font-size:18px}
+    .cc-body{padding:22px 24px}
+    .cc-row{display:flex;justify-content:space-between;padding:9px 0;font-size:14px;color:var(--tx2);border-bottom:1px solid var(--bg-sub)}
+    .cc-row:last-child{border-bottom:none}
+    .cc-row strong{color:var(--tx);font-weight:600}
+    .cc-total{padding:16px 24px;background:var(--bg-sub);display:flex;justify-content:space-between;font-size:18px;font-weight:700;font-family:var(--display)}
+    .conf-actions{display:flex;gap:12px;justify-content:center;margin:30px 0;flex-wrap:wrap}
+    .conf-next{padding:44px 0;border-top:1px solid var(--bd);text-align:center}
+    .conf-next h2{font-size:22px;margin-bottom:8px}
+    .conf-next>p{color:var(--tx2);font-size:14px;margin-bottom:26px}
+    .timeline{margin-top:28px;text-align:left;max-width:460px;margin-left:auto;margin-right:auto}
+    .tl-item{display:flex;gap:16px;padding-bottom:24px;position:relative}
+    .tl-item::before{content:'';position:absolute;left:17px;top:38px;bottom:0;width:2px;background:var(--bd)}
+    .tl-item:last-child::before{display:none}
+    .tl-dot{width:36px;height:36px;border-radius:50%;background:var(--ac-l);display:grid;place-items:center;flex-shrink:0}
+    .tl-dot i{font-size:17px;color:var(--ac)}
+    .tl-content h4{font-size:14px;font-weight:700;margin-bottom:2px}
+    .tl-content p{font-size:13px;color:var(--tx2)}
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="nav-mount"></div>
+
+  <div class="conf-wrap">
+    <div class="conf-hero reveal rd1">
+      <div class="conf-check"><i class="ph-bold ph-check"></i></div>
+      <h1>Booking confirmed</h1>
+      <p>Your reservation has been secured. A confirmation email will be sent shortly.</p>
+      <div class="conf-id" id="bookingRef"><i class="ph ph-hash"></i> Loading...</div>
+    </div>
+
+    <div class="conf-card reveal rd2"><div class="cc-header"><i class="ph-light ph-buildings"></i> Hotel details</div><div class="cc-body" id="hotelDetails"><p style="color:var(--tx3)">Loading...</p></div></div>
+    <div class="conf-card reveal rd3"><div class="cc-header"><i class="ph-light ph-user-circle"></i> Guest information</div><div class="cc-body" id="guestDetails"><p style="color:var(--tx3)">Loading...</p></div></div>
+    <div class="conf-card reveal rd4"><div class="cc-header"><i class="ph-light ph-receipt"></i> Payment summary</div><div class="cc-body" id="paymentDetails"><p style="color:var(--tx3)">Loading...</p></div><div class="cc-total" id="totalPrice"></div></div>
+
+    <div class="alert alert-info reveal" id="confNote" style="margin-bottom:24px"><i class="ph ph-info"></i><span>Your booking is confirmed.</span></div>
+
+    <div class="conf-actions reveal">
+      <button class="btn btn-coral" onclick="window.print()"><span>Print confirmation</span><span class="btn-i"><i class="ph-bold ph-printer"></i></span></button>
+      <a href="index.html" class="btn btn-outline"><span>Back to home</span><span class="btn-i"><i class="ph-bold ph-house"></i></span></a>
+    </div>
+
+    <div class="conf-next reveal">
+      <h2>What happens next</h2>
+      <p>Here is what to expect before your trip</p>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot"><i class="ph-light ph-envelope-simple"></i></div><div class="tl-content"><h4>Confirmation email</h4><p>You will receive a detailed confirmation with your booking reference within minutes.</p></div></div>
+        <div class="tl-item"><div class="tl-dot"><i class="ph-light ph-clock"></i></div><div class="tl-content"><h4>48 hours before check-in</h4><p>We will send a reminder with check-in instructions and hotel contact details.</p></div></div>
+        <div class="tl-item"><div class="tl-dot"><i class="ph-light ph-map-pin"></i></div><div class="tl-content"><h4>Check-in day</h4><p>Present your booking confirmation at the front desk. Most hotels offer check-in from 2:00 PM.</p></div></div>
+        <div class="tl-item"><div class="tl-dot"><i class="ph-light ph-star"></i></div><div class="tl-content"><h4>After your stay</h4><p>Share your experience with a review to help other travellers.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-mount"></div>
+
+  <script src="shared.js?v=20260703b"></script>
+  <script>
+    document.getElementById('nav-mount').innerHTML = BA.renderNav('');
+    document.getElementById('footer-mount').innerHTML = BA.renderFooter();
+    const booking = BA.getBooking();
+    if (booking) {
+      document.getElementById('bookingRef').innerHTML = `<i class="ph ph-hash"></i> ${booking.bookingId}`;
+      document.title = `Booking ${booking.bookingId} — OzBookings`;
+      document.getElementById('hotelDetails').innerHTML = `
+        <div class="cc-row"><span>Hotel</span><strong>${booking.hotel}</strong></div>
+        <div class="cc-row"><span>Room</span><strong>${booking.room}</strong></div>
+        <div class="cc-row"><span>Board</span><strong>${booking.board}</strong></div>
+        <div class="cc-row"><span>Location</span><strong>${BA.prettyCity(booking.city)}</strong></div>
+        <div class="cc-row"><span>Check-in</span><strong>${booking.checkin}</strong></div>
+        <div class="cc-row"><span>Check-out</span><strong>${booking.checkout}</strong></div>
+        <div class="cc-row"><span>Duration</span><strong>${booking.nights} night${booking.nights>1?'s':''}</strong></div>
+        <div class="cc-row"><span>Guests</span><strong>${booking.guests}</strong></div>`;
+      document.getElementById('guestDetails').innerHTML = `
+        <div class="cc-row"><span>Name</span><strong>${booking.guest.firstName} ${booking.guest.lastName}</strong></div>
+        <div class="cc-row"><span>Email</span><strong>${booking.guest.email}</strong></div>`;
+      const savings = booking.suggestedPrice > booking.price ? booking.suggestedPrice - booking.price : 0;
+      document.getElementById('paymentDetails').innerHTML = `
+        <div class="cc-row"><span>Room rate (${booking.nights} night${booking.nights>1?'s':''})</span><strong>A$${booking.price.toFixed(0)}</strong></div>
+        ${booking.suggestedPrice > booking.price ? `<div class="cc-row"><span>Typical rate</span><span class="price-old">A$${booking.suggestedPrice.toFixed(0)}</span></div>` : ''}
+        ${savings ? `<div class="cc-row" style="color:var(--ok)"><span>You saved</span><strong>A$${savings.toFixed(0)} (${Math.round((1-booking.price/booking.suggestedPrice)*100)}%)</strong></div>` : ''}
+        <div class="cc-row"><span>Taxes & fees</span><strong>Included</strong></div>`;
+      document.getElementById('totalPrice').innerHTML = `<span>Total paid</span><span>A$${booking.price.toFixed(0)}</span>`;
+    } else {
+      document.getElementById('bookingRef').innerHTML = '<i class="ph ph-hash"></i> No booking found';
+      document.getElementById('hotelDetails').innerHTML = '<p style="color:var(--err)">No booking data found.</p>';
+      document.getElementById('guestDetails').innerHTML = '';
+      document.getElementById('paymentDetails').innerHTML = '';
+    }
+    const _cn = document.getElementById('confNote');
+    if (_cn) { _cn.querySelector('span').textContent = (booking && booking.live)
+      ? 'A confirmation email is on its way. To change or cancel, contact support@ozbookings.com with your booking reference.'
+      : 'This is a sample booking. No real reservation was made and no charge was applied.'; }
+    BA.init();
+  </script>
+</body>
+</html>

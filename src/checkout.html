@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — OzBookings</title>
+  <link rel="stylesheet" href="styles.css?v=20260703b">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="icon" href="/favicon.svg">
+  <meta property="og:title" content="OzBookings — Book direct across Australia">
+  <meta name="theme-color" content="#14171A">
+  <script src="https://payment-wrapper.liteapi.travel/dist/liteAPIPayment.js?v=a1"></script>
+  <style>
+    .step-indicator{display:flex;align-items:center;gap:12px;margin-bottom:34px;flex-wrap:wrap}
+    .step{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--tx3)}
+    .step.active{color:var(--ac)}.step.done{color:var(--ok)}
+    .step-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;background:var(--bg-sub);color:var(--tx3)}
+    .step.active .step-num{background:var(--ac);color:#fff}.step.done .step-num{background:var(--ok);color:#fff}
+    .step-line{width:30px;height:2px;background:var(--bd)}
+    .checkout-body{display:grid;grid-template-columns:1fr;gap:34px;padding:12px 0 88px}
+    @media(min-width:900px){.checkout-body{grid-template-columns:1.5fr 1fr}}
+    .form-section{padding:24px;border:1px solid var(--bd);border-radius:var(--rc);margin-bottom:22px;background:var(--bg-el)}
+    .form-section h3{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:9px;font-family:var(--display)}
+    .form-section h3 i{color:var(--ac);font-size:20px}
+    .form-grid{display:grid;grid-template-columns:1fr;gap:15px}
+    @media(min-width:640px){.form-grid{grid-template-columns:1fr 1fr}}
+    .form-full{grid-column:1/-1}
+    textarea{resize:vertical;min-height:80px}
+    .sidebar{position:sticky;top:100px;align-self:start}
+    .order-card{background:rgba(255,255,255,.6);border:1px solid var(--bd-2);padding:7px;border-radius:var(--rc);box-shadow:var(--s2)}
+    .order-in{background:var(--bg-el);border-radius:calc(var(--rc) - 6px);padding:24px;box-shadow:inset 0 1px 1px rgba(255,255,255,.6)}
+    .order-card h3{font-size:17px;margin-bottom:18px}
+    .oc-hotel{display:flex;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--bd);margin-bottom:14px}
+    .oc-hotel img{width:92px;height:74px;object-fit:cover;border-radius:var(--ri);flex-shrink:0;background:var(--bg-sub)}
+    .oc-hotel-info h4{font-size:15px;font-weight:600;margin-bottom:3px;font-family:var(--display)}
+    .oc-hotel-info p{font-size:13px;color:var(--tx2)}
+    .oc-row{display:flex;justify-content:space-between;padding:7px 0;font-size:14px;color:var(--tx2)}
+    .oc-row strong{color:var(--tx);font-weight:600}
+    .oc-total{border-top:1.5px solid var(--tx);margin-top:8px;padding-top:13px;display:flex;justify-content:space-between;font-size:18px;font-weight:700;font-family:var(--display)}
+    .pay-wrap{padding:24px;border:1px solid var(--bd);border-radius:var(--rc);background:var(--bg-el)}
+    .pay-wrap h3{font-size:16px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:9px;font-family:var(--display)}
+    .pay-wrap h3 i{color:var(--ac);font-size:20px}
+    .pay-sub{color:var(--tx2);font-size:13.5px;margin-bottom:18px}
+    #targetElement{min-height:120px}
+    .ov{display:none;position:fixed;inset:0;z-index:200;background:rgba(10,13,18,.55);backdrop-filter:blur(8px);align-items:center;justify-content:center}
+    .ov.show{display:flex}
+    .ov-card{background:var(--bg-el);border-radius:var(--rc);padding:40px;text-align:center;max-width:420px;width:90%;box-shadow:var(--s3)}
+    .ov-card h3{font-size:20px;margin-top:20px;font-family:var(--display)}
+    .ov-card p{margin-top:8px;color:var(--tx2);font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="nav-mount"></div>
+
+  <div class="page-head"><div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Home</a><i class="ph ph-caret-right"></i><a href="#" id="backSearch">Search</a><i class="ph ph-caret-right"></i><span style="color:var(--tx)">Checkout</span></div>
+    <h1>Complete your booking</h1>
+  </div></div>
+
+  <div class="wrap">
+    <div class="step-indicator">
+      <div class="step done"><span class="step-num"><i class="ph-bold ph-check" style="font-size:12px"></i></span>Search</div>
+      <div class="step-line"></div>
+      <div class="step done"><span class="step-num"><i class="ph-bold ph-check" style="font-size:12px"></i></span>Select</div>
+      <div class="step-line"></div>
+      <div class="step active"><span class="step-num">3</span>Checkout</div>
+      <div class="step-line"></div>
+      <div class="step"><span class="step-num">4</span>Confirmation</div>
+    </div>
+
+    <div class="checkout-body">
+      <div class="checkout-main">
+        <!-- STEP 1: guest details -->
+        <form id="formSection" onsubmit="return startPayment(event)">
+          <div class="form-section reveal rd1">
+            <h3><i class="ph-light ph-user-circle"></i> Guest details</h3>
+            <div class="form-grid">
+              <div class="fg"><label>First name *</label><input type="text" id="firstName" required placeholder="John"></div>
+              <div class="fg"><label>Last name *</label><input type="text" id="lastName" required placeholder="Smith"></div>
+              <div class="fg form-full"><label>Email *</label><input type="email" id="email" required placeholder="john@example.com"></div>
+              <div class="fg"><label>Phone</label><input type="tel" id="phone" placeholder="+61 400 000 000"></div>
+              <div class="fg"><label>Nationality</label>
+                <select id="nationality"><option value="AU">Australia</option><option value="US">United States</option><option value="GB">United Kingdom</option><option value="NZ">New Zealand</option><option value="CA">Canada</option><option value="DE">Germany</option><option value="FR">France</option><option value="JP">Japan</option><option value="CN">China</option><option value="SG">Singapore</option></select>
+              </div>
+            </div>
+          </div>
+          <div class="form-section reveal rd2">
+            <h3><i class="ph-light ph-chat-text"></i> Special requests</h3>
+            <div class="fg"><label>Notes for the hotel (optional)</label><textarea id="specialReq" rows="3" placeholder="Late check-in, extra pillows, etc."></textarea></div>
+          </div>
+          <div class="reveal rd3">
+            <div class="alert alert-info" id="payNote" style="margin-bottom:16px"><i class="ph ph-shield-check"></i><span>Secure payment is handled by LiteAPI. Free cancellation applies per the rate you selected.</span></div>
+            <button type="submit" class="btn btn-full btn-coral" id="continueBtn"><span>Continue to secure payment</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></button>
+          </div>
+        </form>
+
+        <!-- STEP 2: payment (LiteAPI SDK renders the card form here) -->
+        <div class="pay-wrap reveal" id="paySection" style="display:none">
+          <h3><i class="ph-light ph-lock-simple"></i> Secure payment</h3>
+          <p class="pay-sub">Enter your card below. Your payment is processed securely by LiteAPI. You are not charged until your booking is confirmed.</p>
+          <div id="targetElement"></div>
+          <div class="alert alert-info" style="margin-top:16px"><i class="ph ph-info"></i><span>After payment you will return here and your booking is finalised automatically.</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="order-card"><div class="order-in">
+          <h3>Order summary</h3>
+          <div id="orderSummary"><p style="color:var(--tx3);font-size:14px">Loading...</p></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ov" id="procOverlay"><div class="ov-card"><div class="spinner" style="width:46px;height:46px;border-width:4px;margin:0 auto"></div><h3 id="ovTitle">Finalising your booking…</h3><p id="ovMsg">Please wait, this only takes a moment.</p></div></div>
+
+  <div id="footer-mount"></div>
+
+  <script src="shared.js?v=20260703b"></script>
+  <script>
+    const PAY_ENV = 'live'; // production key -> 'live'. Use 'sandbox' only with a sandbox API key.
+    const hotel = BA.getHotel();
+    const rate = JSON.parse(sessionStorage.getItem('ba_selectedRate') || 'null');
+    const ci = BA.getParam('ci') || BA.defaultCheckin();
+    const co = BA.getParam('co') || BA.defaultCheckout();
+    const gu = BA.getParam('gu') || '2';
+    const city = BA.getParam('city') || 'Sydney';
+    const nights = BA.nightsBetween(ci, co);
+    const name = BA.hotelName(hotel, city);
+    const uns = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=200&q=80';
+
+    document.getElementById('nav-mount').innerHTML = BA.renderNav('');
+    document.getElementById('footer-mount').innerHTML = BA.renderFooter();
+    document.getElementById('backSearch').href = `search.html?city=${encodeURIComponent(city)}&ci=${ci}&co=${co}&gu=${gu}`;
+
+    // If we are returning from the payment portal, finalise the booking.
+    if (new URLSearchParams(location.search).get('paid') === '1') { finalizeBooking(); }
+    else { renderOrder(); }
+
+    function renderOrder(){
+      if (!(hotel && rate)) {
+        document.getElementById('orderSummary').innerHTML = '<p style="color:var(--err)">No booking data found. Please go back and select a room.</p>';
+        const b=document.getElementById('continueBtn'); if(b){ b.disabled=true; b.style.opacity=.5; }
+        return;
+      }
+      const rp = rate.retail, mp = rate.memberPrice, eff = (mp!=null)?mp:rp, sp = rate.suggested;
+      const roomName = rate.roomName || 'Room', board = rate.board || 'Room only';
+      const photo = (hotel.mainPhoto) || uns;
+      if (mp!=null) document.getElementById('payNote').innerHTML = '<i class="ph ph-shield-check"></i><span>Member rate applied. Secure payment handled by LiteAPI. Free cancellation applies per your selected rate.</span>';
+      document.getElementById('orderSummary').innerHTML = `
+        <div class="oc-hotel">
+          <img src="${photo}" alt="${name}" onerror="this.src='${uns}'">
+          <div class="oc-hotel-info"><h4>${name}</h4><p>${roomName}</p><p>${board}</p></div>
+        </div>
+        <div class="oc-row"><span>Check-in</span><strong>${ci}</strong></div>
+        <div class="oc-row"><span>Check-out</span><strong>${co}</strong></div>
+        <div class="oc-row"><span>Duration</span><strong>${nights} night${nights>1?'s':''}</strong></div>
+        <div class="oc-row"><span>Guests</span><strong>${gu}</strong></div>
+        <div class="divider"></div>
+        ${mp!=null?`<div class="oc-row"><span>Public price</span><span class="price-old">A$${rp.toFixed(0)}</span></div><div class="oc-row"><span style="color:var(--ac-ink);font-weight:700">Member price</span><strong style="color:var(--ac-ink)">A$${mp}</strong></div>`:`<div class="oc-row"><span>Room rate (${nights} night${nights>1?'s':''})</span><strong>A$${rp.toFixed(0)}</strong></div>`}
+        ${sp>eff ? `<div class="oc-row"><span>Typical rate</span><span class="price-old">A$${sp.toFixed(0)}</span></div>` : ''}
+        ${sp>eff ? `<div class="oc-row" style="color:var(--ok)"><span>You save</span><strong style="color:var(--ok)">A$${(sp-eff).toFixed(0)}</strong></div>` : ''}
+        <div class="oc-row"><span>Taxes & fees</span><strong>Included</strong></div>
+        <div class="oc-total"><span>Total</span><span>A$${eff}</span></div>`;
+    }
+
+    function prefillGuest(){
+      if(!BA.user) return;
+      const fn=document.getElementById('firstName'),ln=document.getElementById('lastName'),em=document.getElementById('email');
+      if(em&&!em.value) em.value=BA.user.email||'';
+      const full=(BA.user.user_metadata&&BA.user.user_metadata.full_name)||'';
+      if(full){const p=full.split(' ');if(fn&&!fn.value)fn.value=p[0];if(ln&&!ln.value)ln.value=p.slice(1).join(' ');}
+    }
+    document.addEventListener('ba-auth', prefillGuest); prefillGuest();
+
+    async function startPayment(e){
+      e.preventDefault();
+      if (!(hotel && rate && rate.offerId)) { alert('No live rate selected. Please go back and choose a room.'); return false; }
+      const firstName=document.getElementById('firstName').value.trim(), lastName=document.getElementById('lastName').value.trim(),
+            email=document.getElementById('email').value.trim(), phone=document.getElementById('phone').value.trim();
+      if(!firstName||!lastName||!email){ alert('Please fill in all required fields.'); return false; }
+
+      const ov=document.getElementById('procOverlay'); document.getElementById('ovTitle').textContent='Preparing secure payment…'; ov.classList.add('show');
+      let pb;
+      try { pb = await BA.prebook(rate.offerId, rate.memberPrice!=null); }
+      catch(err){ ov.classList.remove('show'); alert('Could not start payment. Please try again.'); return false; }
+      ov.classList.remove('show');
+      if(!pb || !pb.ok || !pb.data || !pb.data.secretKey || !pb.data.transactionId){
+        alert('Payment could not be initialised for this rate. Please try another room or contact support.'); return false;
+      }
+      const holder = { firstName, lastName, email, phone };
+      const guests = [{ occupancyNumber:1, firstName, lastName, email }];
+      const eff = (rate.memberPrice!=null)?rate.memberPrice:rate.retail;
+      sessionStorage.setItem('ba_pay', JSON.stringify({
+        prebookId: pb.data.prebookId, transactionId: pb.data.transactionId, member: rate.memberPrice!=null,
+        holder, guests,
+        booking: { hotel:name, room:rate.roomName||'Room', board:rate.board||'Room only', checkin:ci, checkout:co, nights, guests:gu, guest:holder, price:eff, suggestedPrice:rate.suggested, city }
+      }));
+      // Swap to payment step and mount LiteAPI's payment portal
+      document.getElementById('formSection').style.display='none';
+      document.getElementById('paySection').style.display='block';
+      document.getElementById('paySection').scrollIntoView({behavior:'smooth'});
+      try{
+        const cfg = {
+          publicKey: PAY_ENV,
+          appearance: { theme:'flat' },
+          options: { business: { name: 'OzBookings' } },
+          targetElement: '#targetElement',
+          secretKey: pb.data.secretKey,
+          returnUrl: location.origin + '/checkout.html?paid=1'
+        };
+        const p = new LiteAPIPayment(cfg);
+        p.handlePayment();
+      }catch(err){
+        document.getElementById('targetElement').innerHTML = '<p style="color:var(--err);font-size:14px">Payment form could not load. Please refresh and try again, or contact support@ozbookings.com.</p>';
+      }
+      return false;
+    }
+
+    async function finalizeBooking(){
+      renderOrder();
+      const ov=document.getElementById('procOverlay'); ov.classList.add('show');
+      const pay = JSON.parse(sessionStorage.getItem('ba_pay') || 'null');
+      if(!pay){ location.href='index.html'; return; }
+      try{
+        const bk = await BA.book(pay.prebookId, pay.holder, pay.guests, pay.member, pay.transactionId);
+        const ok = bk && bk.ok && bk.data && bk.data.bookingId;
+        BA.storeBooking({
+          ...pay.booking,
+          bookingId: ok ? bk.data.bookingId : ('REF-' + Date.now()),
+          status: ok ? ((bk.data.status||'confirmed').toLowerCase()) : 'processing',
+          live: true
+        });
+        sessionStorage.removeItem('ba_pay');
+        location.href = 'confirmation.html';
+      }catch(err){
+        ov.classList.remove('show');
+        alert('Payment succeeded but we could not finalise the booking automatically. Please contact support@ozbookings.com with your email and we will confirm it. ('+err.message+')');
+      }
+    }
+  </script>
+</body>
+</html>

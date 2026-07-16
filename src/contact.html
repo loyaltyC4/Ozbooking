@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — OzBookings</title>
+<meta name="description" content="Get in touch with OzBookings. Business details, support email, and contact form.">
+<link rel="stylesheet" href="styles.css?v=20260703b">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="icon" href="/favicon.svg">
+<meta property="og:title" content="Contact OzBookings">
+<meta name="theme-color" content="#14171A">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div id="nav-mount"></div>
+
+<main class="legal">
+  <span class="eyebrow">Contact</span>
+  <h1>We are one message away</h1>
+  <p class="lead">Questions about a booking, a member rate, or a cancellation? Reach the OzBookings team and we will get back to you within one business day.</p>
+
+  <div class="legal-card">
+    <h3>Business details</h3>
+    <div class="biz-grid">
+      <div><div class="k">Business name</div><div class="v">OzBookings</div></div>
+      <div><div class="k">Structure</div><div class="v">Sole trader (Australia)</div></div>
+      <div><div class="k">ABN</div><div class="v">00 000 000 000</div></div>
+      <div><div class="k">Location</div><div class="v">Australia</div></div>
+      <div><div class="k">Support email</div><div class="v">support@ozbookings.com</div></div>
+      <div><div class="k">Support hours</div><div class="v">Mon–Sun, 9am–9pm AEST</div></div>
+    </div>
+  </div>
+
+  <h2>Send us a message</h2>
+  <form class="cform" id="contactForm" onsubmit="return sendContact(event)">
+    <div class="row2">
+      <div class="fg"><label>Your name</label><input id="cName" required placeholder="Alex Nguyen"></div>
+      <div class="fg"><label>Email</label><input id="cEmail" type="email" required placeholder="you@example.com"></div>
+    </div>
+    <div class="fg"><label>Subject</label><input id="cSubject" placeholder="Booking question"></div>
+    <div class="fg"><label>Message</label><textarea id="cMsg" rows="5" required placeholder="How can we help?"></textarea></div>
+    <div><button type="submit" class="btn btn-coral"><span>Send message</span><span class="btn-i"><i class="ph-bold ph-paper-plane-tilt"></i></span></button></div>
+    <p id="cNote" style="font-size:13px;color:var(--tx3);margin-top:4px">This opens your email app addressed to our support team.</p>
+  </form>
+</main>
+
+<div id="footer-mount"></div>
+<script src="shared.js?v=20260703b"></script>
+<script>
+  document.getElementById('nav-mount').innerHTML = BA.renderNav('');
+  document.getElementById('footer-mount').innerHTML = BA.renderFooter();
+  BA.init();
+  function sendContact(e){
+    e.preventDefault();
+    const n=document.getElementById('cName').value, em=document.getElementById('cEmail').value,
+          s=document.getElementById('cSubject').value||'Enquiry', m=document.getElementById('cMsg').value;
+    const body=encodeURIComponent(`${m}\n\nFrom: ${n} (${em})`);
+    window.location.href=`mailto:support@ozbookings.com?subject=${encodeURIComponent(s)}&body=${body}`;
+    document.getElementById('cNote').textContent='Opening your email app… if nothing happens, email support@ozbookings.com directly.';
+    return false;
+  }
+</script>
+</body>
+</html>

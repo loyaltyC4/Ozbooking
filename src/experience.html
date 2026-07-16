@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experience — OzBookings</title>
+  <link rel="stylesheet" href="styles.css?v=20260703b">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="icon" href="/favicon.svg">
+  <meta name="theme-color" content="#14171A">
+  <style>
+    .xd-top{padding-top:96px}
+    .xd-head{margin-bottom:18px}
+    .xd-head h1{font-size:clamp(26px,3.8vw,42px);line-height:1.06;max-width:22ch}
+    .xd-meta{display:flex;align-items:center;gap:14px;margin-top:12px;color:var(--tx2);font-size:14px;flex-wrap:wrap}
+    .xd-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--tx3)}
+    .xd-score{display:inline-flex;align-items:center;gap:7px}
+    .xd-score b{background:var(--ac);color:#fff;font-family:var(--display);font-weight:600;font-size:13px;padding:4px 8px;border-radius:8px}
+    .xd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .xd-tag{font-size:12px;font-weight:600;padding:6px 12px;border-radius:var(--rp)}
+    .xd-tag.free{background:var(--ok-l);color:var(--ok)} .xd-tag.n{background:var(--bg-sub);color:var(--tx2)}
+    /* gallery */
+    .xd-gal{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;border-radius:var(--rc);overflow:hidden;position:relative;aspect-ratio:16/8;background:var(--bg-sub);margin-bottom:8px}
+    .xd-gal .g{position:relative;overflow:hidden;cursor:pointer;background:var(--bg-sub)}
+    .xd-gal .g:first-child{grid-row:span 2}
+    .xd-gal .g img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease-2)}
+    .xd-gal .g:hover img{transform:scale(1.05)}
+    .xd-gal .g.gskel{background:linear-gradient(90deg,var(--bg-sub) 25%,#e4e5e1 37%,var(--bg-sub) 63%);background-size:400% 100%;animation:xdsh 1.4s ease infinite;cursor:default}
+    @keyframes xdsh{0%{background-position:100% 0}100%{background-position:0 0}}
+    .xd-all{position:absolute;right:16px;bottom:16px;z-index:3;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid var(--bd);border-radius:var(--rp);padding:9px 15px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;box-shadow:var(--s1)}
+    @media(max-width:767px){.xd-gal{grid-template-columns:1fr 1fr;aspect-ratio:4/3}.xd-gal .g:nth-child(4),.xd-gal .g:nth-child(5){display:none}}
+    /* body */
+    .xd-body{display:grid;grid-template-columns:1fr;gap:40px;padding:36px 0 120px}
+    @media(min-width:960px){.xd-body{grid-template-columns:1.7fr .9fr;gap:48px}}
+    .xd-main section{padding-bottom:32px;border-bottom:1px solid var(--bd);margin-bottom:32px}
+    .xd-main section:last-child{border-bottom:0}
+    .xd-main h2{font-size:22px;margin-bottom:14px}
+    .xd-main p{color:var(--tx2);line-height:1.75;font-size:15px}
+    .incl{list-style:none;display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:560px){.incl{grid-template-columns:1fr 1fr}}
+    .incl li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--tx)}
+    .incl li i{color:var(--ok);font-size:18px;flex-shrink:0;margin-top:1px}
+    .xd-note{display:flex;gap:12px;align-items:flex-start;background:var(--bg-el);border:1px solid var(--bd);border-radius:var(--ri);padding:16px 18px}
+    .xd-note i{font-size:22px;color:var(--ac);flex-shrink:0}
+    .xd-note .k{font-weight:600;font-size:14px;margin-bottom:3px}.xd-note .v{color:var(--tx2);font-size:13.5px;line-height:1.6;white-space:pre-line}
+    /* booking card */
+    .xd-bk{position:sticky;top:96px;align-self:start}
+    .xd-bk-card{background:rgba(255,255,255,.6);border:1px solid var(--bd-2);padding:7px;border-radius:var(--rc);box-shadow:var(--s2)}
+    .xd-bk-in{background:var(--bg-el);border-radius:calc(var(--rc) - 6px);padding:24px;box-shadow:inset 0 1px 1px rgba(255,255,255,.6)}
+    .xd-price{display:flex;align-items:flex-end;gap:8px;margin-bottom:4px}
+    .xd-price b{font-family:var(--display);font-weight:600;font-size:32px;line-height:1}
+    .xd-price small{color:var(--tx3);font-size:13px}
+    .xd-bk .sub{color:var(--tx2);font-size:13px;margin-bottom:18px}
+    .xd-trust{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+    .xd-trust div{display:flex;gap:9px;align-items:center;font-size:13px;color:var(--tx2)}
+    .xd-trust i{color:var(--ok);font-size:17px}
+    .xd-secure{margin-top:16px;font-size:12px;color:var(--tx3);text-align:center;line-height:1.5}
+    @media(max-width:959px){.xd-bk{display:none}}
+    .xd-bar{position:fixed;left:0;right:0;bottom:0;z-index:90;display:none;align-items:center;justify-content:space-between;gap:14px;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:rgba(247,248,246,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--bd);box-shadow:0 -12px 30px -22px rgba(18,28,42,.5)}
+    .xd-bar .p{font-size:12px;color:var(--tx2)} .xd-bar .p b{font-family:var(--display);font-size:19px;color:var(--tx);font-weight:600}
+    @media(max-width:959px){.xd-bar{display:flex}.xd-body{padding-bottom:92px}}
+    .xd-skelbar{height:40px;border-radius:12px;background:linear-gradient(90deg,var(--bg-sub) 25%,#e4e5e1 37%,var(--bg-sub) 63%);background-size:400% 100%;animation:xdsh 1.4s ease infinite;margin:8px 0}
+    /* lightbox */
+    .lb{position:fixed;inset:0;z-index:200;background:rgba(8,10,14,.94);display:none;align-items:center;justify-content:center}
+    .lb.show{display:flex}
+    .lb img{max-width:92vw;max-height:82vh;object-fit:contain;border-radius:10px}
+    .lb-x{position:absolute;top:22px;right:22px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.14);border:0;color:#fff;font-size:22px;cursor:pointer}
+    .lb-n{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.14);border:0;color:#fff;font-size:22px;cursor:pointer}
+    .lb-p{left:20px}.lb-nx{right:20px}
+    .lb-c{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.8);font-family:var(--mono);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="nav-mount"></div>
+
+  <main class="wrap xd-top">
+    <div class="breadcrumb" style="margin-bottom:14px">
+      <a href="experiences.html">Experiences</a><i class="ph ph-caret-right"></i>
+      <a href="#" id="backLink">Guide</a><i class="ph ph-caret-right"></i>
+      <span id="crumb">Experience</span>
+    </div>
+    <div class="xd-head">
+      <h1 id="title">Loading…</h1>
+      <div class="xd-meta" id="meta"></div>
+      <div class="xd-tags" id="tags"></div>
+    </div>
+
+    <div class="xd-gal" id="gal"></div>
+
+    <div class="xd-body">
+      <div class="xd-main">
+        <section class="reveal"><h2 id="aboutH">About this experience</h2><p id="desc"></p></section>
+        <section class="reveal" id="inclSec" style="display:none"><h2 id="inclH">What's included</h2><ul class="incl" id="incl"></ul></section>
+        <section class="reveal" id="cxlSec" style="display:none"><h2 id="cxlH">Cancellation</h2><div class="xd-note"><i class="ph-light ph-shield-check"></i><div><div class="k" id="cxlK">Free cancellation</div><div class="v" id="cxlV"></div></div></div></section>
+        <section class="reveal" id="meetSec" style="display:none"><h2 id="meetH">Where it starts</h2><div class="xd-note"><i class="ph-light ph-map-pin"></i><div><div class="v" id="meetV"></div></div></div></section>
+      </div>
+
+      <aside class="xd-bk">
+        <div class="xd-bk-card"><div class="xd-bk-in">
+          <div class="sub" id="fromLbl">From</div>
+          <div class="xd-price" id="priceWrap"><div class="xd-skelbar" style="width:60%"></div></div>
+          <div class="sub" id="ppLbl">per person</div>
+          <a class="btn btn-coral btn-full" id="reserveBtn" href="#" target="_blank" rel="noopener noreferrer" style="margin-top:14px"><span id="reserveTxt">Reserve on Viator</span><span class="btn-i"><i class="ph-bold ph-arrow-up-right"></i></span></a>
+          <div class="xd-trust" id="trust"></div>
+          <div class="xd-secure" id="secure"></div>
+        </div></div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="xd-bar" id="bar">
+    <div class="p" id="barP"><span id="barFrom">From</span><br><b id="barPrice">—</b></div>
+    <a class="btn btn-coral" id="barBtn" href="#" target="_blank" rel="noopener noreferrer"><span id="barTxt">Reserve</span><span class="btn-i"><i class="ph-bold ph-arrow-up-right"></i></span></a>
+  </div>
+
+  <div class="lb" id="lb">
+    <button class="lb-x" onclick="closeLb()"><i class="ph-bold ph-x"></i></button>
+    <button class="lb-n lb-p" onclick="lbStep(-1)"><i class="ph-bold ph-caret-left"></i></button>
+    <img id="lbImg" alt="">
+    <button class="lb-n lb-nx" onclick="lbStep(1)"><i class="ph-bold ph-caret-right"></i></button>
+    <div class="lb-c" id="lbC"></div>
+  </div>
+
+  <div id="footer-mount"></div>
+
+  <script src="shared.js?v=20260703b"></script>
+  <script>
+    const L=(en,zh)=>BA.t(en,zh);
+    const code=BA.getParam('code');
+    const price=BA.getParam('price');
+    const city=(BA.getParam('city')||'').toLowerCase();
+    const FB='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80';
+    let images=[], lbIdx=0;
+
+    document.getElementById('nav-mount').innerHTML=BA.renderNav('exp');
+    document.getElementById('footer-mount').innerHTML=BA.renderFooter();
+    if(city){ document.getElementById('backLink').href=`experiences.html?city=${city}`; document.getElementById('backLink').textContent=L('Guide','攻略'); }
+    else { document.getElementById('backLink').href='experiences.html'; }
+
+    // static labels
+    document.getElementById('aboutH').textContent=L('About this experience','关于此体验');
+    document.getElementById('inclH').textContent=L("What's included",'包含内容');
+    document.getElementById('cxlH').textContent=L('Cancellation','取消政策');
+    document.getElementById('meetH').textContent=L('Where it starts','出发地点');
+    document.getElementById('fromLbl').textContent=L('From','起价');
+    document.getElementById('ppLbl').textContent=L('per person · taxes may apply','每人 · 可能含税费');
+    document.getElementById('reserveTxt').textContent=L('Reserve on Viator','在 Viator 预订');
+    document.getElementById('barTxt').textContent=L('Reserve','预订');
+    document.getElementById('barFrom').textContent=L('From','起价');
+    document.getElementById('secure').textContent=L('You complete your booking securely on Viator, a Tripadvisor company. Prices are the same — OzBookings earns a small commission.','您将在 Tripadvisor 旗下的 Viator 上安全完成预订。价格相同——OzBookings 仅赚取少量佣金。');
+
+    if(price){ setPrice(price); }
+    function setPrice(v){
+      document.getElementById('priceWrap').innerHTML=`<b>A$${v}</b>`;
+      document.getElementById('barPrice').textContent=`A$${v}`;
+    }
+
+    function paintGal(imgs, loading){
+      const el=document.getElementById('gal'); const have=(imgs||[]).slice(0,5); let cells='';
+      for(let i=0;i<5;i++){
+        if(have[i]) cells+=`<div class="g" onclick="openLb(${i})"><img src="${have[i]}" alt="Photo ${i+1}" loading="lazy" onerror="this.closest('.g').classList.add('gskel');this.remove()"></div>`;
+        else if(loading) cells+=`<div class="g gskel"></div>`;
+        else cells+=`<div class="g"><img src="${FB}" alt=""></div>`;
+      }
+      el.innerHTML=cells+(images.length>1?`<button class="xd-all" onclick="openLb(0)"><i class="ph-bold ph-images"></i> ${L('View all','查看全部')} ${images.length} ${L('photos','张照片')}</button>`:'');
+    }
+    paintGal([], true);
+    function openLb(i){ if(!images.length)return; lbIdx=i%images.length; document.getElementById('lbImg').src=images[lbIdx]; document.getElementById('lbC').textContent=`${lbIdx+1} / ${images.length}`; document.getElementById('lb').classList.add('show'); }
+    function closeLb(){ document.getElementById('lb').classList.remove('show'); }
+    function lbStep(d){ if(!images.length)return; lbIdx=(lbIdx+d+images.length)%images.length; document.getElementById('lbImg').src=images[lbIdx]; document.getElementById('lbC').textContent=`${lbIdx+1} / ${images.length}`; }
+    document.addEventListener('keydown',e=>{ if(!document.getElementById('lb').classList.contains('show'))return; if(e.key==='Escape')closeLb(); if(e.key==='ArrowRight')lbStep(1); if(e.key==='ArrowLeft')lbStep(-1); });
+    document.getElementById('lb').addEventListener('click',e=>{ if(e.target.id==='lb')closeLb(); });
+
+    load();
+    async function load(){
+      if(!code){ document.getElementById('title').textContent=L('Experience not found','未找到此体验'); return; }
+      let p=null;
+      try{ const r=await fetch(`/api/experiences?code=${encodeURIComponent(code)}`); const j=await r.json(); p=j.product; }catch(e){}
+      if(!p){ document.getElementById('title').textContent=L('This experience is unavailable right now.','该体验暂时不可用。'); return; }
+      document.title=`${p.title} — OzBookings`;
+      document.getElementById('title').textContent=p.title;
+      document.getElementById('crumb').textContent=p.title;
+      // meta
+      const bits=[];
+      if(p.rating) bits.push(`<span class="xd-score"><b>${p.rating}</b> ${p.reviews?p.reviews.toLocaleString()+' '+L('reviews','条评价'):''}</span>`);
+      if(p.duration) bits.push(`<span><i class="ph ph-clock"></i> ${p.duration}</span>`);
+      document.getElementById('meta').innerHTML=bits.join('<span class="dot"></span>');
+      // tags
+      const tags=[];
+      if(p.freeCancel) tags.push(`<span class="xd-tag free"><i class="ph-fill ph-shield-check" style="vertical-align:-2px"></i> ${L('Free cancellation','免费取消')}</span>`);
+      if(p.privateTour) tags.push(`<span class="xd-tag n">${L('Private tour','私人团')}</span>`);
+      if(p.skipLine) tags.push(`<span class="xd-tag n">${L('Skip the line','免排队')}</span>`);
+      document.getElementById('tags').innerHTML=tags.join('');
+      // gallery
+      images=(p.images&&p.images.length)?p.images:[];
+      paintGal(images, false);
+      // about
+      document.getElementById('desc').textContent=p.description||'';
+      // inclusions
+      if(p.inclusions&&p.inclusions.length){ document.getElementById('inclSec').style.display=''; document.getElementById('incl').innerHTML=p.inclusions.map(x=>`<li><i class="ph-fill ph-check-circle"></i>${x}</li>`).join(''); }
+      // cancellation
+      if(p.cancellation){ document.getElementById('cxlSec').style.display=''; document.getElementById('cxlV').textContent=p.cancellation; document.getElementById('cxlK').textContent=p.freeCancel?L('Free cancellation available','支持免费取消'):L('Cancellation policy','取消政策'); }
+      // meeting
+      if(p.meeting){ document.getElementById('meetSec').style.display=''; document.getElementById('meetV').textContent=p.meeting; }
+      // booking CTAs
+      document.getElementById('reserveBtn').href=p.url;
+      document.getElementById('barBtn').href=p.url;
+      // trust
+      document.getElementById('trust').innerHTML=`
+        ${p.freeCancel?`<div><i class="ph-fill ph-shield-check"></i>${L('Free cancellation on this experience','此体验支持免费取消')}</div>`:''}
+        <div><i class="ph-fill ph-check-circle"></i>${L('Instant confirmation available','可即时确认')}</div>
+        <div><i class="ph-fill ph-star"></i>${L('Rated by verified Viator travellers','经 Viator 真实旅客评价')}</div>`;
+      BA.init();
+    }
+  </script>
+</body>
+</html>

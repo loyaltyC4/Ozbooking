@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — OzBookings</title>
+<meta name="description" content="OzBookings compares hotel prices across Australia and lets you book direct. Members save even more.">
+<link rel="stylesheet" href="styles.css?v=20260703b">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="icon" href="/favicon.svg">
+<meta property="og:title" content="About OzBookings">
+<meta name="theme-color" content="#14171A">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div id="nav-mount"></div>
+
+<main class="wrap" style="max-width:900px">
+  <header class="about-hero reveal">
+    <span class="eyebrow">About OzBookings</span>
+    <h1 style="font-size:clamp(34px,6vw,58px);margin-top:14px;max-width:16ch">Book direct across Australia. Save more.</h1>
+    <p class="h-sub" style="font-size:18px;margin-top:18px;max-width:60ch">OzBookings is an Australian hotel-booking service. We pull live hotel rates from our global supply network and let you book direct — with each hotel's typical selling price shown next to your direct price. Members unlock even lower, sign-in-only rates.</p>
+  </header>
+
+  <div class="about-stats reveal rd1">
+    <div class="s"><div class="n">2M<span>+</span></div><div class="l">Hotels in our network</div></div>
+    <div class="s"><div class="n">Live</div><div class="l">Real-time supplier rates</div></div>
+    <div class="s"><div class="n">24/7</div><div class="l">Customer support</div></div>
+  </div>
+
+  <section class="reveal" style="padding-bottom:8px">
+    <h2 style="font-size:26px;margin:14px 0 12px">What we do</h2>
+    <p class="h-sub" style="max-width:64ch">Booking a hotel shouldn't mean guessing whether you're overpaying. OzBookings searches live rates across our global supply network, shows you the direct rate next to each hotel's typical selling price, and lets you book it directly, so the savings stay with you instead of going to a middle layer.</p>
+  </section>
+
+  <section class="reveal" style="padding:26px 0 8px">
+    <h2 style="font-size:26px;margin:0 0 12px">How we compare</h2>
+    <p class="h-sub" style="max-width:64ch">For every stay we pull the live direct rate and the hotel's typical selling price (as supplied by our rate provider), then surface the difference so you can see what you are saving. No inflated "was" prices, no hidden booking fees. Rates and availability are provided in real time through our supplier network.</p>
+  </section>
+
+  <section class="reveal" style="padding:26px 0 8px">
+    <h2 style="font-size:26px;margin:0 0 12px">Membership</h2>
+    <p class="h-sub" style="max-width:64ch">A free OzBookings account unlocks member-only rates on eligible properties, saves your trips so you can rebook in one tap, and keeps your guest details ready at checkout. Membership is optional and free. You can always browse and book as a guest.</p>
+  </section>
+
+  <section class="reveal" style="padding:26px 0 8px">
+    <h2 style="font-size:26px;margin:0 0 12px">How bookings are fulfilled</h2>
+    <p class="h-sub" style="max-width:64ch">Live inventory, pricing, and reservations are powered by LiteAPI (Nuitee), a global hotel-distribution platform connecting to leading bed banks and suppliers. When you book, your reservation is confirmed with the property through this network, and your booking reference is issued instantly.</p>
+  </section>
+
+  <section class="reveal" style="padding:26px 0 40px">
+    <h2 style="font-size:26px;margin:0 0 12px">Who we are</h2>
+    <p class="h-sub" style="max-width:64ch;margin-bottom:18px">OzBookings is an independently operated Australian business. For anything at all, our team is one email away.</p>
+    <div class="legal-card">
+      <div class="biz-grid">
+        <div><div class="k">Business</div><div class="v">OzBookings</div></div>
+        <div><div class="k">Structure</div><div class="v">Sole trader (Australia)</div></div>
+        <div><div class="k">ABN</div><div class="v">00 000 000 000</div></div>
+        <div><div class="k">Country</div><div class="v">Australia</div></div>
+        <div><div class="k">Email</div><div class="v">support@ozbookings.com</div></div>
+        <div><div class="k">Web</div><div class="v">ozbookings.com</div></div>
+      </div>
+    </div>
+    <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap">
+      <a href="search.html?city=Sydney" class="btn btn-coral"><span>Search stays</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></a>
+      <a href="contact.html" class="btn btn-outline"><span>Contact us</span><span class="btn-i"><i class="ph-bold ph-envelope-simple"></i></span></a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-mount"></div>
+<script src="shared.js?v=20260703b"></script>
+<script>
+  document.getElementById('nav-mount').innerHTML = BA.renderNav('');
+  document.getElementById('footer-mount').innerHTML = BA.renderFooter();
+  BA.init();
+</script>
+</body>
+</html>

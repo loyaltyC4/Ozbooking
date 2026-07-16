@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+Sitemap: https://ozbookings.com/sitemap.xml

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Things to do in Australia — top-rated tours & experiences | OzBookings</title>
+  <meta name="description" content="Real, top-rated things to do across Australia — local guides to Sydney, Melbourne, the Great Barrier Reef and more, with honest budgets and instantly bookable experiences." id="metaDesc">
+  <link rel="canonical" href="https://ozbookings.com/experiences.html" id="canon">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="stylesheet" href="styles.css?v=20260703b">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="icon" href="/favicon.svg">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="OzBookings">
+  <meta property="og:title" content="Things to do in Australia — OzBookings">
+  <meta name="theme-color" content="#14171A">
+  <style>
+    .xp-sec{padding-block:clamp(56px,8vh,104px)}
+    .xp-sec.tight{padding-block:clamp(40px,6vh,72px)}
+    .xp-head{max-width:60ch;margin-bottom:34px}
+    .xp-head h2{font-size:clamp(26px,3.6vw,42px);line-height:1.05}
+    .xp-head p{color:var(--tx2);font-size:clamp(15px,1.4vw,17px);margin-top:12px}
+
+    /* HERO */
+    .xp-hero{position:relative;min-height:clamp(440px,64vh,600px);display:flex;align-items:flex-end;overflow:hidden}
+    .xp-hero-bg{position:absolute;inset:0;z-index:0}
+    .xp-hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.05);animation:xpkb 18s var(--ease-2) forwards}
+    @keyframes xpkb{to{transform:scale(1)}}
+    .xp-hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,18,.30),rgba(10,13,18,.05) 36%,rgba(10,13,18,.72))}
+    .xp-hero-in{position:relative;z-index:2;width:100%;padding-top:150px;padding-bottom:clamp(34px,5vh,58px)}
+    .xp-hero .eyebrow{color:#fff}
+    .xp-hero h1{color:#fff;font-size:clamp(36px,6vw,74px);max-width:16ch;text-shadow:0 2px 30px rgba(0,0,0,.28);margin-top:12px}
+    .xp-hero p{color:rgba(255,255,255,.92);font-size:clamp(16px,1.6vw,20px);max-width:52ch;margin-top:16px;text-shadow:0 1px 14px rgba(0,0,0,.3)}
+    .xp-hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+
+    /* city switch pills */
+    .xp-cities{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+    .xp-citypill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;padding:9px 16px;border-radius:var(--rp);font-size:13.5px;font-weight:500;backdrop-filter:blur(8px);transition:background .3s var(--ease)}
+    .xp-citypill:hover{background:rgba(255,255,255,.26)}
+    .xp-citypill.on{background:#fff;color:var(--tx)}
+
+    /* EXPERIENCE CARDS */
+    .xp-grid{display:grid;grid-template-columns:1fr;gap:20px}
+    @media(min-width:640px){.xp-grid{grid-template-columns:1fr 1fr}}
+    @media(min-width:1024px){.xp-grid{grid-template-columns:repeat(3,1fr)}}
+    .xp-card{display:flex;flex-direction:column;background:var(--bg-el);border:1px solid var(--bd-2);border-radius:var(--rc);overflow:hidden;box-shadow:var(--s1);transition:transform .6s var(--ease),box-shadow .6s var(--ease);text-decoration:none;color:inherit}
+    .xp-card:hover{transform:translateY(-6px);box-shadow:var(--s2)}
+    .xp-card-img{position:relative;aspect-ratio:3/2;overflow:hidden;background:var(--bg-sub)}
+    .xp-card-img img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease-2)}
+    .xp-card:hover .xp-card-img img{transform:scale(1.06)}
+    .xp-card-badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap}
+    .xp-chip{font-size:11px;font-weight:600;padding:5px 10px;border-radius:var(--rp);line-height:1;backdrop-filter:blur(6px)}
+    .xp-chip.free{background:rgba(21,128,61,.92);color:#fff}
+    .xp-chip.hot{background:rgba(224,81,47,.92);color:#fff}
+    .xp-rate{position:absolute;top:12px;right:12px;background:rgba(20,23,26,.82);color:#fff;font-family:var(--display);font-weight:600;font-size:13px;padding:5px 9px;border-radius:9px;display:flex;align-items:center;gap:5px;backdrop-filter:blur(6px)}
+    .xp-rate i{color:#ffd15c;font-size:13px}
+    .xp-card-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+    .xp-card-body h3{font-size:16px;line-height:1.3;font-family:var(--display);font-weight:600;letter-spacing:-.01em}
+    .xp-meta{display:flex;align-items:center;gap:12px;color:var(--tx2);font-size:12.5px;margin-top:9px}
+    .xp-meta span{display:inline-flex;align-items:center;gap:5px}
+    .xp-meta i{font-size:14px;color:var(--tx3)}
+    .xp-card-foot{margin-top:auto;padding-top:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+    .xp-price small{color:var(--tx3);font-size:12px;font-weight:500;display:block;line-height:1}
+    .xp-price b{font-family:var(--display);font-weight:600;font-size:20px}
+    .xp-book{display:inline-flex;align-items:center;gap:8px;background:var(--tx);color:#fff;font-size:13px;font-weight:500;padding:9px 12px 9px 15px;border-radius:var(--rp);transition:background .3s var(--ease)}
+    .xp-card:hover .xp-book{background:var(--ac)}
+    .xp-book i{transition:transform .5s var(--ease)}
+    .xp-card:hover .xp-book i{transform:translate(2px,-2px)}
+    .xp-skel{aspect-ratio:3/2;border-radius:var(--rc);background:linear-gradient(90deg,var(--bg-sub) 25%,#e4e5e1 37%,var(--bg-sub) 63%);background-size:400% 100%;animation:xpsh 1.4s ease infinite}
+    @keyframes xpsh{0%{background-position:100% 0}100%{background-position:0 0}}
+    .xp-disc{font-size:12.5px;color:var(--tx3);margin-top:20px;display:flex;align-items:center;gap:7px}
+    .xp-disc i{color:var(--ac)}
+
+    /* stay-by-type */
+    .stay-grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:768px){.stay-grid{grid-template-columns:repeat(3,1fr)}}
+    .stay-card{background:var(--bg-el);border:1px solid var(--bd);border-radius:var(--rc);padding:24px;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+    .stay-card:hover{transform:translateY(-4px);box-shadow:var(--s1)}
+    .stay-card .ico{width:46px;height:46px;border-radius:50%;background:var(--ac-l);color:var(--ac);display:grid;place-items:center;font-size:22px;margin-bottom:16px}
+    .stay-card h3{font-size:19px}
+    .stay-card p{color:var(--tx2);font-size:14px;margin:8px 0 16px}
+
+    /* info split (getting around / eat / when) */
+    .info-grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:640px){.info-grid{grid-template-columns:1fr 1fr}}
+    .info-item{display:flex;gap:14px;align-items:flex-start;background:var(--bg-el);border:1px solid var(--bd);border-radius:var(--ri);padding:18px 20px}
+    .info-item i{font-size:24px;color:var(--ac);flex-shrink:0;margin-top:1px}
+    .info-item h4{font-size:15px;font-weight:600;margin-bottom:4px}
+    .info-item p{color:var(--tx2);font-size:13.5px;line-height:1.6}
+
+    /* months */
+    .months{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
+    @media(min-width:640px){.months{grid-template-columns:repeat(12,1fr)}}
+    .mo{text-align:center;border-radius:12px;padding:12px 4px;background:var(--bg-el);border:1px solid var(--bd);font-size:12px}
+    .mo.best{background:var(--ac);color:#fff;border-color:var(--ac)}
+    .mo.good{background:var(--ac-l);color:var(--ac-ink);border-color:transparent}
+    .mo .m{font-weight:600;font-family:var(--mono)}
+
+    /* budget */
+    .bud-grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:768px){.bud-grid{grid-template-columns:repeat(3,1fr)}}
+    .bud-card{border:1px solid var(--bd);border-radius:var(--rc);padding:24px;background:var(--bg-el)}
+    .bud-card.mid{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac)}
+    .bud-card .lab{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2)}
+    .bud-card .amt{font-family:var(--display);font-weight:600;font-size:30px;margin:8px 0 2px}
+    .bud-card .amt small{font-size:14px;color:var(--tx3);font-weight:500}
+    .bud-card p{color:var(--tx2);font-size:13.5px;margin-top:10px}
+
+    /* plan/search widget + map */
+    .plan-grid{display:grid;grid-template-columns:1fr;gap:24px}
+    @media(min-width:900px){.plan-grid{grid-template-columns:1fr 1fr;align-items:stretch}}
+    .plan-card{background:rgba(255,255,255,.6);border:1px solid var(--bd-2);padding:8px;border-radius:var(--rc);box-shadow:var(--s2)}
+    .plan-in{background:var(--bg-el);border-radius:calc(var(--rc) - 7px);padding:26px;box-shadow:inset 0 1px 1px rgba(255,255,255,.6);height:100%}
+    .plan-in h3{font-size:22px;margin-bottom:6px}
+    .plan-in p{color:var(--tx2);font-size:14px;margin-bottom:18px}
+    .plan-map{border-radius:var(--rc);overflow:hidden;border:1px solid var(--bd);min-height:300px;background:var(--bg-sub)}
+    .plan-map iframe{width:100%;height:100%;min-height:300px;border:0;display:block}
+
+    /* hub */
+    .hub-grid{display:grid;grid-template-columns:1fr;gap:20px}
+    @media(min-width:768px){.hub-grid{grid-template-columns:repeat(3,1fr)}}
+    .hub-card{position:relative;border-radius:var(--rc);overflow:hidden;min-height:340px;display:flex;align-items:flex-end;box-shadow:var(--s1);text-decoration:none}
+    .hub-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;transition:transform 1s var(--ease-2)}
+    .hub-card:hover img{transform:scale(1.06)}
+    .hub-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,18,0) 40%,rgba(10,13,18,.8));z-index:1}
+    .hub-card .hb{position:relative;z-index:2;padding:24px;color:#fff}
+    .hub-card .hb h3{color:#fff;font-size:26px}
+    .hub-card .hb p{color:rgba(255,255,255,.9);font-size:13.5px;margin-top:6px}
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="nav-mount"></div>
+
+  <main id="app"></main>
+
+  <div id="footer-mount"></div>
+
+  <script src="shared.js?v=20260703b"></script>
+  <script>
+    const L = (en, zh) => BA.t(en, zh);
+    const UNS_FB = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'; // neutral beach fallback (not a specific city)
+
+    // ---- City content: real editorial (EN + 简体中文), real Viator destination IDs, real map coords ----
+    const CITY = {
+      sydney: {
+        destId: 357, lat:-33.8688, lng:151.2093,
+        hero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg/1280px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg',
+        name:{en:'Sydney',zh:'悉尼'},
+        hook:{en:'Sydney, beyond the Opera House',zh:'悉尼，不止歌剧院'},
+        sub:{en:'Harbour kayaks, hidden beaches, ferry escapes and the food locals actually queue for — the real Sydney, instantly bookable.',zh:'海港皮划艇、隐秘海滩、渡轮小旅行，以及当地人真正排队的美食——真实的悉尼，即刻可订。'},
+        around:[
+          {i:'ph-train-simple',en:['Get an Opal card','One tap card covers trains, buses, light rail and the iconic harbour ferries. The airport train reaches the CBD in ~15 min.'],zh:['购买 Opal 卡','一张卡通乘火车、公交、轻轨和标志性的海港渡轮。机场线约 15 分钟直达市中心。']},
+          {i:'ph-boat',en:['Ride the ferries','The Manly and Watsons Bay ferries from Circular Quay are the best-value harbour cruise in the city — for the price of a bus fare.'],zh:['乘坐渡轮','从环形码头出发前往 Manly 和 Watsons Bay 的渡轮，是全城性价比最高的海港游——只需一张公交票价。']},
+          {i:'ph-person-simple-walk',en:['Walk the coast','The Bondi to Coogee coastal walk (6 km) strings together clifftops, beaches and rock pools. No car needed.'],zh:['海岸步道','Bondi 到 Coogee 海岸步道（6 公里）串起悬崖、海滩与天然岩池，无需开车。']}
+        ],
+        eat:[
+          {en:['Spice Alley, Chippendale','Hawker-style Asian eats in a lantern-lit laneway, cash-free and cheap.'],zh:['Spice Alley（Chippendale）','灯笼小巷里的亚洲大排档风味，无现金、价格亲民。']},
+          {en:['Sydney Fish Market, Pyrmont','Grab fresh oysters and fish and chips by the water before it moves to its new home.'],zh:['悉尼鱼市场（Pyrmont）','在水边享用新鲜生蚝与炸鱼薯条。']},
+          {en:['Marrickville','The inner-west for Vietnamese pho, craft breweries and great coffee.'],zh:['Marrickville','内西区的越南河粉、精酿啤酒和一流咖啡。']}
+        ],
+        months:{best:[11,0,1],good:[8,9,10,2,3,4]}, // Dec-Feb best, spring/autumn good (0-indexed)
+        when:{en:'Sydney is a year-round city. December–February is beach-and-festival summer (hot, busy). September–November and March–May are mild with thinner crowds and lower rates.',zh:'悉尼四季皆宜。12 月至 2 月是海滩与节庆的夏季（炎热、人多）；9–11 月及 3–5 月气候温和、人少、价格更低。'},
+        budget:[
+          {lab:{en:'Budget',zh:'经济'},amt:'120–180',note:{en:'Hostel or budget hotel, public transport, casual eats, one paid activity.',zh:'青旅或经济酒店、公共交通、简餐、一项付费活动。'}},
+          {lab:{en:'Mid-range',zh:'中档'},amt:'250–380',note:{en:'3–4★ hotel, a harbour tour, restaurant dinners, the odd taxi.',zh:'3–4 星酒店、一次海港游、餐厅晚餐、偶尔打车。'}},
+          {lab:{en:'Luxury',zh:'豪华'},amt:'550+',note:{en:'Harbour-view hotel, fine dining, private tours and transfers.',zh:'海景酒店、精致餐饮、私人导览与接送。'}}
+        ]
+      },
+      melbourne: {
+        destId: 384, lat:-37.8136, lng:144.9631,
+        hero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Melbourne_skyline_sor.jpg/1280px-Melbourne_skyline_sor.jpg',
+        name:{en:'Melbourne',zh:'墨尔本'},
+        hook:{en:'Melbourne for coffee, laneways & culture',zh:'墨尔本：咖啡、小巷与文化'},
+        sub:{en:'Hidden laneway bars, the world\'s best coffee, street art and the Great Ocean Road at the doorstep. Book the experiences that make the trip.',zh:'隐秘小巷酒吧、全球顶级咖啡、街头艺术，还有近在咫尺的大洋路。预订让旅程难忘的体验。'},
+        around:[
+          {i:'ph-tram',en:['Ride the free tram','The City Circle and the Free Tram Zone cover the CBD for nothing. Beyond it, a Myki card runs trams, trains and buses.'],zh:['免费电车','City Circle 与免费电车区覆盖整个市中心，完全免费。区外用 Myki 卡乘电车、火车和公交。']},
+          {i:'ph-coffee',en:['Follow the coffee','Melbourne\'s laneways (Degraves St, Hardware Lane) are a coffee pilgrimage. Order a "flat white" like a local.'],zh:['追随咖啡','墨尔本的小巷（Degraves St、Hardware Lane）是咖啡朝圣地。像当地人一样点一杯 flat white。']},
+          {i:'ph-paint-brush',en:['Street-art walk','Hosier Lane and the Fitzroy walls are open-air galleries that change weekly — free and self-guided.'],zh:['街头艺术漫步','Hosier Lane 与 Fitzroy 的墙面是每周更新的露天画廊——免费、自助。']}
+        ],
+        eat:[
+          {en:['Lygon Street, Carlton','Melbourne\'s Little Italy — pasta, gelato and old-school espresso bars.'],zh:['Lygon 街（Carlton）','墨尔本的小意大利——意面、意式冰淇淋与老派浓缩咖啡吧。']},
+          {en:['Queen Victoria Market','A 140-year-old market: deli hall, street food and the summer night market.'],zh:['维多利亚女王市场','拥有 140 年历史的市场：熟食大厅、街头小吃与夏季夜市。']},
+          {en:['Footscray','The west for Vietnamese, Ethiopian and African food at local prices.'],zh:['Footscray','西区的越南、埃塞俄比亚与非洲美食，本地价格。']}
+        ],
+        months:{best:[2,3,4],good:[8,9,10,11]}, // autumn Mar-May best
+        when:{en:'Melbourne famously gets "four seasons in a day", so pack layers. March–May (autumn) is the sweet spot — crisp, clear and festival season. Summers are warm with long events calendars.',zh:'墨尔本以"一日四季"闻名，请备好可叠穿的衣物。3–5 月（秋季）最宜人——凉爽晴朗、节庆不断。夏季温暖，活动众多。'},
+        budget:[
+          {lab:{en:'Budget',zh:'经济'},amt:'110–170',note:{en:'Hostel or budget stay, free trams, laneway eats, one gallery or tour.',zh:'青旅或经济住宿、免费电车、小巷美食、一处画廊或导览。'}},
+          {lab:{en:'Mid-range',zh:'中档'},amt:'230–360',note:{en:'Boutique hotel, a Great Ocean Road day tour, dinners out.',zh:'精品酒店、一次大洋路一日游、外出晚餐。'}},
+          {lab:{en:'Luxury',zh:'豪华'},amt:'520+',note:{en:'Top hotel, chef\'s tables, private Yarra Valley wine touring.',zh:'顶级酒店、主厨餐桌、私人亚拉河谷酒庄之旅。'}}
+        ]
+      },
+      cairns: {
+        destId: 754, lat:-16.9186, lng:145.7781,
+        hero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Cairns_%28Queensland%29_%28cropped%29.jpg/1280px-Cairns_%28Queensland%29_%28cropped%29.jpg',
+        name:{en:'Cairns & the Great Barrier Reef',zh:'凯恩斯与大堡礁'},
+        hook:{en:'The Great Barrier Reef, on every budget',zh:'大堡礁，适合每种预算'},
+        sub:{en:'Outer-reef dives, rainforest that meets the sea, and scenic railways. Compare real reef tours from A$99 day trips to liveaboard dives.',zh:'外堡礁潜水、雨林与海洋交汇、观景铁路。对比真实的堡礁行程——从 99 澳元的一日游到船宿潜水。'},
+        around:[
+          {i:'ph-boat',en:['Reef boats leave the Marina','Most reef day tours depart Marlin Marina in the morning. Pick an outer-reef operator for the clearest water.'],zh:['堡礁游船从码头出发','大多数堡礁一日游清晨从 Marlin Marina 出发。选择外堡礁运营商可获最清澈的水质。']},
+          {i:'ph-car',en:['Hire a car for the north','Cairns town is walkable, but the Daintree, Cape Tribulation and the Atherton Tablelands need a car (or a day tour).'],zh:['北上需租车','凯恩斯市区适合步行，但 Daintree、Cape Tribulation 与 Atherton 高地需要开车（或参加一日游）。']},
+          {i:'ph-train-simple',en:['Kuranda by rail & cable','The Scenic Railway up and the Skyrail cableway down over the rainforest is the classic half-day loop.'],zh:['库兰达火车与缆车','乘观景铁路上山、坐 Skyrail 缆车俯瞰雨林下山，是经典的半日环线。']}
+        ],
+        eat:[
+          {en:['Rusty\'s Markets','Fri–Sun tropical-fruit and street-food market in the town centre.'],zh:['Rusty\'s 市场','周五至周日的热带水果与街头美食市场，位于市中心。']},
+          {en:['The Cairns Esplanade','Waterfront dining and the free public lagoon for a swim (no stingers).'],zh:['凯恩斯海滨大道','海滨餐饮与免费公共泻湖泳池（无水母之忧）。']},
+          {en:['Palm Cove','A palm-lined beach village 25 min north for a long lunch by the sea.'],zh:['Palm Cove','向北 25 分钟的棕榈海滩小镇，适合海边悠长午餐。']}
+        ],
+        months:{best:[5,6,7,8,9],good:[4,10]}, // dry season May-Oct
+        when:{en:'The dry season (May–October) is prime: warm, clear reef water and low rainfall. The wet season (Nov–April) is hotter and is marine-stinger season — swim in netted areas or wear a stinger suit; reef tours still run.',zh:'旱季（5–10 月）最佳：温暖、堡礁水质清澈、降雨少。雨季（11 月–4 月）更炎热，且为水母季——请在防护网区域游泳或穿防蜇衣；堡礁行程仍照常运营。'},
+        budget:[
+          {lab:{en:'Budget',zh:'经济'},amt:'130–200',note:{en:'Hostel, a $99–150 reef day trip, self-catering, town lagoon swims.',zh:'青旅、99–150 澳元堡礁一日游、自炊、市区泻湖游泳。'}},
+          {lab:{en:'Mid-range',zh:'中档'},amt:'260–420',note:{en:'Reef resort, premium outer-reef pontoon tour, Daintree day trip.',zh:'堡礁度假村、高级外堡礁浮台游、Daintree 一日游。'}},
+          {lab:{en:'Luxury',zh:'豪华'},amt:'600+',note:{en:'5★ or island resort, private dive charter, scenic-flight over the reef.',zh:'五星或海岛度假村、私人潜水包船、堡礁观光飞行。'}}
+        ]
+      },
+      goldcoast: {
+        destId: 367, lat:-28.0167, lng:153.4000, searchCity:'Gold Coast',
+        hero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Gold_Coast_skyline_%28Unsplash%29.jpg/1280px-Gold_Coast_skyline_%28Unsplash%29.jpg',
+        name:{en:'Gold Coast',zh:'黄金海岸'},
+        hook:{en:'The Gold Coast, beyond the theme parks',zh:'黄金海岸，不止主题公园'},
+        sub:{en:'Surf breaks for every level, rainforest in the hinterland, whales offshore in winter, and a glittering high-rise beach strip.',zh:'适合各水平的冲浪点、腹地雨林、冬季近海观鲸，以及璀璨的高楼海滩带。'},
+        around:[
+          {i:'ph-tram',en:['Ride the G:link tram','The light rail runs the coast from Broadbeach to Southport — base yourself near a stop and skip the car.'],zh:['乘坐 G:link 轻轨','轻轨沿海岸从 Broadbeach 通往 Southport——住在站点附近即可免开车出行。']},
+          {i:'ph-person-simple-swim',en:['Beaches by skill','Surfers Paradise for first-timers; Burleigh Heads and Snapper Rocks for experienced surfers.'],zh:['按水平选海滩','冲浪者天堂适合新手；Burleigh Heads 与 Snapper Rocks 适合资深冲浪者。']},
+          {i:'ph-car',en:['Car for the hinterland','Tamborine Mountain and Springbrook rainforest are ~45 min inland and reward a day trip.'],zh:['腹地需租车','Tamborine 山与 Springbrook 雨林车程约 45 分钟，值得一日游。']}
+        ],
+        eat:[
+          {en:['Burleigh Heads','Beachfront cafes and a buzzing dinner strip above the point.'],zh:['Burleigh Heads','海滨咖啡馆与岬角上热闹的晚餐街。']},
+          {en:['Broadbeach','Restaurant-dense blocks and the Kurrawa beachfront markets.'],zh:['Broadbeach','餐厅林立的街区与 Kurrawa 海滨集市。']},
+          {en:['Miami Marketta','A weekend street-food warehouse with live music.'],zh:['Miami Marketta','周末的街头美食仓库，现场音乐相伴。']}
+        ],
+        months:{best:[8,9,10],good:[3,4,5]},
+        when:{en:'Warm and subtropical all year. Spring (Sep–Nov) and autumn (Mar–May) are ideal — warm water, thinner crowds. Whale-watching season runs June–November.',zh:'全年温暖亚热带气候。春季（9–11 月）与秋季（3–5 月）最佳——水温宜人、人流较少。观鲸季为 6 月至 11 月。'},
+        budget:[
+          {lab:{en:'Budget',zh:'经济'},amt:'120–180',note:{en:'Beach hostel or motel, tram travel, one theme park or tour.',zh:'海滩青旅或汽车旅馆、轻轨出行、一处主题公园或行程。'}},
+          {lab:{en:'Mid-range',zh:'中档'},amt:'240–360',note:{en:'Beachfront apartment, a whale cruise, dinners out.',zh:'海滨公寓、一次观鲸游船、外出晚餐。'}},
+          {lab:{en:'Luxury',zh:'豪华'},amt:'520+',note:{en:'High-rise resort, private hinterland tour, fine dining.',zh:'高层度假酒店、私人腹地导览、精致餐饮。'}}
+        ]
+      },
+      brisbane: {
+        destId: 363, lat:-27.4698, lng:153.0251, searchCity:'Brisbane',
+        hero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Brisbane_CBD_seen_from_Kangaroo_Point%2C_2024%2C_01_%282%29.jpg/1280px-Brisbane_CBD_seen_from_Kangaroo_Point%2C_2024%2C_01_%282%29.jpg',
+        name:{en:'Brisbane',zh:'布里斯班'},
+        hook:{en:'Brisbane, Australia’s most underrated city',zh:'布里斯班，澳大利亚最被低估的城市'},
+        sub:{en:'River-city sunshine, koala cuddles, a world-class gallery precinct, and a launchpad for Australia Zoo and Moreton Island.',zh:'河畔阳光之城、抱考拉、世界级美术馆区，也是前往澳大利亚动物园与摩顿岛的门户。'},
+        around:[
+          {i:'ph-boat',en:['Ride the CityCat','The CityCat catamarans up and down the Brisbane River are the best way to move and sightsee. Uses the go card.'],zh:['乘坐 CityCat','沿布里斯班河往返的 CityCat 双体船是出行兼观光的最佳方式，使用 go card。']},
+          {i:'ph-person-simple-walk',en:['Walk South Bank','GOMA, the museums and the man-made Streets Beach lagoon all cluster in walkable South Bank.'],zh:['漫步南岸','GOMA 美术馆、博物馆与人工 Streets Beach 泻湖都集中在可步行的南岸。']},
+          {i:'ph-paw-print',en:['Cuddle a koala','Lone Pine, the world’s oldest koala sanctuary, is a short bus or river cruise from the city.'],zh:['抱抱考拉','全球最古老的考拉保护区 Lone Pine，乘公交或游船即可从市区抵达。']}
+        ],
+        eat:[
+          {en:['Fish Lane','A laneway of small bars and restaurants under the rail line in South Brisbane.'],zh:['Fish Lane','南布里斯班铁路桥下的小酒吧与餐厅小巷。']},
+          {en:['West End','Multicultural cafes, the Davies Park market and late-night eats.'],zh:['West End','多元文化咖啡馆、Davies Park 集市与深夜美食。']},
+          {en:['Eat Street Northshore','A shipping-container night market by the river (Fri–Sun).'],zh:['Eat Street Northshore','河畔的集装箱夜市（周五至周日）。']}
+        ],
+        months:{best:[3,4,8,9],good:[5,6]},
+        when:{en:'Warm year-round. April–May and September–October are the sweet spot — sunny and mild. Summers (Dec–Feb) are hot and humid with afternoon storms.',zh:'全年温暖。4–5 月与 9–10 月最宜人——晴朗温和。夏季（12–2 月）炎热潮湿，午后多雷雨。'},
+        budget:[
+          {lab:{en:'Budget',zh:'经济'},amt:'110–170',note:{en:'Hostel or budget hotel, ferries, South Bank (free), one day trip.',zh:'青旅或经济酒店、渡轮、南岸（免费）、一次一日游。'}},
+          {lab:{en:'Mid-range',zh:'中档'},amt:'220–340',note:{en:'CBD or riverside hotel, Australia Zoo trip, dinners out.',zh:'市中心或河畔酒店、澳大利亚动物园行程、外出晚餐。'}},
+          {lab:{en:'Luxury',zh:'豪华'},amt:'500+',note:{en:'Riverfront 5★, private tours, chef’s tables.',zh:'河景五星、私人导览、主厨餐桌。'}}
+        ]
+      },
+      perth: {
+        destId: 389, lat:-31.9523, lng:115.8613, searchCity:'Perth',
+        hero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Perth_CBD_skyline_from_State_War_Memorial_Lookout%2C_2023%2C_04_b.jpg/1280px-Perth_CBD_skyline_from_State_War_Memorial_Lookout%2C_2023%2C_04_b.jpg',
+        name:{en:'Perth',zh:'珀斯'},
+        hook:{en:'Perth & the wild west coast',zh:'珀斯与狂野西海岸'},
+        sub:{en:'Quokka selfies on Rottnest, historic Fremantle, white-sand city beaches, and the Pinnacles desert at sunset.',zh:'在罗特尼斯岛与短尾矮袋鼠自拍、historic 弗里曼特尔、白沙城市海滩，以及日落时分的尖峰石阵。'},
+        around:[
+          {i:'ph-boat',en:['Ferry to Rottnest','Ferries from Perth or Fremantle reach car-free Rottnest Island (and its quokkas) in ~30–90 min.'],zh:['渡轮前往罗特尼斯','从珀斯或弗里曼特尔乘渡轮约 30–90 分钟即达无车的罗特尼斯岛（及其短尾矮袋鼠）。']},
+          {i:'ph-train-simple',en:['Train to Fremantle','The Transperth train links the city to the historic port in ~30 min (SmartRider card).'],zh:['火车去弗里曼特尔','Transperth 火车约 30 分钟连接市区与历史港口（使用 SmartRider 卡）。']},
+          {i:'ph-car',en:['Car for the Pinnacles & wine','The Pinnacles (2 hr north) and Margaret River wine region (3 hr south) need a car or a tour.'],zh:['尖峰石阵与酒乡需租车','尖峰石阵（北行 2 小时）与玛格丽特河酒乡（南行 3 小时）需自驾或参团。']}
+        ],
+        eat:[
+          {en:['Fremantle','The cappuccino strip, the fishing-boat harbour and Little Creatures brewery.'],zh:['弗里曼特尔','咖啡一条街、渔船码头与 Little Creatures 精酿酒厂。']},
+          {en:['Northbridge','Perth’s nightlife and multicultural food quarter.'],zh:['Northbridge','珀斯的夜生活与多元美食区。']},
+          {en:['Cottesloe Beach','Sunset dinners over the Indian Ocean.'],zh:['Cottesloe 海滩','印度洋畔的日落晚餐。']}
+        ],
+        months:{best:[8,9,10],good:[2,3,4]},
+        when:{en:'A Mediterranean climate — hot, dry summers and mild winters. September–November (wildflower season) and March–May are the most comfortable, with warm, dry days.',zh:'地中海气候——夏季炎热干燥，冬季温和。9–11 月（野花季）与 3–5 月最舒适，温暖而干爽。'},
+        budget:[
+          {lab:{en:'Budget',zh:'经济'},amt:'120–180',note:{en:'Hostel, trains and ferries, a Rottnest day trip.',zh:'青旅、火车与渡轮、一次罗特尼斯一日游。'}},
+          {lab:{en:'Mid-range',zh:'中档'},amt:'240–370',note:{en:'City or Fremantle hotel, Pinnacles tour, dinners out.',zh:'市区或弗里曼特尔酒店、尖峰石阵行程、外出晚餐。'}},
+          {lab:{en:'Luxury',zh:'豪华'},amt:'520+',note:{en:'Riverside 5★, private wine touring, island stays.',zh:'河畔五星、私人酒庄之旅、海岛住宿。'}}
+        ]
+      },
+      adelaide: {
+        destId: 376, lat:-34.9285, lng:138.6007, searchCity:'Adelaide',
+        hero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Adelaide_skyline%2C_December_2022_b.jpg/1280px-Adelaide_skyline%2C_December_2022_b.jpg',
+        name:{en:'Adelaide',zh:'阿德莱德'},
+        hook:{en:'Adelaide: wine, wildlife & the outback',zh:'阿德莱德：葡萄酒、野生动物与内陆'},
+        sub:{en:'World-class wine an hour from the city, koalas and sea lions on Kangaroo Island, and a compact, walkable festival capital.',zh:'距市区仅一小时的世界级葡萄酒、袋鼠岛上的考拉与海狮，以及紧凑宜步行的节庆之都。'},
+        around:[
+          {i:'ph-tram',en:['Free city loop','Free Adelaide Metro buses and the Glenelg tram cover the flat, walkable CBD.'],zh:['免费市区环线','免费的 Adelaide Metro 巴士与 Glenelg 电车覆盖平坦、宜步行的市中心。']},
+          {i:'ph-wine',en:['Tour the wine country','The Barossa and McLaren Vale are ~45–60 min by car — or take a winery day tour.'],zh:['畅游葡萄酒乡','巴罗萨与麦克拉伦谷车程约 45–60 分钟——或参加酒庄一日游。']},
+          {i:'ph-boat',en:['Ferry to Kangaroo Island','KI is a ferry-plus-drive or a long day tour: sea lions, koalas and rugged coast.'],zh:['前往袋鼠岛','袋鼠岛需渡轮加自驾或参加长途一日游：海狮、考拉与崎岖海岸。']}
+        ],
+        eat:[
+          {en:['Adelaide Central Market','150 years of produce, cheese and multicultural food stalls in the CBD.'],zh:['阿德莱德中央市场','市中心拥有 150 年历史的生鲜、奶酪与多元美食摊位。']},
+          {en:['Gouger Street','Adelaide’s Chinatown and seafood strip.'],zh:['Gouger 街','阿德莱德的唐人街与海鲜一条街。']},
+          {en:['Glenelg','Beachfront dining at the end of the tram line.'],zh:['Glenelg','电车终点的海滨餐饮。']}
+        ],
+        months:{best:[2,3,4],good:[8,9,10]},
+        when:{en:'Hot, dry summers and mild winters. Autumn (Mar–May) is glorious — vintage season in the wine country — and spring (Sep–Nov) brings festivals and mild days.',zh:'夏季炎热干燥，冬季温和。秋季（3–5 月）绝佳——酒乡的采收季；春季（9–11 月）节庆连连、气候宜人。'},
+        budget:[
+          {lab:{en:'Budget',zh:'经济'},amt:'110–160',note:{en:'Hostel or budget hotel, free transit, Central Market eats.',zh:'青旅或经济酒店、免费交通、中央市场美食。'}},
+          {lab:{en:'Mid-range',zh:'中档'},amt:'210–330',note:{en:'City hotel, a Barossa wine tour, dinners out.',zh:'市区酒店、一次巴罗萨酒庄游、外出晚餐。'}},
+          {lab:{en:'Luxury',zh:'豪华'},amt:'480+',note:{en:'Boutique hotel, private wine touring, Kangaroo Island lodge.',zh:'精品酒店、私人酒庄之旅、袋鼠岛小屋。'}}
+        ]
+      },
+      hobart: {
+        destId: 379, lat:-42.8821, lng:147.3272, searchCity:'Hobart',
+        hero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Franklin_Wharf_2015_b_%28cropped%29.jpg/1280px-Franklin_Wharf_2015_b_%28cropped%29.jpg',
+        name:{en:'Hobart & Tasmania',zh:'霍巴特与塔斯马尼亚'},
+        hook:{en:'Tasmania, Australia’s adventure island',zh:'塔斯马尼亚，澳大利亚的探险之岛'},
+        sub:{en:'The daring MONA museum, Bruny Island oysters, Salamanca’s Saturday market, and Cradle Mountain wilderness within reach.',zh:'大胆前卫的 MONA 博物馆、布鲁尼岛生蚝、萨拉曼卡周六集市，以及触手可及的摇篮山荒野。'},
+        around:[
+          {i:'ph-person-simple-walk',en:['Walk the waterfront','Hobart’s harbour, Salamanca and the CBD are compact and walkable; buses cover the rest.'],zh:['漫步海滨','霍巴特的港口、萨拉曼卡与市中心紧凑宜步行；其余可乘公交。']},
+          {i:'ph-boat',en:['Ferry to MONA','The camo-painted MONA ferry from the waterfront is the best way to reach the museum.'],zh:['渡轮去 MONA','从海滨出发的迷彩涂装 MONA 渡轮是抵达博物馆的最佳方式。']},
+          {i:'ph-car',en:['Car for the wild','Bruny Island, the Tasman Peninsula and Cradle Mountain need a hire car or a day tour.'],zh:['探索荒野需租车','布鲁尼岛、塔斯曼半岛与摇篮山需自驾或参加一日游。']}
+        ],
+        eat:[
+          {en:['Salamanca Market','Saturday’s famous open-air market — produce, cheese, whisky and crafts.'],zh:['萨拉曼卡集市','著名的周六露天集市——生鲜、奶酪、威士忌与手工艺品。']},
+          {en:['Bruny Island','A day-trip foodie trail of oysters, cheese, fudge and whisky.'],zh:['布鲁尼岛','一日游美食之旅：生蚝、奶酪、软糖与威士忌。']},
+          {en:['Battery Point','Historic cottages and cafes a short walk from the docks.'],zh:['Battery Point','距码头几步之遥的历史小屋与咖啡馆。']}
+        ],
+        months:{best:[11,0,1],good:[2,3]},
+        when:{en:'Cool year-round. Summer (Dec–Feb) is warmest and best for hiking and the islands; autumn (Mar–Apr) turns the fagus golden. Pack layers in any season.',zh:'全年凉爽。夏季（12–2 月）最暖，最适合徒步与海岛；秋季（3–4 月）水青冈叶转金黄。无论何季都请备好可叠穿衣物。'},
+        budget:[
+          {lab:{en:'Budget',zh:'经济'},amt:'120–180',note:{en:'Hostel or cabin, Salamanca market, one island day trip.',zh:'青旅或木屋、萨拉曼卡集市、一次海岛一日游。'}},
+          {lab:{en:'Mid-range',zh:'中档'},amt:'230–360',note:{en:'Waterfront hotel, MONA, a Bruny Island tour.',zh:'海滨酒店、MONA、一次布鲁尼岛行程。'}},
+          {lab:{en:'Luxury',zh:'豪华'},amt:'520+',note:{en:'Boutique stay, private wilderness tours, scenic flights.',zh:'精品住宿、私人荒野导览、观光飞行。'}}
+        ]
+      }
+    };
+    const CITY_ORDER = ['sydney','melbourne','cairns','goldcoast','brisbane','perth','adelaide','hobart'];
+    const MONTHS = {en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+                    zh:['一','二','三','四','五','六','七','八','九','十','十一','十二']};
+
+    const cityKey = (BA.getParam('city')||'').toLowerCase();
+    document.getElementById('nav-mount').innerHTML = BA.renderNav('exp');
+    document.getElementById('footer-mount').innerHTML = BA.renderFooter();
+
+    if (CITY[cityKey]) renderCity(cityKey); else renderHub();
+    BA.init();
+
+    // ============ HUB ============
+    function renderHub(){
+      document.title = L('Experiences across Australia — OzBookings','澳大利亚体验活动 — OzBookings');
+      const cards = CITY_ORDER.map(k=>{
+        const c=CITY[k];
+        return `<a class="hub-card reveal" href="experiences.html?city=${k}">
+          <img src="${c.hero}" alt="${c.name[BA.lang]||c.name.en}" loading="lazy" onerror="this.src='${UNS_FB}'">
+          <div class="hb"><h3>${c.name[BA.lang]||c.name.en}</h3><p>${c.hook[BA.lang]||c.hook.en}</p></div>
+        </a>`;
+      }).join('');
+      document.getElementById('app').innerHTML = `
+        <section class="xp-hero">
+          <div class="xp-hero-bg"><img src="${CITY.cairns.hero}" alt="" onerror="this.src='${UNS_FB}'"></div>
+          <div class="xp-hero-in wrap">
+            <span class="eyebrow">${L('OzBookings · Experiences','OzBookings · 体验活动')}</span>
+            <h1>${L('Do the real Australia','玩转真实的澳大利亚')}</h1>
+            <p>${L('Top-rated, instantly bookable experiences — paired with honest local guides and live hotel rates. Pick a destination to start.','高评分、即刻可订的体验活动——搭配真实的本地攻略与实时酒店价格。选择目的地开始吧。')}</p>
+          </div>
+        </section>
+        <section class="xp-sec wrap">
+          <div class="xp-head reveal"><h2>${L('Where are you headed?','你要去哪里？')}</h2><p>${L('Deep local guides for Australia\'s must-visit regions — with the experiences that actually make the trip.','为澳大利亚必访地区打造的深度本地攻略——附上真正成就旅程的体验活动。')}</p></div>
+          <div class="hub-grid">${cards}</div>
+          <p class="xp-disc reveal"><i class="ph-fill ph-info"></i>${L('Experiences are provided by our partner Viator (a Tripadvisor company). Hotels are booked directly with OzBookings.','体验活动由合作伙伴 Viator（Tripadvisor 旗下公司）提供。酒店通过 OzBookings 直接预订。')}</p>
+        </section>`;
+    }
+
+    // ============ CITY GUIDE ============
+    function renderCity(key){
+      const c = CITY[key];
+      const nm = c.name[BA.lang]||c.name.en;
+      document.title = `${c.hook[BA.lang]||c.hook.en} — OzBookings`;
+      const md=document.getElementById('metaDesc'); if(md) md.setAttribute('content', c.sub[BA.lang]||c.sub.en);
+      const cn=document.getElementById('canon'); if(cn) cn.setAttribute('href', 'https://ozbookings.com/experiences.html?city='+key);
+
+      const cityPills = CITY_ORDER.map(k=>`<a class="xp-citypill ${k===key?'on':''}" href="experiences.html?city=${k}">${CITY[k].name[BA.lang]||CITY[k].name.en}</a>`).join('');
+
+      const around = c.around.map(a=>{const x=a[BA.lang]||a.en;return `<div class="info-item reveal"><i class="ph-light ${a.i}"></i><div><h4>${x[0]}</h4><p>${x[1]}</p></div></div>`;}).join('');
+      const eat = c.eat.map(e=>{const x=e[BA.lang]||e.en;return `<div class="info-item reveal"><i class="ph-light ph-fork-knife"></i><div><h4>${x[0]}</h4><p>${x[1]}</p></div></div>`;}).join('');
+      const months = MONTHS[BA.lang].map((m,idx)=>{const cls=c.months.best.includes(idx)?'best':(c.months.good.includes(idx)?'good':'');return `<div class="mo ${cls}"><div class="m">${m}</div></div>`;}).join('');
+      const budget = c.budget.map((b,idx)=>`<div class="bud-card ${idx===1?'mid':''} reveal"><div class="lab">${b.lab[BA.lang]||b.lab.en}</div><div class="amt">A$${b.amt}<small> ${L('/ day pp','/ 天/人')}</small></div><p>${b.note[BA.lang]||b.note.en}</p></div>`).join('');
+
+      document.getElementById('app').innerHTML = `
+        <section class="xp-hero">
+          <div class="xp-hero-bg"><img src="${c.hero}" alt="${nm}" onerror="this.src='${UNS_FB}'"></div>
+          <div class="xp-hero-in wrap">
+            <span class="eyebrow">${L('Australia · Experiences','澳大利亚 · 体验活动')}</span>
+            <h1>${c.hook[BA.lang]||c.hook.en}</h1>
+            <p>${c.sub[BA.lang]||c.sub.en}</p>
+            <div class="xp-hero-cta">
+              <a class="btn btn-coral" href="#experiences"><span>${L('See top experiences','查看热门体验')}</span><span class="btn-i"><i class="ph-bold ph-arrow-down"></i></span></a>
+              <a class="btn btn-outline" href="search.html?city=${encodeURIComponent(nmEn(key))}" style="color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)"><span>${L('Find stays','查找住宿')}</span><span class="btn-i" style="background:rgba(255,255,255,.2)"><i class="ph-bold ph-bed"></i></span></a>
+            </div>
+            <div class="xp-cities">${cityPills}</div>
+          </div>
+        </section>
+
+        <section class="xp-sec wrap" id="experiences">
+          <div class="xp-head reveal"><span class="eyebrow" style="margin-bottom:14px">${L('What to actually do','真正值得做的事')}</span><h2>${L('Top-rated things to do in','热门体验目的地：')} ${nm}</h2><p>${L('Ranked by real traveller reviews and popularity. Book instantly with free cancellation on most.','依据真实旅客评价与热度排序，多数支持免费取消、即时确认。')}</p></div>
+          <div class="xp-grid" id="expGrid">${skel(6)}</div>
+          <p class="xp-disc"><i class="ph-fill ph-shield-check"></i>${L('Experiences booked securely via our partner Viator (a Tripadvisor company).','体验通过合作伙伴 Viator（Tripadvisor 旗下）安全预订。')}</p>
+        </section>
+
+        <section class="xp-sec tight" style="background:var(--bg-el);border-block:1px solid var(--bd)">
+          <div class="wrap">
+            <div class="xp-head reveal"><h2>${L('Where to stay in','住宿推荐：')} ${nm}</h2><p>${L('Book any of these direct through OzBookings and keep the savings the big platforms take.','通过 OzBookings 直接预订，省下大平台抽走的差价。')}</p></div>
+            <div class="stay-grid">
+              <div class="stay-card reveal"><div class="ico"><i class="ph-light ph-wallet"></i></div><h3>${L('Budget','经济')}</h3><p>${L('Clean, well-located stays under budget. Sort by price and book direct.','干净、位置好的高性价比住宿。按价格排序并直接预订。')}</p><a class="btn btn-sm btn-outline" href="search.html?city=${encodeURIComponent(nmEn(key))}"><span>${L('Browse stays','浏览住宿')}</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></a></div>
+              <div class="stay-card reveal rd1"><div class="ico"><i class="ph-light ph-buildings"></i></div><h3>${L('Mid-range','中档')}</h3><p>${L('3–4★ hotels in the best neighbourhoods, with live direct-rate pricing.','位于最佳区域的 3–4 星酒店，实时直订价格。')}</p><a class="btn btn-sm btn-outline" href="search.html?city=${encodeURIComponent(nmEn(key))}"><span>${L('Browse stays','浏览住宿')}</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></a></div>
+              <div class="stay-card reveal rd2"><div class="ico"><i class="ph-light ph-crown-simple"></i></div><h3>${L('Luxury','豪华')}</h3><p>${L('Top-rated and view hotels. Members unlock an extra saving at checkout.','高评分与景观酒店。会员结账时享额外优惠。')}</p><a class="btn btn-sm btn-outline" href="search.html?city=${encodeURIComponent(nmEn(key))}"><span>${L('Browse stays','浏览住宿')}</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></a></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="xp-sec wrap">
+          <div class="xp-head reveal"><h2>${L('Getting around','交通出行')}</h2></div>
+          <div class="info-grid">${around}</div>
+        </section>
+
+        <section class="xp-sec tight wrap">
+          <div class="xp-head reveal"><h2>${L('Eat like a local','像当地人一样吃')}</h2></div>
+          <div class="info-grid">${eat}</div>
+        </section>
+
+        <section class="xp-sec" style="background:var(--bg-el);border-block:1px solid var(--bd)">
+          <div class="wrap">
+            <div class="xp-head reveal"><h2>${L('When to visit','最佳出行时间')}</h2><p>${c.when[BA.lang]||c.when.en}</p></div>
+            <div class="months reveal">${months}</div>
+            <div style="display:flex;gap:18px;margin-top:16px;font-size:12.5px;color:var(--tx2);flex-wrap:wrap">
+              <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--ac);vertical-align:-1px"></span> ${L('Best','最佳')}</span>
+              <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--ac-l);vertical-align:-1px"></span> ${L('Good','不错')}</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="xp-sec wrap">
+          <div class="xp-head reveal"><h2>${L('What it costs','花费参考')}</h2><p>${L('A rough per-person daily guide (stay + food + one activity). Real prices vary by season.','每人每日的大致参考（住宿+餐饮+一项活动）。实际价格随季节浮动。')}</p></div>
+          <div class="bud-grid">${budget}</div>
+        </section>
+
+        <section class="xp-sec tight" style="background:var(--bg-el);border-top:1px solid var(--bd)">
+          <div class="wrap">
+            <div class="xp-head reveal"><h2>${L('Plan your trip to','规划你的行程：')} ${nm}</h2></div>
+            <div class="plan-grid">
+              <div class="plan-card reveal"><div class="plan-in">
+                <h3>${L('Find your stay','查找住宿')}</h3><p>${L('Live direct rates. Book direct, save more.','实时直订价格。直接预订，省得更多。')}</p>
+                <form onsubmit="return goSearch(event)">
+                  <div class="fg" style="margin-bottom:12px"><label>${L('Check in','入住')}</label><input type="date" id="pci"></div>
+                  <div class="fg" style="margin-bottom:12px"><label>${L('Check out','退房')}</label><input type="date" id="pco"></div>
+                  <div class="fg" style="margin-bottom:16px"><label>${L('Guests','人数')}</label><select id="pgu"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select></div>
+                  <button class="btn btn-coral btn-full" type="submit"><span>${L('Search stays in','搜索住宿：')} ${nm}</span><span class="btn-i"><i class="ph-bold ph-magnifying-glass"></i></span></button>
+                </form>
+              </div></div>
+              <div class="plan-map reveal"><iframe loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=${c.lng-0.09},${c.lat-0.07},${c.lng+0.09},${c.lat+0.07}&layer=mapnik&marker=${c.lat},${c.lng}"></iframe></div>
+            </div>
+          </div>
+        </section>`;
+
+      document.getElementById('pci').value = BA.defaultCheckin();
+      document.getElementById('pco').value = BA.defaultCheckout();
+      loadExperiences(c.destId);
+      BA.init();
+    }
+
+    function nmEn(key){ const m={sydney:'Sydney',melbourne:'Melbourne',cairns:'Cairns',goldcoast:'Gold Coast',brisbane:'Brisbane',perth:'Perth',adelaide:'Adelaide',hobart:'Hobart'}; return (CITY[key]&&CITY[key].searchCity)||m[key]||(CITY[key]&&CITY[key].name.en.split(' ')[0])||''; }
+    function skel(n){ let h=''; for(let i=0;i<n;i++) h+='<div class="xp-skel"></div>'; return h; }
+    function goSearch(e){ e.preventDefault(); const k=cityKey; location.href=`search.html?city=${encodeURIComponent(nmEn(k))}&ci=${document.getElementById('pci').value}&co=${document.getElementById('pco').value}&gu=${document.getElementById('pgu').value}`; return false; }
+
+    async function loadExperiences(destId){
+      const grid = document.getElementById('expGrid'); if(!grid) return;
+      let list = [];
+      try { const r = await fetch(`/api/experiences?dest=${destId}&count=9`); const j = await r.json(); list = j.experiences||[]; } catch(e){}
+      if(!list.length){ grid.innerHTML = `<div class="alert alert-info" style="grid-column:1/-1"><i class="ph ph-info"></i><span>${L('Live experiences are loading — refresh in a moment.','体验活动加载中——请稍后刷新。')}</span></div>`; return; }
+      grid.innerHTML = list.map(x=>{
+        const badges = `${x.freeCancel?`<span class="xp-chip free">${L('Free cancellation','免费取消')}</span>`:''}${x.sellsOut?`<span class="xp-chip hot">${L('Selling fast','即将售罄')}</span>`:''}`;
+        return `<a class="xp-card reveal" href="experience.html?code=${encodeURIComponent(x.code)}&price=${x.fromPrice}&city=${cityKey}">
+          <div class="xp-card-img">
+            <img src="${x.img}" alt="${escapeHtml(x.title)}" loading="lazy" onerror="this.src='${UNS_FB}'">
+            <div class="xp-card-badges">${badges}</div>
+            ${x.rating?`<div class="xp-rate"><i class="ph-fill ph-star"></i>${x.rating}</div>`:''}
+          </div>
+          <div class="xp-card-body">
+            <h3>${escapeHtml(x.title)}</h3>
+            <div class="xp-meta">${x.rating?`<span><i class="ph-fill ph-star" style="color:var(--star)"></i>${x.rating} (${x.reviews.toLocaleString()})</span>`:''}${x.duration?`<span><i class="ph ph-clock"></i>${x.duration}</span>`:''}</div>
+            <div class="xp-card-foot">
+              <div class="xp-price"><small>${L('from','起')}</small><b>A$${x.fromPrice}</b></div>
+              <span class="xp-book">${L('Book','预订')}<i class="ph-bold ph-arrow-up-right"></i></span>
+            </div>
+          </div>
+        </a>`;
+      }).join('');
+      BA.init();
+    }
+    function escapeHtml(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  </script>
+</body>
+</html>

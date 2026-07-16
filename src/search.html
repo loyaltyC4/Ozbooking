@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Hotels — OzBookings</title>
+  <link rel="stylesheet" href="styles.css?v=20260703b">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="icon" href="/favicon.svg">
+  <meta property="og:title" content="OzBookings — Book direct across Australia">
+  <meta property="og:description" content="Compare hotel prices across Australia and book direct. Members save more.">
+  <meta name="theme-color" content="#14171A">
+  <style>
+    .navpad{height:92px}
+    .search-bar{position:sticky;top:78px;z-index:80;background:rgba(247,248,246,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--bd);border-radius:var(--rc);box-shadow:var(--s1);padding:14px;margin-bottom:8px;transition:box-shadow .4s var(--ease)}
+    .sb-summary{display:none;align-items:center;justify-content:space-between;gap:12px;width:100%;background:transparent;border:0;cursor:pointer;text-align:left;padding:2px 4px}
+    .sb-summary .s-main{display:flex;align-items:center;gap:12px;min-width:0}
+    .sb-summary .s-ic{width:42px;height:42px;border-radius:50%;background:var(--ac-l);color:var(--ac);display:grid;place-items:center;font-size:19px;flex-shrink:0}
+    .sb-summary .s-txt{min-width:0}
+    .sb-summary .s-txt b{display:block;font-family:var(--display);font-weight:600;font-size:16px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sb-summary .s-txt span{font-size:12.5px;color:var(--tx2)}
+    .sb-summary .s-edit{font-size:13px;font-weight:600;color:var(--ac-ink);display:flex;align-items:center;gap:6px;flex-shrink:0}
+    .sb-summary .s-edit i{transition:transform .4s var(--ease)}
+    .sb-form{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:768px){.sb-summary{display:none!important}.sb-form{grid-template-columns:1.6fr 1fr 1fr .8fr auto;align-items:end}}
+    @media(max-width:767px){
+      .sb-summary{display:flex}
+      .sb-form{display:none}
+      .search-bar.open .sb-form{display:grid;margin-top:14px;padding-top:14px;border-top:1px solid var(--bd)}
+      .search-bar.open .s-edit i{transform:rotate(180deg)}
+    }
+    .results-head{padding:30px 0 22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+    .results-count{font-size:14px;color:var(--tx2)}
+    .results-count strong{color:var(--tx);font-weight:700;font-family:var(--display)}
+    .sort-bar select{padding:10px 14px;border:1px solid var(--bd);border-radius:var(--rp);font-size:13px;background:var(--bg-el);color:var(--tx);cursor:pointer;font-family:var(--sans);font-weight:500}
+    .results-grid{display:grid;grid-template-columns:1fr;gap:20px;padding-bottom:56px}
+    @media(min-width:640px){.results-grid{grid-template-columns:1fr 1fr}}
+    @media(min-width:1024px){.results-grid{grid-template-columns:repeat(3,1fr)}}
+    .hc-img{position:relative;aspect-ratio:16/11;overflow:hidden;background:var(--bg-sub)}
+    .hc-img img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease-2)}
+    .hc-img .img2{position:absolute;inset:0;opacity:0;transition:opacity .55s var(--ease)}
+    .dbc:hover .hc-img img{transform:scale(1.06)}
+    .dbc:hover .hc-img .img2{opacity:1}
+    .hc-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+    .hc-badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:var(--rp);line-height:1}
+    .hc-badge i{font-size:13px}
+    .hc-badge.free{background:var(--ok-l);color:var(--ok)}
+    .hc-badge.meal{background:var(--ac-l);color:var(--ac-ink)}
+    .hc-det{padding:17px 19px 19px}
+    .hc-det h3{font-size:18px;font-weight:600;letter-spacing:-.01em;font-family:var(--display)}
+    .hc-loc{margin-top:4px;font-size:13px;color:var(--tx2);display:flex;align-items:center;gap:5px}
+    .hc-loc i{font-size:14px;color:var(--tx3)}
+    .hc-meta{margin-top:11px;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--tx2)}
+    .hc-stars{color:var(--star);letter-spacing:1px}
+    .hc-pr{margin-top:15px;padding-top:14px;border-top:1px solid var(--bd);display:flex;align-items:flex-end;justify-content:space-between}
+    .no-results{text-align:center;padding:80px 0;color:var(--tx2)}
+    .no-results i{font-size:48px;color:var(--tx3);margin-bottom:16px;display:block}
+    .no-results h3{font-size:22px;font-weight:600;color:var(--tx);margin-bottom:8px;font-family:var(--display)}
+    .filters{padding:6px 0 4px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+    .filters::-webkit-scrollbar{display:none}
+    .filter-chip{padding:9px 16px;border-radius:var(--rp);font-size:13px;font-weight:500;color:var(--tx2);background:var(--bg-el);border:1px solid var(--bd);cursor:pointer;white-space:nowrap;transition:all .3s var(--ease)}
+    .filter-chip:hover{border-color:rgba(20,23,26,.28)}
+    .filter-chip.active{background:var(--tx);color:#fff;border-color:var(--tx)}
+    .src-note{font-size:12px;color:var(--tx3);margin-left:8px}
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="nav-mount"></div>
+
+  <div class="wrap">
+    <div class="navpad"></div>
+    <div class="search-bar" id="searchBar">
+      <button type="button" class="sb-summary" onclick="toggleSearch()">
+        <span class="s-main"><span class="s-ic"><i class="ph-bold ph-magnifying-glass"></i></span>
+          <span class="s-txt"><b id="sbTitle">Search</b><span id="sbSub">Tap to edit</span></span></span>
+        <span class="s-edit">Edit <i class="ph-bold ph-caret-down"></i></span>
+      </button>
+      <form class="sb-form" id="searchForm" onsubmit="doSearch(event)">
+        <div class="fg"><label>Destination</label><input type="text" id="city" placeholder="Sydney, Melbourne..." autocomplete="off"></div>
+        <div class="fg"><label>Check in</label><input type="date" id="ci"></div>
+        <div class="fg"><label>Check out</label><input type="date" id="co"></div>
+        <div class="fg"><label>Guests</label><select id="gu"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select></div>
+        <button type="submit" class="btn btn-coral"><span>Search</span><span class="btn-i"><i class="ph-bold ph-magnifying-glass"></i></span></button>
+      </form>
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="filter-chip active" data-f="all">All stays</button>
+      <button class="filter-chip" data-f="pool">Pool</button>
+      <button class="filter-chip" data-f="wifi">Free WiFi</button>
+      <button class="filter-chip" data-f="breakfast">Breakfast</button>
+      <button class="filter-chip" data-f="spa">Spa</button>
+      <button class="filter-chip" data-f="parking">Parking</button>
+      <button class="filter-chip" data-f="gym">Gym</button>
+    </div>
+    <div class="results-head">
+      <div class="results-count" id="resultsCount">Searching...</div>
+      <div class="sort-bar">
+        <select id="sortBy" onchange="sortResults()">
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Rating: Best first</option>
+          <option value="savings">Savings: Best first</option>
+        </select>
+      </div>
+    </div>
+    <div class="results-grid" id="resultsGrid"></div>
+  </div>
+
+  <div id="footer-mount"></div>
+
+  <script src="shared.js?v=20260703b"></script>
+  <script>
+    let allResults = [];
+    const fallbackImgs = ['photo-1566073771259-6a8506099945','photo-1551882547-ff40c63fe5fa','photo-1618773928121-c32242e63f39','photo-1590490360182-c33d57733427','photo-1571896349842-33c89424de2d','photo-1582719478250-c89cae4dc85b','photo-1564501049412-61c2a3083791','photo-1520250497591-112f2f40a3f4'];
+    const img = (h, i) => h.mainPhoto || `https://images.unsplash.com/${fallbackImgs[i % fallbackImgs.length]}?auto=format&fit=crop&w=700&q=80`;
+
+    document.getElementById('nav-mount').innerHTML = BA.renderNav('search');
+    document.getElementById('footer-mount').innerHTML = BA.renderFooter();
+
+    const city = BA.getParam('city') || 'Sydney';
+    const ci = BA.getParam('ci') || BA.defaultCheckin();
+    const co = BA.getParam('co') || BA.defaultCheckout();
+    const gu = BA.getParam('gu') || '2';
+    const nights = BA.nightsBetween(ci, co);
+
+    document.getElementById('city').value = city;
+    document.getElementById('ci').value = ci;
+    document.getElementById('co').value = co;
+    document.getElementById('gu').value = gu;
+    document.title = `Hotels in ${BA.prettyCity(city)} — OzBookings`;
+    document.getElementById('resultsGrid').innerHTML = BA.skeletonCards(9);
+
+    // Mobile compact search summary
+    function toggleSearch(){ document.getElementById('searchBar').classList.toggle('open'); }
+    (function fillSummary(){
+      const fd = s => { const d=new Date(s); return isNaN(d)?s:d.toLocaleDateString('en-AU',{day:'numeric',month:'short'}); };
+      document.getElementById('sbTitle').textContent = BA.prettyCity(city);
+      document.getElementById('sbSub').textContent = `${fd(ci)} – ${fd(co)} · ${gu} guest${gu>1?'s':''}`;
+    })();
+
+    let lastMember = null;
+    async function runSearch() {
+      lastMember = BA.isMember();
+      let live = [];
+      try { live = await BA.searchHotels({ city, checkin: ci, checkout: co, guests: +gu }); }
+      catch (err) { console.log('Search error:', err); }
+      allResults = live || [];
+      BA.storeSearch({ city, checkin: ci, checkout: co, guests: +gu });
+      renderResults(allResults);
+    }
+    runSearch();
+
+    function renderResults(hotels) {
+      const grid = document.getElementById('resultsGrid');
+      if (!hotels.length) {
+        grid.innerHTML = `<div class="no-results" style="grid-column:1/-1"><i class="ph-light ph-magnifying-glass"></i><h3>No hotels found</h3><p>Try different dates or another destination.</p></div>`;
+        document.getElementById('resultsCount').innerHTML = `<strong>0</strong> hotels found`;
+        return;
+      }
+      document.getElementById('resultsCount').innerHTML = `<strong>${hotels.length}</strong> hotels in ${BA.prettyCity(city)} &middot; ${nights} night${nights>1?'s':''} &middot; ${gu} guest${gu>1?'s':''}`;
+
+      grid.innerHTML = hotels.map((h, i) => {
+        const name = h.hotelName || `${BA.prettyCity(city)} Hotel`;
+        const yp = h.retail, bp = h.suggested, sv = BA.getSavings(h);
+        const perNight = yp ? (yp / nights).toFixed(0) : null;
+        const bpNight = bp ? (bp / nights).toFixed(0) : null;
+        const mp = h.memberPrice; const mpNight = (mp != null) ? Math.round(mp / nights) : null; // server-gated member price
+        const stars = h.stars ? '★'.repeat(h.stars) : '';
+        const rating = h.rating ? `<span><i class="ph-fill ph-star" style="color:var(--star);font-size:12px"></i> ${h.rating}${h.reviewCount?` · ${h.reviewCount.toLocaleString()} reviews`:''}</span>` : '';
+        const bl = (h.board||'').toLowerCase();
+        const mealBadge = (h.board && !/room only|room-only|no meal/i.test(bl)) ? (/breakfast/i.test(bl) ? 'Breakfast included' : h.board) : '';
+        return `
+        <a href="hotel.html?hotelId=${encodeURIComponent(h.hotelId)}&city=${encodeURIComponent(city)}&ci=${ci}&co=${co}&gu=${gu}" class="dbc reveal rd${(i%4)+1}" onclick='BA.storeHotel(${JSON.stringify(JSON.stringify(h))})'>
+          <div class="dbc-in">
+            <div class="hc-img">
+              <img src="${img(h,i)}" alt="${name}" loading="lazy" onerror="this.src='https://images.unsplash.com/${fallbackImgs[i%fallbackImgs.length]}?auto=format&fit=crop&w=700&q=80'">
+              ${h.photo2?`<img class="img2" src="${h.photo2}" alt="" loading="lazy" onerror="this.remove()">`:''}
+              <button class="save-btn${BA.auth.isSaved(h.hotelId)?' saved':''}" style="left:13px;right:auto" title="Save this stay" onclick="event.preventDefault();event.stopPropagation();saveFromCard(${i})"><i class="ph${BA.auth.isSaved(h.hotelId)?'-fill':''} ph-heart"></i></button>
+              ${h.rating ? `<span class="badge-rate" style="position:absolute;top:13px;right:13px">${h.rating}</span>` : ''}
+            </div>
+            <div class="hc-det">
+              <h3>${name}</h3>
+              <div class="hc-loc"><i class="ph-light ph-map-pin"></i>${h.address || BA.prettyCity(city)}</div>
+              <div class="hc-meta">${stars?`<span class="hc-stars">${stars}</span>`:''}${rating}</div>
+              ${(h.refundable||mealBadge)?`<div class="hc-badges">${h.refundable?`<span class="hc-badge free"><i class="ph-fill ph-shield-check"></i>Free cancellation</span>`:''}${mealBadge?`<span class="hc-badge meal"><i class="ph-fill ph-coffee"></i>${mealBadge}</span>`:''}</div>`:''}
+              <div class="hc-pr">
+                <div>
+                  ${bpNight ? `<span class="price-old">A$${bpNight} typical</span>` : ''}
+                  ${perNight ? (mp!=null
+                     ? `<div class="price-member">A$${mpNight} <small>/night</small></div><div class="price-total">A$${mp} total · <span style="color:var(--ac-ink);font-weight:700">Member</span></div>`
+                     : `<div class="price-now">A$${perNight} <small>/night</small></div><div class="price-total">A$${yp.toFixed(0)} total</div>`)
+                   : '<div class="price-now">Check rates</div>'}
+                </div>
+                ${sv ? `<span class="badge-save">Save ${sv}%</span>` : ''}
+              </div>
+              ${(mp==null && !BA.isMember() && perNight) ? `<div style="margin-top:12px"><span class="unlock-pill" onclick="event.preventDefault();event.stopPropagation();BA.openAuth('signup')"><i class="ph ph-lock-simple"></i> Sign in to unlock member rates</span></div>` : ''}
+            </div>
+          </div>
+        </a>`;
+      }).join('');
+      BA.init();
+    }
+
+
+    function doSearch(e) {
+      e.preventDefault();
+      const c = document.getElementById('city').value || 'Sydney';
+      location.href = `search.html?city=${encodeURIComponent(c)}&ci=${document.getElementById('ci').value}&co=${document.getElementById('co').value}&gu=${document.getElementById('gu').value}`;
+    }
+
+    function sortResults() {
+      const v = document.getElementById('sortBy').value;
+      const s = [...allResults];
+      if (v === 'price-asc') s.sort((a,b)=>(a.retail||9e9)-(b.retail||9e9));
+      if (v === 'price-desc') s.sort((a,b)=>(b.retail||0)-(a.retail||0));
+      if (v === 'rating') s.sort((a,b)=>(b.rating||0)-(a.rating||0));
+      if (v === 'savings') s.sort((a,b)=>(BA.getSavings(b)||0)-(BA.getSavings(a)||0));
+      renderResults(s);
+    }
+
+    document.querySelectorAll('.filter-chip').forEach(c => c.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+    }));
+
+    function saveFromCard(i){
+      const h = allResults[i]; if(!h) return;
+      BA.auth.save({ hotel_id:h.hotelId, hotel_name:h.hotelName||`${BA.prettyCity(city)} Hotel`, city, checkin:ci, checkout:co, price:h.retail, main_photo:h.mainPhoto });
+    }
+    // Re-fetch with the session token when membership state changes, so members get server-gated pricing
+    document.addEventListener('ba-auth', ()=>{ if(BA.isMember()!==lastMember) runSearch(); else if(allResults.length) renderResults(allResults); });
+  </script>
+</body>
+</html>

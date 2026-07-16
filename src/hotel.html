@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Details — OzBookings</title>
+  <link rel="stylesheet" href="styles.css?v=20260703b">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="icon" href="/favicon.svg">
+  <meta property="og:title" content="OzBookings — Book direct across Australia">
+  <meta property="og:description" content="Compare hotel prices across Australia and book direct. Members save more.">
+  <meta name="theme-color" content="#14171A">
+  <style>
+    /* ===== HERO + GALLERY ===== */
+    .hp-top{padding-top:96px}
+    .hp-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:18px}
+    .hp-title h1{font-size:clamp(28px,4.4vw,46px);line-height:1.04}
+    .hp-title .skel-h1{height:44px;width:min(420px,70vw);border-radius:12px}
+    .hp-meta{display:flex;align-items:center;gap:14px;margin-top:12px;color:var(--tx2);font-size:14px;flex-wrap:wrap}
+    .hp-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--tx3)}
+    .hp-meta .stars{color:var(--star);letter-spacing:1px;font-size:13px}
+    .hp-score{display:inline-flex;align-items:center;gap:9px}
+    .hp-score b{background:var(--ac);color:#fff;font-family:var(--display);font-weight:600;font-size:14px;padding:5px 9px;border-radius:9px;line-height:1}
+    .hp-save-btn{flex-shrink:0}
+
+    /* magazine gallery: 1 big + 4 small */
+    .gal{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;border-radius:var(--rc);overflow:hidden;position:relative;aspect-ratio:16/8;background:var(--bg-sub)}
+    .gal .g{position:relative;overflow:hidden;cursor:pointer;background:var(--bg-sub)}
+    .gal .g:first-child{grid-row:span 2}
+    .gal .g img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease-2)}
+    .gal .g:hover img{transform:scale(1.05)}
+    .gal-all{position:absolute;right:16px;bottom:16px;z-index:3;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid var(--bd);border-radius:var(--rp);padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:var(--s1);transition:transform .4s var(--ease)}
+    .gal-all:hover{transform:translateY(-2px)}
+    @media(max-width:767px){.gal{grid-template-columns:1fr 1fr;aspect-ratio:5/4}.gal .g:first-child{grid-row:span 2}.gal .g:nth-child(4),.gal .g:nth-child(5){display:none}}
+
+    /* ===== LIGHTBOX ===== */
+    .lb{position:fixed;inset:0;z-index:200;background:rgba(8,10,14,.94);display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .4s var(--ease)}
+    .lb.show{display:flex;opacity:1}
+    .lb img{max-width:92vw;max-height:82vh;object-fit:contain;border-radius:10px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6)}
+    .lb-close{position:absolute;top:22px;right:22px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);border:0;color:#fff;font-size:22px;cursor:pointer;display:grid;place-items:center;transition:background .3s}
+    .lb-close:hover{background:rgba(255,255,255,.24)}
+    .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.12);border:0;color:#fff;font-size:22px;cursor:pointer;display:grid;place-items:center;transition:background .3s}
+    .lb-nav:hover{background:rgba(255,255,255,.24)}
+    .lb-prev{left:20px}.lb-next{right:20px}
+    .lb-count{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.8);font-family:var(--mono);font-size:13px;letter-spacing:.05em}
+
+    /* ===== BODY LAYOUT ===== */
+    .hp-body{display:grid;grid-template-columns:1fr;gap:40px;padding:44px 0 120px}
+    @media(min-width:960px){.hp-body{grid-template-columns:1.75fr .85fr;gap:52px}}
+    .hp-main > section{padding-bottom:40px;border-bottom:1px solid var(--bd);margin-bottom:40px}
+    .hp-main > section:last-child{border-bottom:0}
+    .hp-main h2{font-size:clamp(22px,2.4vw,28px);margin-bottom:18px}
+    .hp-main .lead{color:var(--tx2);line-height:1.75;font-size:15.5px}
+
+    /* quick facts */
+    .facts{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+    .fact{display:inline-flex;align-items:center;gap:8px;background:var(--bg-el);border:1px solid var(--bd);border-radius:var(--rp);padding:9px 15px;font-size:13px;font-weight:500;color:var(--tx)}
+    .fact i{font-size:17px;color:var(--ac)}
+
+    /* reviews / sentiment */
+    .rv-top{display:flex;align-items:center;gap:18px;margin-bottom:26px;flex-wrap:wrap}
+    .rv-score{background:var(--ac);color:#fff;font-family:var(--display);font-weight:600;font-size:30px;border-radius:var(--ri);padding:14px 20px;line-height:1}
+    .rv-cats{display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
+    @media(max-width:600px){.rv-cats{grid-template-columns:1fr}}
+    .rv-cat .rv-cl{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:7px}
+    .rv-cat .rv-cl b{font-family:var(--mono);font-weight:500}
+    .rv-bar{height:6px;border-radius:99px;background:var(--bg-sub);overflow:hidden}
+    .rv-bar span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ac),var(--ac-strong));transition:width 1s var(--ease-2)}
+    .rv-prc{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+    @media(max-width:600px){.rv-prc{grid-template-columns:1fr}}
+    .rv-col{background:var(--bg-el);border:1px solid var(--bd);border-radius:var(--rc);padding:18px 20px}
+    .rv-col h4{font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+    .rv-col.pro h4{color:var(--ok)}.rv-col.con h4{color:var(--ac-ink)}
+    .rv-col li{list-style:none;font-size:13.5px;color:var(--tx2);padding:5px 0 5px 20px;position:relative}
+    .rv-col li::before{content:"";position:absolute;left:0;top:12px;width:7px;height:7px;border-radius:50%}
+    .rv-col.pro li::before{background:var(--ok)}.rv-col.con li::before{background:var(--ac-strong)}
+
+    /* amenities */
+    .amn{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 24px}
+    @media(min-width:560px){.amn{grid-template-columns:repeat(3,1fr)}}
+    .amn div{display:flex;align-items:center;gap:11px;font-size:14px;color:var(--tx);padding:2px 0}
+    .amn i{font-size:20px;color:var(--ac);flex-shrink:0}
+
+    /* rooms */
+    .rooms{display:flex;flex-direction:column;gap:18px}
+    .room{border:1px solid var(--bd);border-radius:var(--rc);overflow:hidden;background:var(--bg-el);transition:border-color .35s var(--ease),box-shadow .35s var(--ease)}
+    .room:hover{border-color:rgba(20,23,26,.24);box-shadow:var(--s1)}
+    .room.sel{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac)}
+    .room-in{display:grid;grid-template-columns:1fr;gap:0}
+    @media(min-width:620px){.room-in{grid-template-columns:210px 1fr}}
+    .room-ph{position:relative;background:var(--bg-sub);min-height:150px;overflow:hidden}
+    .room-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .room-ph .noph{position:absolute;inset:0;display:grid;place-items:center;color:var(--tx3);font-size:30px}
+    .room-info{padding:18px 20px;display:flex;flex-direction:column}
+    .room-info h3{font-size:17px;font-family:var(--display);font-weight:600;letter-spacing:-.01em}
+    .room-specs{display:flex;flex-wrap:wrap;gap:7px;margin:11px 0 12px}
+    .spec{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--tx2);background:var(--bg-sub);padding:5px 10px;border-radius:var(--rp)}
+    .spec i{font-size:14px;color:var(--tx3)}
+    .room-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+    .room-foot{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}
+    .room-amen{font-size:12px;color:var(--tx3);margin-top:2px}
+    .room-price{text-align:right;margin-left:auto}
+
+    /* good to know */
+    .gtk{display:grid;grid-template-columns:1fr;gap:14px}
+    @media(min-width:560px){.gtk{grid-template-columns:1fr 1fr}}
+    .gtk-item{display:flex;gap:13px;align-items:flex-start}
+    .gtk-item i{font-size:22px;color:var(--ac);flex-shrink:0;margin-top:1px}
+    .gtk-item .k{font-weight:600;font-size:14px}.gtk-item .v{font-size:13.5px;color:var(--tx2);margin-top:2px}
+
+    /* map */
+    .map-wrap{border-radius:var(--rc);overflow:hidden;border:1px solid var(--bd);aspect-ratio:16/7;background:var(--bg-sub)}
+    .map-wrap iframe{width:100%;height:100%;border:0;display:block}
+
+    /* ===== BOOKING SIDEBAR ===== */
+    .bk{position:sticky;top:96px;align-self:start}
+    .bk-card{background:rgba(255,255,255,.6);border:1px solid var(--bd-2);padding:7px;border-radius:var(--rc);box-shadow:var(--s2)}
+    .bk-in{background:var(--bg-el);border-radius:calc(var(--rc) - 6px);padding:24px;box-shadow:inset 0 1px 1px rgba(255,255,255,.6)}
+    .bk h3{font-size:18px;margin-bottom:6px}
+    .bk .sub{color:var(--tx3);font-size:13px;margin-bottom:16px}
+    .bk-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;color:var(--tx2)}
+    .bk-row strong{color:var(--tx);font-weight:600}
+    .bk-total{border-top:1.5px solid var(--tx);margin-top:8px;padding-top:13px;display:flex;justify-content:space-between;font-size:19px;font-weight:700;font-family:var(--display)}
+    @media(max-width:959px){.bk{display:none}}
+
+    /* mobile bottom book-bar */
+    .bookbar{position:fixed;left:0;right:0;bottom:0;z-index:90;display:none;align-items:center;justify-content:space-between;gap:14px;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:rgba(247,248,246,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--bd);box-shadow:0 -12px 30px -22px rgba(18,28,42,.5)}
+    .bookbar .bb-p{font-size:12px;color:var(--tx2);line-height:1.35}
+    .bookbar .bb-p b{font-family:var(--display);font-size:19px;color:var(--tx);font-weight:600}
+    .bookbar .btn{flex-shrink:0}
+    @media(max-width:959px){.bookbar{display:flex}.hp-body{padding-bottom:96px}}
+
+    .skel-box,.gal .g.gskel{background:linear-gradient(90deg,var(--bg-sub) 25%,#e4e5e1 37%,var(--bg-sub) 63%);background-size:400% 100%;animation:sh 1.4s ease infinite}
+    .gal .g.gskel{cursor:default}
+    @keyframes sh{0%{background-position:100% 0}100%{background-position:0 0}}
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="nav-mount"></div>
+
+  <main class="wrap hp-top">
+    <div class="breadcrumb" style="margin-bottom:14px">
+      <a href="index.html">Home</a><i class="ph ph-caret-right"></i>
+      <a href="#" id="backLink">Search</a><i class="ph ph-caret-right"></i>
+      <span id="crumbName">Hotel</span>
+    </div>
+    <div class="hp-head">
+      <div class="hp-title">
+        <h1 id="hotelName"></h1>
+        <div class="hp-meta" id="hpMeta"></div>
+      </div>
+      <button class="btn btn-sm btn-outline hp-save-btn" id="saveBtn" onclick="toggleSave()"><span id="saveTxt">Save stay</span><span class="btn-i"><i class="ph ph-heart" id="saveIco"></i></span></button>
+    </div>
+
+    <div class="gal" id="gal"></div>
+
+    <div class="hp-body">
+      <div class="hp-main">
+        <section id="secOverview" class="reveal">
+          <div class="facts" id="facts"></div>
+          <h2 style="margin-top:22px">About this stay</h2>
+          <p class="lead" id="desc"></p>
+        </section>
+
+        <section id="secReviews" class="reveal" style="display:none">
+          <h2>Guest reviews</h2>
+          <div id="reviews"></div>
+        </section>
+
+        <section id="secAmen" class="reveal" style="display:none">
+          <h2>What this place offers</h2>
+          <div class="amn" id="amn"></div>
+        </section>
+
+        <section id="secRooms" class="reveal">
+          <h2>Choose your room</h2>
+          <div class="rooms" id="rooms"><div class="loading-center"><div class="spinner"></div><p>Loading live rates…</p></div></div>
+        </section>
+
+        <section id="secMap" class="reveal" style="display:none">
+          <h2>Where you'll be</h2>
+          <div class="map-wrap" id="mapWrap"></div>
+          <p class="lead" id="addrLine" style="margin-top:14px;font-size:14px"></p>
+        </section>
+
+        <section id="secGtk" class="reveal" style="display:none">
+          <h2>Good to know</h2>
+          <div class="gtk" id="gtk"></div>
+        </section>
+      </div>
+
+      <aside class="bk">
+        <div class="bk-card"><div class="bk-in">
+          <h3>Your booking</h3>
+          <div class="sub" id="bkSub">Select a room to see your total.</div>
+          <div id="bkBody"><p style="color:var(--tx3);font-size:14px">No room selected yet.</p></div>
+        </div></div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="bookbar" id="bookbar">
+    <div class="bb-p" id="bbP">Select a room<br><b>&nbsp;</b></div>
+    <button class="btn btn-coral" id="bbBtn" onclick="mobileBook()"><span id="bbTxt">Choose room</span><span class="btn-i"><i class="ph-bold ph-arrow-down"></i></span></button>
+  </div>
+
+  <div class="lb" id="lb">
+    <button class="lb-close" onclick="closeLb()"><i class="ph-bold ph-x"></i></button>
+    <button class="lb-nav lb-prev" onclick="lbStep(-1)"><i class="ph-bold ph-caret-left"></i></button>
+    <img id="lbImg" alt="">
+    <button class="lb-nav lb-next" onclick="lbStep(1)"><i class="ph-bold ph-caret-right"></i></button>
+    <div class="lb-count" id="lbCount"></div>
+  </div>
+
+  <div id="footer-mount"></div>
+
+  <script src="shared.js?v=20260703b"></script>
+  <script>
+    const hotelId = BA.getParam('hotelId');
+    const ci = BA.getParam('ci') || BA.defaultCheckin();
+    const co = BA.getParam('co') || BA.defaultCheckout();
+    const gu = BA.getParam('gu') || '2';
+    const city = BA.getParam('city') || '';
+    const nights = BA.nightsBetween(ci, co);
+    const stored = BA.getHotel() || {};
+    const FB = ['photo-1566073771259-6a8506099945','photo-1551882547-ff40c63fe5fa','photo-1618773928121-c32242e63f39','photo-1590490360182-c33d57733427','photo-1571896349842-33c89424de2d'];
+    const uns = (id,w) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
+
+    let images = [], lbIdx = 0;
+    let lastRooms = [], selIdx = null;
+    let hotelObj = { hotelId, hotelName: stored.hotelName || stored.name || '', mainPhoto: stored.mainPhoto || null, address: stored.address || '', stars: stored.stars || 0, city };
+    let lastMember = null;
+
+    document.getElementById('nav-mount').innerHTML = BA.renderNav('');
+    document.getElementById('footer-mount').innerHTML = BA.renderFooter();
+    document.getElementById('backLink').href = `search.html?city=${encodeURIComponent(city||'Sydney')}&ci=${ci}&co=${co}&gu=${gu}`;
+
+    const storedName = stored.hotelName || stored.name || '';
+    if (storedName) { setName(storedName); }
+    else { document.getElementById('hotelName').innerHTML = '<span class="skel-box skel-h1" style="display:inline-block"></span>'; document.getElementById('crumbName').textContent = 'Hotel'; }
+    paintGallery(stored.mainPhoto ? [stored.mainPhoto] : [], true);
+
+    function setName(nm){
+      document.getElementById('hotelName').textContent = nm;
+      document.getElementById('crumbName').textContent = nm;
+      document.title = `${nm} — OzBookings`;
+    }
+    function starStr(n){ return n ? '★'.repeat(Math.round(n)) : ''; }
+    function scoreLabel(r){ return r>=9?'Exceptional':r>=8?'Very good':r>=7?'Good':r>=6?'Pleasant':'Guest rated'; }
+
+    function paintMeta(h){
+      const stars = starStr(h.stars);
+      const bits = [];
+      if (stars) bits.push(`<span class="stars">${stars}</span>`);
+      if (h.rating) bits.push(`<span class="hp-score"><b>${h.rating}</b> ${scoreLabel(h.rating)}${h.reviewCount?` · ${h.reviewCount.toLocaleString()} reviews`:''}</span>`);
+      bits.push(`<span><i class="ph ph-map-pin"></i> ${h.address || BA.prettyCity(city||h.city)}</span>`);
+      document.getElementById('hpMeta').innerHTML = bits.join('<span class="dot"></span>');
+    }
+
+    function paintGallery(imgs, loading){
+      const have = (imgs || []).slice(0,5);
+      const el = document.getElementById('gal');
+      let cells = '';
+      for (let i=0;i<5;i++){
+        if (have[i]) cells += `<div class="g" onclick="openLb(${i})"><img src="${have[i]}" alt="Photo ${i+1}" loading="lazy" onerror="this.closest('.g').classList.add('gskel');this.remove()"></div>`;
+        else if (loading) cells += `<div class="g gskel"></div>`;                       // shimmer while real photos load — never a fake hotel photo
+        else cells += `<div class="g"><img src="${uns(FB[i%FB.length],700)}" alt="Photo ${i+1}"></div>`; // last resort only if the API returned no photos at all
+      }
+      el.innerHTML = cells + (images.length>1?`<button class="gal-all" onclick="openLb(0)"><i class="ph-bold ph-images"></i> View all ${images.length} photos</button>`:'');
+    }
+
+    function openLb(i){ if(!images.length) return; lbIdx=i%images.length; document.getElementById('lbImg').src=images[lbIdx]; document.getElementById('lbCount').textContent=`${lbIdx+1} / ${images.length}`; document.getElementById('lb').classList.add('show'); }
+    function closeLb(){ document.getElementById('lb').classList.remove('show'); }
+    function lbStep(d){ if(!images.length) return; lbIdx=(lbIdx+d+images.length)%images.length; document.getElementById('lbImg').src=images[lbIdx]; document.getElementById('lbCount').textContent=`${lbIdx+1} / ${images.length}`; }
+    document.addEventListener('keydown',e=>{ if(!document.getElementById('lb').classList.contains('show'))return; if(e.key==='Escape')closeLb(); if(e.key==='ArrowRight')lbStep(1); if(e.key==='ArrowLeft')lbStep(-1); });
+    (function(){ let x0=null; const lb=document.getElementById('lb'); lb.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true}); lb.addEventListener('touchend',e=>{ if(x0==null)return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50)lbStep(dx<0?1:-1); x0=null; }); })();
+    document.getElementById('lb').addEventListener('click',e=>{ if(e.target.id==='lb')closeLb(); });
+
+    loadDetails();
+    async function loadDetails(){
+      lastMember = BA.isMember();
+      let res = { hotel:null, rooms:[] };
+      if (hotelId) { try { res = await BA.getHotelDetails({ hotelId, checkin: ci, checkout: co, guests: +gu }); } catch(e){ console.log('detail err',e); } }
+      const h = res.hotel;
+      if (h){
+        setName(h.name);
+        hotelObj = { hotelId, hotelName: h.name, mainPhoto: h.mainPhoto, address: h.address, stars: h.stars, city: h.city||city };
+        paintMeta(h);
+        images = (h.images && h.images.length) ? h.images : (h.mainPhoto?[h.mainPhoto]:[]);
+        paintGallery(images, false);
+        document.getElementById('desc').textContent = h.description || `Book ${h.name} directly and keep the commission the big platforms would take.`;
+        renderFacts(h);
+        renderReviews(h.sentiment, h.rating, h.reviewCount);
+        renderAmenities(h.facilities);
+        renderMap(h);
+        renderGtk(h);
+      } else {
+        if(!storedName) setName(BA.prettyCity(city||'') + ' stay');
+        document.getElementById('desc').textContent = 'Live details are loading from our supplier. Room rates below are confirmed in real time.';
+      }
+      renderRooms(res.rooms || []);
+      updateSave();
+      BA.init();
+    }
+
+    function renderFacts(h){
+      const f = [];
+      if (h.checkin) f.push(`<span class="fact"><i class="ph-light ph-clock"></i>Check-in ${h.checkin}</span>`);
+      if (h.checkout) f.push(`<span class="fact"><i class="ph-light ph-clock-afternoon"></i>Check-out ${h.checkout}</span>`);
+      const keys = ['Free WiFi','Parking','Swimming pool','Restaurant','Fitness','Bar','Spa','Air conditioning'];
+      (h.facilities||[]).filter(x=>keys.some(k=>x.toLowerCase().includes(k.toLowerCase()))).slice(0,4).forEach(x=>{
+        f.push(`<span class="fact"><i class="ph-light ${facIcon(x)}"></i>${x}</span>`);
+      });
+      document.getElementById('facts').innerHTML = f.join('');
+    }
+
+    function facIcon(name){
+      const n=(name||'').toLowerCase();
+      if(/wifi|internet/.test(n))return'ph-wifi-high';
+      if(/pool|swim/.test(n))return'ph-swimming-pool';
+      if(/breakfast|restaurant|dining|food|kitchen/.test(n))return'ph-fork-knife';
+      if(/parking|car/.test(n))return'ph-car';
+      if(/gym|fitness/.test(n))return'ph-barbell';
+      if(/bar|lounge|pub/.test(n))return'ph-martini';
+      if(/spa|massage|wellness|sauna/.test(n))return'ph-flower-lotus';
+      if(/air|climate|conditioning|heating/.test(n))return'ph-snowflake';
+      if(/reception|concierge|desk|check|24/.test(n))return'ph-bell';
+      if(/pet/.test(n))return'ph-paw-print';
+      if(/laundry|dry clean/.test(n))return'ph-t-shirt';
+      if(/beach|garden|terrace|balcony/.test(n))return'ph-tree';
+      if(/tv|television/.test(n))return'ph-television-simple';
+      if(/family|child|kid/.test(n))return'ph-baby';
+      if(/business|meeting/.test(n))return'ph-briefcase';
+      if(/lift|elevator/.test(n))return'ph-elevator';
+      return'ph-check-circle';
+    }
+
+    function renderReviews(s, rating, count){
+      const sec=document.getElementById('secReviews'); const el=document.getElementById('reviews');
+      if(!rating && !(s && s.categories && s.categories.length)){ sec.style.display='none'; return; }
+      sec.style.display='';
+      let html = '';
+      if(rating){
+        html += `<div class="rv-top"><div class="rv-score">${rating}</div><div><div style="font-weight:600;font-size:17px">${scoreLabel(rating)}</div><div style="color:var(--tx2);font-size:14px">${count?count.toLocaleString()+' verified guest reviews':'Based on verified guest reviews'}</div></div></div>`;
+      }
+      if(s && s.categories && s.categories.length){
+        html += `<div class="rv-cats">` + s.categories.map(c=>`
+          <div class="rv-cat"><div class="rv-cl"><span>${c.name}</span><b>${(c.rating||0).toFixed(1)}</b></div>
+          <div class="rv-bar"><span style="width:${Math.max(5,Math.min(100,(c.rating||0)*10))}%"></span></div></div>`).join('') + `</div>`;
+      }
+      const pros=(s&&s.pros)||[], cons=(s&&s.cons)||[];
+      if(pros.length || cons.length){
+        html += `<div class="rv-prc">
+          ${pros.length?`<div class="rv-col pro"><h4><i class="ph-fill ph-thumbs-up"></i>Guests loved</h4><ul>${pros.map(p=>`<li>${p}</li>`).join('')}</ul></div>`:''}
+          ${cons.length?`<div class="rv-col con"><h4><i class="ph-fill ph-info"></i>Worth noting</h4><ul>${cons.map(c=>`<li>${c}</li>`).join('')}</ul></div>`:''}
+        </div>`;
+      }
+      el.innerHTML = html;
+    }
+
+    function renderAmenities(facs){
+      const sec=document.getElementById('secAmen'); const el=document.getElementById('amn');
+      if(!facs || !facs.length){ sec.style.display='none'; return; }
+      sec.style.display='';
+      el.innerHTML = facs.slice(0,18).map(f=>`<div><i class="ph-light ${facIcon(f)}"></i>${f}</div>`).join('');
+    }
+
+    function renderMap(h){
+      if(!h.lat || !h.lng){ document.getElementById('secMap').style.display='none'; return; }
+      document.getElementById('secMap').style.display='';
+      const d=0.008, bbox=`${(h.lng-d).toFixed(5)},${(h.lat-d).toFixed(5)},${(h.lng+d).toFixed(5)},${(h.lat+d).toFixed(5)}`;
+      document.getElementById('mapWrap').innerHTML = `<iframe loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${h.lat},${h.lng}"></iframe>`;
+      document.getElementById('addrLine').innerHTML = `<i class="ph ph-map-pin" style="color:var(--ac);vertical-align:-2px"></i> ${h.address||''}${h.city?', '+BA.prettyCity(h.city):''} · <a href="https://www.google.com/maps/search/?api=1&query=${h.lat},${h.lng}" target="_blank" rel="noopener noreferrer" style="color:var(--ac-ink);font-weight:600">Open in Google Maps ↗</a>`;
+    }
+
+    function renderGtk(h){
+      const items=[];
+      if(h.checkin||h.checkout) items.push(['ph-clock',`Check-in / Check-out`,`${h.checkin||'—'} → ${h.checkout||'—'}`]);
+      if(h.childAllowed!=null) items.push(['ph-baby','Children',h.childAllowed?'Welcome':'Not permitted']);
+      if(h.petsAllowed!=null) items.push(['ph-paw-print','Pets',h.petsAllowed?'Allowed (may incur a fee)':'Not allowed']);
+      if(h.importantInfo) items.push(['ph-info','Before you go',h.importantInfo]);
+      const sec=document.getElementById('secGtk');
+      if(!items.length){ sec.style.display='none'; return; }
+      sec.style.display='';
+      document.getElementById('gtk').innerHTML = items.map(([ic,k,v])=>`<div class="gtk-item"><i class="ph-light ${ic}"></i><div><div class="k">${k}</div><div class="v">${v}</div></div></div>`).join('');
+    }
+
+    function fmtDeadline(iso){
+      if(!iso) return null;
+      const d=new Date(String(iso).replace(' ','T')); if(isNaN(d)) return null;
+      return d.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
+    }
+    function renderRooms(rooms){
+      lastRooms = rooms;
+      const el=document.getElementById('rooms');
+      if(!rooms.length){ el.innerHTML = `<div class="alert alert-info"><i class="ph ph-info"></i><span>No live rates for these dates. Try different dates or another property.</span></div>`; setBookBar(null); return; }
+      el.innerHTML = rooms.map((r,i)=>{
+        const rp=r.retail, mp=r.memberPrice, sp=r.suggested;
+        const perNight = rp?Math.round(rp/nights):null;
+        const mpNight = (mp!=null)?Math.round(mp/nights):null;
+        const sv0 = (sp&&rp&&sp>rp)?Math.round((1-rp/sp)*100):0; const sv = sv0>=5?sv0:0; // hide sub-5% "savings"
+        const dl = fmtDeadline(r.cancelDeadline);
+        const specs=[];
+        if(r.bed) specs.push(`<span class="spec"><i class="ph ph-bed"></i>${r.bed}</span>`);
+        if(r.size) specs.push(`<span class="spec"><i class="ph ph-ruler"></i>${r.size} ${r.sizeUnit}</span>`);
+        if(r.maxOccupancy) specs.push(`<span class="spec"><i class="ph ph-users"></i>Sleeps ${r.maxOccupancy}</span>`);
+        const ph = r.photo || hotelObj.mainPhoto;
+        return `<div class="room ${selIdx===i?'sel':''}" id="room-${i}">
+          <div class="room-in">
+            <div class="room-ph">${ph?`<img src="${ph}" alt="${r.roomName}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="noph" style="display:none"><i class="ph-light ph-image"></i></div>`:`<div class="noph"><i class="ph-light ph-image"></i></div>`}</div>
+            <div class="room-info">
+              <h3>${r.roomName}</h3>
+              <div class="room-specs">${specs.join('')}</div>
+              <div class="room-tags">
+                <span class="tag">${r.board||'Room only'}</span>
+                ${r.refundable ? `<span class="tag" style="background:var(--ok-l);color:var(--ok)">Free cancellation${dl?` until ${dl}`:''}</span>` : `<span class="tag" style="background:var(--err-l);color:var(--err)">Non-refundable</span>`}
+                ${r.taxesIncluded ? `<span class="tag">Taxes included</span>` : ''}
+                ${sv?`<span class="badge-save">Save ${sv}%</span>`:''}
+              </div>
+              <div class="room-foot">
+                ${r.amenities&&r.amenities.length?`<div class="room-amen"><i class="ph ph-check" style="color:var(--ok);vertical-align:-1px"></i> ${r.amenities.slice(0,3).join(' · ')}</div>`:'<div></div>'}
+                <div class="room-price">
+                  ${sv?`<span class="price-old">A$${Math.round(sp/nights)}/nt typical</span>`:''}
+                  ${mp!=null
+                    ? `<div class="price-member">A$${mpNight}<small>/nt</small></div><div class="price-total">A$${mp} total · Member</div>`
+                    : `<div class="price-now">A$${perNight}<small>/nt</small></div><div class="price-total">A$${rp} total</div>`}
+                  <button class="btn btn-sm btn-coral" style="margin-top:10px" onclick="selectRoom(${i})"><span>Select</span><span class="btn-i"><i class="ph-bold ph-check"></i></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+      if(selIdx==null) setBookBar(rooms[0], 0, false); else setBookBar(rooms[selIdx], selIdx, false);
+      BA.init();
+    }
+
+    function selectRoom(i){
+      selIdx=i; const r=lastRooms[i]; if(!r) return;
+      document.querySelectorAll('.room').forEach(c=>c.classList.remove('sel'));
+      document.getElementById(`room-${i}`)?.classList.add('sel');
+      const rp=r.retail, mp=r.memberPrice, sp=r.suggested;
+      const total = mp!=null?mp:rp;
+      const svPct = (sp&&rp&&sp>rp)?Math.round((1-rp/sp)*100):0; const showSave = svPct>=5; // hide sub-5% comparisons
+      document.getElementById('bkSub').textContent = `${ci} → ${co} · ${nights} night${nights>1?'s':''}, ${gu} guest${gu>1?'s':''}`;
+      document.getElementById('bkBody').innerHTML = `
+        <div class="bk-row"><strong>${r.roomName}</strong></div>
+        <div class="bk-row"><span>${r.board||'Room only'}</span></div>
+        <div class="bk-row"><span>${r.refundable?'Free cancellation':'Non-refundable'}</span>${r.refundable?'<i class="ph-fill ph-shield-check" style="color:var(--ok)"></i>':''}</div>
+        ${showSave?`<div class="bk-row"><span>Typical rate</span><span class="price-old">A$${Math.round(sp)}</span></div>`:''}
+        <div class="bk-row"><span>${mp!=null?'Public price':'Room ('+nights+' night'+(nights>1?'s':'')+')'}</span><strong style="${mp!=null?'text-decoration:line-through;color:var(--tx3);font-weight:500':''}">A$${rp}</strong></div>
+        ${mp!=null?`<div class="bk-row"><span style="color:var(--ac-ink);font-weight:700">Member price</span><strong style="color:var(--ac-ink)">A$${mp}</strong></div>`:(showSave?`<div class="bk-row"><span style="color:var(--ok);font-weight:600">You save</span><strong style="color:var(--ok)">A$${Math.round(sp-rp)}</strong></div>`:'')}
+        ${r.taxesIncluded?`<div class="bk-row" style="font-size:12.5px;color:var(--tx3)"><span>Incl. taxes & fees</span>${r.taxAmount?`<span>A$${r.taxAmount}</span>`:''}</div>`:''}
+        <div class="bk-total"><span>Total</span><span>A$${total}</span></div>
+        <div style="margin-top:18px"><button class="btn btn-full btn-coral" onclick="goCheckout()"><span>Book now</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></button></div>
+        ${(mp==null && !BA.isMember())?`<div style="margin-top:12px;text-align:center"><span class="unlock-pill" onclick="BA.openAuth('signup')"><i class="ph ph-lock-simple"></i> Sign in to unlock member rates</span></div>`:''}
+        <div class="alert alert-info" style="margin-top:14px"><i class="ph ph-shield-check"></i><span>${r.offerId?'Live rate — locked at checkout':'Sample rate'}</span></div>`;
+      setBookBar(r, i, true);
+    }
+
+    function setBookBar(r, i, selected){
+      const bar=document.getElementById('bookbar');
+      if(!r){ document.getElementById('bbP').innerHTML='No rooms available<br><b>&nbsp;</b>'; document.getElementById('bbTxt').textContent='—'; return; }
+      const total = r.memberPrice!=null?r.memberPrice:r.retail;
+      const per = Math.round(total/nights);
+      document.getElementById('bbP').innerHTML = `${r.memberPrice!=null?'Member · ':''}from<br><b>A$${per}<span style="font-size:12px;font-weight:500;color:var(--tx2)">/nt</span></b>`;
+      document.getElementById('bbTxt').textContent = selected ? 'Book now' : 'Choose room';
+      document.getElementById('bbBtn').querySelector('.btn-i i').className = selected ? 'ph-bold ph-arrow-right' : 'ph-bold ph-arrow-down';
+      bar._selected = selected; bar._idx = i;
+    }
+    function mobileBook(){
+      const bar=document.getElementById('bookbar');
+      if(bar._selected && selIdx!=null){ goCheckout(); }
+      else { selectRoom(bar._idx!=null?bar._idx:0); document.getElementById('secRooms').scrollIntoView({behavior:'smooth',block:'start'}); }
+    }
+
+    function goCheckout(){
+      const r = lastRooms[selIdx!=null?selIdx:0]; if(!r) return;
+      sessionStorage.setItem('ba_selectedRate', JSON.stringify(r));
+      BA.storeHotel(hotelObj);
+      location.href = `checkout.html?ci=${ci}&co=${co}&gu=${gu}&city=${encodeURIComponent(city||hotelObj.city||'')}`;
+    }
+
+    function toggleSave(){
+      if(!BA.user){ BA.openAuth('signup'); return; }
+      const ex = BA.saved.find(s=>s.hotel_id===hotelObj.hotelId);
+      if(ex){ BA.auth.remove(ex.id); } else { BA.auth.save({ hotel_id:hotelObj.hotelId, hotel_name:hotelObj.hotelName, city:hotelObj.city, checkin:ci, checkout:co, price:(lastRooms[selIdx||0]||{}).retail, main_photo:hotelObj.mainPhoto }); }
+      setTimeout(updateSave, 350);
+    }
+    function updateSave(){
+      const saved = !!(BA.user && BA.saved.some(s=>s.hotel_id===hotelObj.hotelId));
+      document.getElementById('saveTxt').textContent = saved?'Saved':'Save stay';
+      document.getElementById('saveIco').className = saved?'ph-fill ph-heart':'ph ph-heart';
+    }
+
+    document.addEventListener('ba-auth', ()=>{ if(BA.isMember()!==lastMember){ loadDetails(); } updateSave(); });
+  </script>
+</body>
+</html>
