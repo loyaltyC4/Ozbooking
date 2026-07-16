@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/hotel/:id", "destination": "/api/hotel-page?hotelId=:id" },
     { "source": "/hotels-in-:city", "destination": "/hotels-in-:city.html" }
   ],
   "headers": [

@@ -164,7 +164,7 @@
     var per=h.retail?Math.round(h.retail/nights):null;
     var typ=(h.suggested&&h.suggested>h.retail)?Math.round(h.suggested/nights):null;
     var sv=(h.retail&&h.suggested&&h.suggested>h.retail)?Math.round((1-h.retail/h.suggested)*100):null;
-    var href='hotel.html?hotelId='+encodeURIComponent(h.hotelId)+'&city='+encodeURIComponent(CITY)+'&ci='+ci+'&co='+co+'&gu=2';
+    var href='/hotel/'+encodeURIComponent(h.hotelId);
     return '<a class="cc" href="'+href+'">'+
       '<div class="cc-img"><img loading="lazy" alt="'+esc(h.hotelName)+' — '+esc(CITY)+'" src="'+(h.mainPhoto||FB)+'" onerror="this.src=FB">'+(h.rating?'<span class="cc-rate">'+h.rating+'</span>':'')+'</div>'+
       '<div class="cc-b"><h3>'+esc(h.hotelName)+'</h3><p class="cc-loc">'+esc(h.address||CITY)+'</p>'+
