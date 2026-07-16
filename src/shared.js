@@ -309,6 +309,8 @@ const BA = {
   // ---- common init ----
   init(){
     try{ document.documentElement.lang = this.lang==='zh' ? 'zh-CN' : 'en'; }catch(e){}
+    // Vercel Web Analytics + Speed Insights (same-origin proxied scripts; injected once)
+    try{ ['/_vercel/insights/script.js','/_vercel/speed-insights/script.js'].forEach(src=>{ if(document.querySelector('script[data-va="'+src+'"]')) return; const s=document.createElement('script'); s.defer=true; s.src=src; s.setAttribute('data-va',src); document.head.appendChild(s); }); }catch(e){}
     this.loadCJK();
     const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');ro.unobserve(x.target)}})},{threshold:.1,rootMargin:'0px 0px -8% 0px'});
     document.querySelectorAll('.reveal:not(.visible)').forEach(el=>ro.observe(el));
