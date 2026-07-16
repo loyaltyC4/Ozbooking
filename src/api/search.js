@@ -5,6 +5,7 @@ const { DATA, call, hasKey, verifyUser, PUBLIC_MARGIN, MEMBER_MARGIN } = require
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'private, no-store, max-age=0');
   res.setHeader('Vary', 'Authorization');
+  res.setHeader('Access-Control-Allow-Origin', '*'); // public guest rate data; allows the StaysAfrica frontend to read ZAR rates cross-origin
 
   const { city = 'Sydney', checkin, checkout, guests = '2', countryCode = 'AU', currency = 'AUD', nat = 'AU' } = req.query || {};
   if (!hasKey) return res.status(200).json({ hotels: [], member: false, source: 'no_key' });

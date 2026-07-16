@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/staysafrica", "destination": "/staysafrica.html" },
     { "source": "/hotel/:id", "destination": "/api/hotel-page?hotelId=:id" },
     { "source": "/hotels-in-:city", "destination": "/hotels-in-:city.html" },
     { "source": "/how-to-avoid-hotel-booking-fees-australia", "destination": "/how-to-avoid-hotel-booking-fees-australia.html" },
