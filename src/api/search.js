@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'private, no-store, max-age=0');
   res.setHeader('Vary', 'Authorization');
 
-  const { city = 'Sydney', checkin, checkout, guests = '2', countryCode = 'AU' } = req.query || {};
+  const { city = 'Sydney', checkin, checkout, guests = '2', countryCode = 'AU', currency = 'AUD', nat = 'AU' } = req.query || {};
   if (!hasKey) return res.status(200).json({ hotels: [], member: false, source: 'no_key' });
   if (!checkin || !checkout) return res.status(400).json({ error: 'checkin and checkout required' });
 
@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
   const pubF = 1 + PUBLIC_MARGIN / 100, memF = 1 + MEMBER_MARGIN / 100;
 
   const body = {
-    checkin, checkout, currency: 'AUD', guestNationality: 'AU',
+    checkin, checkout, currency, guestNationality: nat,
     countryCode, cityName: city,
     occupancies: [{ adults: Math.max(1, parseInt(guests, 10) || 2) }],
     includeHotelData: true, maxRatesPerHotel: 1, limit: 30, timeout: 8, margin

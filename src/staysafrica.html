@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StaysAfrica — Book South African stays direct (preview)</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0d10">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--disp:'Clash Display',system-ui,sans-serif;--sans:'Satoshi',system-ui,sans-serif;--gold:#eab24c;--gold2:#f2c877;--ink:#0b0d10;--ease:cubic-bezier(.32,.72,0,1)}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--ink);color:#fff;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,56px)}
+
+  .preview-ribbon{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--gold);color:#231a09;text-align:center;font-size:12.5px;font-weight:700;letter-spacing:.02em;padding:6px 12px}
+  .preview-ribbon a{text-decoration:underline}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;min-height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding-top:30px}
+  .bg{position:absolute;inset:0;z-index:0}
+  .bg img{width:100%;height:100%;object-fit:cover;animation:kb 14s var(--ease) both}
+  .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,16,.36) 0%,rgba(11,13,16,.14) 32%,rgba(11,13,16,.82) 90%)}
+  @keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
+
+  .nav{position:relative;z-index:5;margin:22px auto 0;width:calc(100% - clamp(32px,8vw,96px));max-width:1200px}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 10px 0 22px;border-radius:999px;background:rgba(20,17,12,.34);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
+  .logo{font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:-.02em}
+  .logo span{color:var(--gold)}
+  .nav-links{display:flex;gap:26px;font-size:14px;font-weight:500}
+  .nav-links a{color:rgba(255,255,255,.82)}
+  .nav-right{display:flex;align-items:center;gap:12px}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:999px;background:rgba(234,178,76,.16);color:var(--gold2);border:1px solid rgba(234,178,76,.35)}
+  .signin{font-size:14px;font-weight:500;color:#fff}
+  .navcta{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:10px 8px 10px 18px;border-radius:999px;background:var(--gold);color:#231a09}
+  .navcta .ic{width:30px;height:30px;border-radius:999px;display:grid;place-items:center;font-size:15px;background:rgba(0,0,0,.16);transition:transform .5s var(--ease)}
+  .navcta:hover .ic{transform:translate(3px,-1px)}
+  @media(max-width:820px){.nav-links{display:none}}
+
+  .content{position:relative;z-index:3;margin-top:auto;padding-bottom:clamp(38px,6vh,64px)}
+  .kicker{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;color:var(--gold2);margin-bottom:20px}
+  .kicker::before{content:"";width:26px;height:1px;background:var(--gold)}
+  h1.title{font-family:var(--disp);font-weight:700;letter-spacing:-.03em;line-height:.98;font-size:clamp(42px,7.4vw,100px);max-width:15ch;text-shadow:0 2px 40px rgba(0,0,0,.35)}
+  h1.title em{font-style:normal;color:#f0bd63}
+  .sub{margin:20px 0 30px;font-size:clamp(16px,1.5vw,20px);color:rgba(255,255,255,.9);max-width:54ch;line-height:1.55;font-weight:500}
+
+  form.search{padding:6px;border-radius:26px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 30px 80px -30px rgba(0,0,0,.6);max-width:960px}
+  .search-core{display:grid;grid-template-columns:1.5fr 1fr 1fr .9fr auto;gap:2px;border-radius:20px;overflow:hidden;background:rgba(12,14,17,.32)}
+  .sf{display:flex;flex-direction:column;gap:4px;padding:13px 18px;background:rgba(255,255,255,.06)}
+  .sf label{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);display:flex;align-items:center;gap:6px}
+  .sf select,.sf input{background:transparent;border:none;color:#fff;font-family:var(--sans);font-size:15px;font-weight:500;outline:none;width:100%}
+  .sf select option{color:#111}
+  .sf input::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.6}
+  .sbtn{margin:7px;border:none;cursor:pointer;border-radius:15px;padding:0 22px;display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:600;font-size:15px;background:var(--gold);color:#231a09;transition:transform .4s var(--ease)}
+  .sbtn:hover{transform:translateY(-1px)}.sbtn:active{transform:scale(.98)}
+  .sbtn .ic{width:34px;height:34px;border-radius:999px;display:grid;place-items:center;font-size:16px;background:rgba(0,0,0,.18)}
+  @media(max-width:760px){.search-core{grid-template-columns:1fr 1fr}.sbtn{grid-column:1/-1;justify-content:center;padding:16px}}
+  .foot-trust{display:flex;gap:22px;flex-wrap:wrap;align-items:center;font-size:13px;margin-top:20px;color:rgba(255,255,255,.85)}
+  .foot-trust span{display:inline-flex;align-items:center;gap:7px}.foot-trust i{color:var(--gold)}
+
+  /* ---------- FEATURED ---------- */
+  .sec{padding:clamp(56px,8vh,96px) 0}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:30px}
+  .sec-head h2{font-family:var(--disp);font-weight:700;font-size:clamp(28px,4vw,46px);letter-spacing:-.02em}
+  .sec-head p{color:#9aa2ab;font-size:14.5px;margin-top:8px}
+  .note{color:#6b727b;font-size:13px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+  .card{background:#13161b;border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;transition:transform .4s var(--ease),border-color .4s var(--ease)}
+  .card:hover{transform:translateY(-4px);border-color:rgba(234,178,76,.4)}
+  .card-img{position:relative;aspect-ratio:16/11;background:#1c2027}
+  .card-img img{width:100%;height:100%;object-fit:cover}
+  .card-rate{position:absolute;top:12px;right:12px;background:rgba(11,13,16,.7);backdrop-filter:blur(6px);color:#fff;font-weight:700;font-size:13px;padding:4px 9px;border-radius:8px;display:flex;align-items:center;gap:4px}
+  .card-rate i{color:var(--gold);font-size:13px}
+  .card-b{padding:16px 18px}
+  .card-b h3{font-family:var(--disp);font-weight:600;font-size:17px;margin-bottom:4px}
+  .card-loc{color:#8b929b;font-size:13px;display:flex;align-items:center;gap:6px;margin-bottom:14px}
+  .card-pr{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .p-old{color:#6b727b;text-decoration:line-through;font-size:13px}
+  .p-now{font-family:var(--disp);font-weight:700;font-size:22px}.p-now small{font-size:12px;font-weight:500;color:#8b929b}
+  .save{margin-left:auto;background:rgba(234,178,76,.16);color:var(--gold2);font-weight:700;font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid rgba(234,178,76,.3)}
+  .skel{background:#13161b;border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden}
+  .skel .sh{background:linear-gradient(90deg,#1a1e24 25%,#232830 37%,#1a1e24 63%);background-size:400% 100%;animation:sh 1.4s ease infinite}
+  @keyframes sh{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+  /* ---------- WHY ---------- */
+  .why{border-top:1px solid rgba(255,255,255,.08)}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:26px}
+  .why-item h3{font-family:var(--disp);font-weight:600;font-size:19px;margin:14px 0 8px;display:flex;align-items:center;gap:10px}
+  .why-item i{color:var(--gold);font-size:24px}
+  .why-item p{color:#9aa2ab;font-size:14.5px;line-height:1.6}
+  @media(max-width:760px){.why-grid{grid-template-columns:1fr}}
+
+  footer{border-top:1px solid rgba(255,255,255,.08);padding:40px 0;color:#8b929b;font-size:13.5px}
+  footer .fr{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  footer .logo{font-size:18px;color:#fff}
+
+  @media(prefers-reduced-motion:reduce){.bg img{animation:none}.skel .sh{animation:none}}
+</style>
+</head>
+<body>
+
+<div class="preview-ribbon">PREVIEW · StaysAfrica proof-of-concept on OzBookings infrastructure · live ZAR rates from LiteAPI · not for public launch</div>
+
+<section class="hero">
+  <div class="bg"><img src="https://pub.hyperagent.com/api/published/pbf01KXP41N2K_EGQRXF6Z0VAG83HR/1908e64d-fc83-4881-a86a-81a410c18f2a.png" alt="Cape Town and Table Mountain at golden hour"></div>
+
+  <nav class="nav"><div class="nav-in">
+    <div class="logo">Stays<span>Africa</span></div>
+    <div class="nav-links"><a href="#featured">Destinations</a><a href="#featured">Stays</a><a href="#why">Why direct</a></div>
+    <div class="nav-right">
+      <span class="chip"><i class="ph ph-currency-circle-dollar"></i> ZAR · R</span>
+      <a class="signin" href="#">Sign in</a>
+      <a class="navcta" href="#featured">Search stays <span class="ic"><i class="ph-bold ph-arrow-up-right"></i></span></a>
+    </div>
+  </div></nav>
+
+  <div class="content wrap">
+    <div class="kicker">South Africa · Direct rates</div>
+    <h1 class="title">Your South Africa,<br>booked <em>direct.</em></h1>
+    <p class="sub">Search live rates nationwide and pay in Rands. No hidden booking fees, and free cancellation on most stays.</p>
+
+    <form class="search" id="searchForm" onsubmit="return runSearch(event)">
+      <div class="search-core">
+        <div class="sf"><label><i class="ph ph-map-pin"></i> Destination</label>
+          <select id="city">
+            <option>Cape Town</option><option>Johannesburg</option><option>Durban</option><option>Pretoria</option><option>Stellenbosch</option><option>Port Elizabeth</option><option>Knysna</option><option>Hermanus</option>
+          </select>
+        </div>
+        <div class="sf"><label><i class="ph ph-calendar-blank"></i> Check in</label><input type="date" id="ci"></div>
+        <div class="sf"><label><i class="ph ph-calendar-check"></i> Check out</label><input type="date" id="co"></div>
+        <div class="sf"><label><i class="ph ph-user"></i> Guests</label>
+          <select id="gu"><option value="1">1 adult</option><option value="2" selected>2 adults</option><option value="3">3 adults</option><option value="4">4 adults</option></select>
+        </div>
+        <button class="sbtn" type="submit">Search <span class="ic"><i class="ph-bold ph-magnifying-glass"></i></span></button>
+      </div>
+    </form>
+
+    <div class="foot-trust">
+      <span><i class="ph-fill ph-shield-check"></i> Free cancellation on most stays</span>
+      <span><i class="ph-fill ph-lock-simple"></i> Secure payment in Rands</span>
+      <span><i class="ph-fill ph-buildings"></i> Live rates from our global network</span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED -->
+<section class="sec" id="featured">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 id="featTitle">Featured stays in Cape Town</h2>
+        <p id="featSub">Live rates in Rands, updated in real time. Your direct price shown next to the hotel's typical selling price.</p>
+      </div>
+      <span class="note" id="featNote"></span>
+    </div>
+    <div class="grid" id="results"></div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="sec why" id="why">
+  <div class="wrap">
+    <h2 style="font-family:var(--disp);font-weight:700;font-size:clamp(26px,3.6vw,40px);letter-spacing:-.02em;max-width:16ch">Skip the markup. Keep the Rands.</h2>
+    <div class="why-grid">
+      <div class="why-item"><i class="ph-light ph-scales"></i><h3>Transparent pricing</h3><p>Every stay shows your direct rate next to the hotel's typical selling price, in Rands. No inflated "was" prices.</p></div>
+      <div class="why-item"><i class="ph-light ph-shield-check"></i><h3>Free cancellation</h3><p>Most stays can be cancelled free up to the deadline shown before you pay. Plans change, and that is fine.</p></div>
+      <div class="why-item"><i class="ph-light ph-tag"></i><h3>Member rates</h3><p>Create a free account and sign in to unlock lower, member-only rates on eligible stays.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fr">
+    <div class="logo">Stays<span style="color:var(--gold)">Africa</span></div>
+    <span>Preview build · rates powered by LiteAPI · pricing in ZAR (R)</span>
+  </div>
+</footer>
+
+<script>
+  var CUR='R';
+  function money(n){ return CUR + Math.round(n).toLocaleString('en-ZA'); }
+  function fmt(d){ return d.toISOString().slice(0,10); }
+  function nightsBetween(a,b){ return Math.max(1, Math.round((new Date(b)-new Date(a))/86400000)); }
+  (function setDefaults(){
+    var t=new Date();
+    document.getElementById('ci').value = fmt(new Date(t.getTime()+14*864e5));
+    document.getElementById('co').value = fmt(new Date(t.getTime()+17*864e5));
+  })();
+
+  function skeletons(n){
+    var h='';
+    for(var i=0;i<n;i++) h+='<div class="skel"><div class="sh" style="aspect-ratio:16/11"></div><div style="padding:16px 18px"><div class="sh" style="height:16px;width:70%;border-radius:6px"></div><div class="sh" style="height:12px;width:45%;border-radius:6px;margin-top:10px"></div><div class="sh" style="height:20px;width:55%;border-radius:6px;margin-top:16px"></div></div></div>';
+    return h;
+  }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  var FB='https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=700&q=80';
+
+  function card(h, nights){
+    var per = h.retail ? Math.round(h.retail/nights) : null;
+    var typ = (h.suggested && h.suggested>h.retail) ? Math.round(h.suggested/nights) : null;
+    var sv  = (h.retail && h.suggested && h.suggested>h.retail) ? Math.round((1 - h.retail/h.suggested)*100) : null;
+    return '<div class="card">'+
+      '<div class="card-img"><img loading="lazy" alt="'+esc(h.hotelName)+'" src="'+(h.mainPhoto||FB)+'" onerror="this.src=FB">'+
+        (h.rating ? '<span class="card-rate"><i class="ph-fill ph-star"></i>'+h.rating+'</span>' : '')+'</div>'+
+      '<div class="card-b"><h3>'+esc(h.hotelName)+'</h3>'+
+        '<div class="card-loc"><i class="ph ph-map-pin"></i>'+esc(h.address||'')+'</div>'+
+        '<div class="card-pr">'+
+          (per ? '<span class="p-now">'+money(per)+' <small>/night</small></span>' : '<span class="p-now">Check rates</span>')+
+          (typ ? '<span class="p-old">'+money(typ)+' typical</span>' : '')+
+          (sv ? '<span class="save">Save '+sv+'%</span>' : '')+
+        '</div></div></div>';
+  }
+
+  async function runSearch(ev){
+    if(ev) ev.preventDefault();
+    var city=document.getElementById('city').value;
+    var ci=document.getElementById('ci').value, co=document.getElementById('co').value;
+    var gu=document.getElementById('gu').value;
+    var nights=nightsBetween(ci,co);
+    var res=document.getElementById('results');
+    document.getElementById('featTitle').textContent='Featured stays in '+city;
+    document.getElementById('featNote').textContent='';
+    res.innerHTML=skeletons(6);
+    if(ev){ document.getElementById('featured').scrollIntoView({behavior:'smooth'}); }
+    try{
+      var url='/api/search?city='+encodeURIComponent(city)+'&checkin='+ci+'&checkout='+co+'&guests='+gu+'&countryCode=ZA&currency=ZAR&nat=ZA';
+      var r=await fetch(url); var j=await r.json();
+      var hotels=(j.hotels||[]);
+      if(!hotels.length){ res.innerHTML='<p class="note">No live rates returned for these dates. Try different dates or another city.</p>'; return; }
+      res.innerHTML=hotels.slice(0,9).map(function(h){return card(h,nights);}).join('');
+      document.getElementById('featNote').textContent=hotels.length+' live stays · '+ci+' to '+co+' · '+gu+' guests · prices in ZAR';
+    }catch(e){
+      res.innerHTML='<p class="note">Could not load live rates right now. Please try again.</p>';
+    }
+  }
+  runSearch(null);
+</script>
+</body>
+</html>
