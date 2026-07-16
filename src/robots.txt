@@ -1,4 +1,134 @@
+# OzBookings — robots.txt
+# Humans and AI assistants are welcome. Public content is open; app/API endpoints are not.
+
 User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+# --- AI / LLM crawlers explicitly welcomed (search citations + training) ---
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Claude-User
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Applebot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Bytespider
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: MistralAI-User
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Google-CloudVertexBot
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+User-agent: Timpibot
 Allow: /
 Disallow: /api/
 Disallow: /checkout.html

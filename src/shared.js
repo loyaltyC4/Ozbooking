@@ -327,7 +327,19 @@ const BA = {
       window.addEventListener('scroll',()=>{const n=document.getElementById('nav');if(n)n.classList.toggle('scrolled',window.scrollY>40)},{passive:true});
       document.addEventListener('keydown',e=>{if(e.key==='Escape'){this.closeMenu();this.closeAuth();this.closeSaved();document.getElementById('navLangWrap')?.classList.remove('open');}});
       document.addEventListener('click',e=>{const w=document.getElementById('navLangWrap');if(w&&!e.target.closest('#navLangWrap'))w.classList.remove('open');});
-      setTimeout(()=>{ try{ BA.maybeShowOffer(); }catch(e){} }, 1800);
+      // Member offer: show on genuine intent (exit-intent or ~50% scroll), once — not an on-load interstitial
+      (function armOffer(){
+        try{ if(/checkout|confirmation/i.test(location.pathname)) return;
+             if(localStorage.getItem('ba_offer_seen')||sessionStorage.getItem('ba_offer_dismissed')) return; }catch(e){}
+        var done=false;
+        function fire(){ if(done) return; done=true; cleanup(); try{ BA.maybeShowOffer(); }catch(e){} }
+        function onScroll(){ var sc=window.scrollY||document.documentElement.scrollTop||0; var h=document.documentElement.scrollHeight-window.innerHeight; if(h>400 && sc/h>=0.5) fire(); }
+        function onExit(e){ if((e.clientY||0)<=0) fire(); }
+        function cleanup(){ window.removeEventListener('scroll',onScroll); document.removeEventListener('mouseout',onExit); }
+        window.addEventListener('scroll',onScroll,{passive:true});
+        document.addEventListener('mouseout',onExit);
+        setTimeout(fire, 60000); // last-resort fallback: appears once, unobtrusively
+      })();
     }
   },
 
@@ -337,7 +349,7 @@ const BA = {
       <div class="wrap">
         <div class="ft-g">
           <div class="ft-brand"><h3><span>Oz</span>Bookings</h3><p>Compare hotel prices across Australia and book direct. Members save even more.</p></div>
-          <div class="ft-col"><h4>Destinations</h4><a href="search.html?city=Sydney">Sydney</a><a href="search.html?city=Melbourne">Melbourne</a><a href="search.html?city=Gold+Coast">Gold Coast</a><a href="search.html?city=Cairns">Cairns</a><a href="search.html?city=Brisbane">Brisbane</a><a href="search.html?city=Perth">Perth</a></div>
+          <div class="ft-col"><h4>Destinations</h4><a href="/hotels-in-sydney">Sydney</a><a href="/hotels-in-melbourne">Melbourne</a><a href="/hotels-in-gold-coast">Gold Coast</a><a href="/hotels-in-cairns">Cairns</a><a href="/hotels-in-brisbane">Brisbane</a><a href="/hotels-in-perth">Perth</a><a href="/hotels-in-adelaide">Adelaide</a><a href="/hotels-in-hobart">Hobart</a></div>
           <div class="ft-col"><h4>Company</h4><a href="about.html">About us</a><a href="index.html#how-it-works">How it works</a><a href="index.html#value">Why book direct</a><a href="contact.html">Contact</a></div>
           <div class="ft-col"><h4>${this.t('Support','支持')}</h4><a href="help.html">${this.t('Help centre','帮助中心')}</a><a href="terms.html#cancellation">${this.t('Cancellation policy','取消政策')}</a><a href="privacy.html">${this.t('Privacy policy','隐私政策')}</a><a href="contact.html">${this.t('Contact','联系我们')}</a></div>
         </div>

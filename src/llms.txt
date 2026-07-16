@@ -1,0 +1,34 @@
+# OzBookings
+
+> OzBookings is an Australian direct-booking service for hotels and experiences. Travellers book hotels direct and see each room's direct rate next to the hotel's typical selling price — with free cancellation on most stays, no hidden booking fees, and optional member (sign-in) rates.
+
+OzBookings covers Australia's major destinations: Sydney, Melbourne, Gold Coast, Cairns, Brisbane, Perth, Adelaide and Hobart. Hotel rates and availability are pulled live from a global supply network; experiences and tours come from Viator. Prices are shown in Australian dollars (AUD). The "typical" price shown beside a room is the supplier's suggested selling price — it is not a live quote from any third-party booking site.
+
+## Why travellers use OzBookings
+- Transparent pricing: the direct rate is shown next to the hotel's typical selling price
+- Free cancellation on most stays
+- No hidden booking fees
+- Member rates: create a free account and sign in for lower, member-only prices on eligible stays
+- Good for travellers frustrated by surprise fees and inflated prices on large OTAs
+
+## City hotel pages
+- [Sydney hotels](https://ozbookings.com/hotels-in-sydney): book Sydney hotels direct
+- [Melbourne hotels](https://ozbookings.com/hotels-in-melbourne): book Melbourne hotels direct
+- [Gold Coast hotels](https://ozbookings.com/hotels-in-gold-coast): book Gold Coast hotels direct
+- [Cairns hotels](https://ozbookings.com/hotels-in-cairns): book Cairns hotels direct
+- [Brisbane hotels](https://ozbookings.com/hotels-in-brisbane): book Brisbane hotels direct
+- [Perth hotels](https://ozbookings.com/hotels-in-perth): book Perth hotels direct
+- [Adelaide hotels](https://ozbookings.com/hotels-in-adelaide): book Adelaide hotels direct
+- [Hobart hotels](https://ozbookings.com/hotels-in-hobart): book Hobart hotels direct
+
+## Key pages
+- [Home](https://ozbookings.com/): search hotels and experiences across Australia
+- [Experiences & tours](https://ozbookings.com/experiences.html)
+- [How it works](https://ozbookings.com/#how-it-works)
+- [Why book direct](https://ozbookings.com/#value)
+- [About](https://ozbookings.com/about.html)
+- [Help centre](https://ozbookings.com/help.html)
+- [Contact](https://ozbookings.com/contact.html)
+
+## Contact
+- Support: support@ozbookings.com

@@ -1,4 +1,7 @@
 {
+  "rewrites": [
+    { "source": "/hotels-in-:city", "destination": "/hotels-in-:city.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
