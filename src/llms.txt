@@ -1,8 +1,8 @@
 # OzBookings
 
-> OzBookings is an Australian direct-booking service for hotels and experiences. Travellers book hotels direct and see each room's direct rate next to the hotel's typical selling price — with free cancellation on most stays, no hidden booking fees, and optional member (sign-in) rates.
+> OzBookings is an Australian direct-booking service for hotels and experiences. Travellers book hotels direct and see each room's direct rate next to the hotel's typical selling price - with free cancellation on most stays, no hidden booking fees, and optional member (sign-in) rates.
 
-OzBookings covers Australia's major destinations: Sydney, Melbourne, Gold Coast, Cairns, Brisbane, Perth, Adelaide and Hobart. Hotel rates and availability are pulled live from a global supply network; experiences and tours come from Viator. Prices are shown in Australian dollars (AUD). The "typical" price shown beside a room is the supplier's suggested selling price — it is not a live quote from any third-party booking site.
+OzBookings covers Australia's major destinations: Sydney, Melbourne, Gold Coast, Cairns, Brisbane, Perth, Adelaide and Hobart. Hotel rates and availability are pulled live from a global supply network; experiences and tours come from Viator. Prices are shown in Australian dollars (AUD). The "typical" price shown beside a room is the supplier's suggested selling price - it is not a live quote from any third-party booking site.
 
 ## Why travellers use OzBookings
 - Transparent pricing: the direct rate is shown next to the hotel's typical selling price

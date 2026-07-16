@@ -1,4 +1,4 @@
-// SSR indexable hotel page — served at /hotel/:id via a rewrite to /api/hotel-page?hotelId=:id
+// SSR indexable hotel page - served at /hotel/:id via a rewrite to /api/hotel-page?hotelId=:id
 // Renders full HTML (Hotel + BreadcrumbList JSON-LD, title/meta/canonical) for crawlers + AI,
 // then funnels booking into the existing interactive hotel.html flow (payment untouched).
 const { DATA, call, hasKey, PUBLIC_MARGIN } = require('./_liteapi');
@@ -51,7 +51,7 @@ ${bodyHtml}
 module.exports = async (req, res) => {
   const hotelId = (req.query && (req.query.hotelId || req.query.id)) || '';
   const notFound = (msg) => shell(404, res,
-    'Hotel not found — OzBookings',
+    'Hotel not found - OzBookings',
     `<main class="wrap" style="padding:80px 0;text-align:center"><h1 style="font-size:32px">Hotel not found</h1><p style="color:#697079;margin:12px 0 24px">${esc(msg||'We couldn’t load this hotel. It may no longer be available.')}</p><a class="btn btn-coral" href="search.html?city=Sydney"><span>Search hotels</span><span class="btn-i"><i class="ph-bold ph-magnifying-glass"></i></span></a></main>`,
     { noindex:true, cache:'public, s-maxage=60' });
 
@@ -107,8 +107,8 @@ module.exports = async (req, res) => {
     const cityCrumbUrl = citySlug ? `${BASE}/hotels-in-${citySlug}` : `${BASE}/`;
     const cityCrumbName = citySlug ? `Hotels in ${city}` : 'Australia';
 
-    const title = `${d.name}${city?', '+city:''} — Rates, Reviews & Direct Booking | OzBookings`;
-    const metaDesc = `${d.name} in ${city||'Australia'}. Book direct and see the room's direct rate next to the typical selling price${rating?` — rated ${rating}/10`:''}. Free cancellation on most stays, no hidden booking fees.`;
+    const title = `${d.name}${city?', '+city:''} - Rates, Reviews & Direct Booking | OzBookings`;
+    const metaDesc = `${d.name} in ${city||'Australia'}. Book direct and see the room's direct rate next to the typical selling price${rating?` - rated ${rating}/10`:''}. Free cancellation on most stays, no hidden booking fees.`;
 
     // ---- JSON-LD ----
     const hotelLd = { '@type':'Hotel', '@id':canon+'#hotel', name:d.name, url:canon,
@@ -119,7 +119,7 @@ module.exports = async (req, res) => {
     if (rating) hotelLd.aggregateRating = { '@type':'AggregateRating', ratingValue:rating, bestRating:10, ratingCount: reviewCount || undefined };
     if (lat && lng) hotelLd.geo = { '@type':'GeoCoordinates', latitude:lat, longitude:lng };
     if (facilities.length) hotelLd.amenityFeature = facilities.slice(0,12).map(f=>({ '@type':'LocationFeatureSpecification', name:f, value:true }));
-    if (low) hotelLd.priceRange = high && high!==low ? `${money(low)}–${money(high)} / night` : `${money(low)} / night`;
+    if (low) hotelLd.priceRange = high && high!==low ? `${money(low)}-${money(high)} / night` : `${money(low)} / night`;
     if (low) hotelLd.makesOffer = { '@type':'Offer', priceCurrency:'AUD', price:low, availability:'https://schema.org/InStock', url:canon, priceSpecification:{ '@type':'PriceSpecification', price:low, priceCurrency:'AUD', description:`from ${money(low)} for ${nights} nights` } };
     const jsonld = JSON.stringify({ '@context':'https://schema.org', '@graph':[
       hotelLd,
@@ -135,11 +135,11 @@ module.exports = async (req, res) => {
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OzBookings">
 <meta property="og:url" content="${canon}">
-<meta property="og:title" content="${escA(d.name+(city?', '+city:'')+' — OzBookings')}">
+<meta property="og:title" content="${escA(d.name+(city?', '+city:'')+' - OzBookings')}">
 <meta property="og:description" content="${escA(metaDesc)}">
 ${mainPhoto?`<meta property="og:image" content="${escA(mainPhoto)}">`:''}
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="${escA(d.name+' — OzBookings')}">
+<meta name="twitter:title" content="${escA(d.name+' - OzBookings')}">
 <meta name="twitter:description" content="${escA(metaDesc)}">
 ${mainPhoto?`<meta name="twitter:image" content="${escA(mainPhoto)}">`:''}
 <script type="application/ld+json">${jsonld}</script>`;
@@ -172,9 +172,9 @@ ${mainPhoto?`<meta name="twitter:image" content="${escA(mainPhoto)}">`:''}
   .disc{color:var(--tx3,#697079);font-size:13px;margin-top:10px}
 </style>`;
 
-    const galleryHtml = images.length>1 ? `<section class="sec" style="padding-top:0"><div class="gal">${images.slice(0,8).map(u=>`<img loading="lazy" src="${escA(u)}" alt="${escA(d.name+' — '+city)}">`).join('')}</div></section>` : '';
+    const galleryHtml = images.length>1 ? `<section class="sec" style="padding-top:0"><div class="gal">${images.slice(0,8).map(u=>`<img loading="lazy" src="${escA(u)}" alt="${escA(d.name+' - '+city)}">`).join('')}</div></section>` : '';
     const descHtml = description ? `<section class="sec prose" style="padding-top:0"><h2>About ${esc(d.name)}</h2><p>${esc(description.slice(0,900))}</p></section>` : '';
-    const roomsHtml = rooms.length ? `<section class="sec" style="padding-top:0"><h2>Rooms &amp; live rates</h2><p class="disc" style="margin:-6px 0 16px">Prices for ${esc(ci)} to ${esc(co)} (${nights} nights), 2 guests. Your direct rate is shown next to the hotel’s typical selling price — not a quote from any third-party site.</p><div class="rooms">${rooms.map(r=>{
+    const roomsHtml = rooms.length ? `<section class="sec" style="padding-top:0"><h2>Rooms &amp; live rates</h2><p class="disc" style="margin:-6px 0 16px">Prices for ${esc(ci)} to ${esc(co)} (${nights} nights), 2 guests. Your direct rate is shown next to the hotel’s typical selling price - not a quote from any third-party site.</p><div class="rooms">${rooms.map(r=>{
       const per=Math.round(r.retail/nights); const typ=(r.suggested&&r.suggested>r.retail)?Math.round(r.suggested/nights):null;
       const sv=(r.suggested&&r.suggested>r.retail)?Math.round((1-r.retail/r.suggested)*100):null;
       return `<div class="room"><div><div class="rn">${esc(r.name)}</div><div class="rb">${esc(r.board)}${r.refundable?' · <span style="color:#087443;font-weight:600">Free cancellation</span>':''}</div></div><div class="rp">${typ?`<span class="po">${money(typ)} typical</span>`:''}<span class="pn">${money(per)}</span> <span class="pt">/night · ${money(r.retail)} total</span>${sv?`<br><span class="sv">Save ${sv}%</span>`:''}<div style="margin-top:10px"><a class="btn btn-sm btn-coral" href="${bookHref}"><span>Select</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></a></div></div></div>`;
@@ -190,7 +190,7 @@ ${mainPhoto?`<meta name="twitter:image" content="${escA(mainPhoto)}">`:''}
     <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="${citySlug?('/hotels-in-'+citySlug):'/'}">${esc(cityCrumbName)}</a> &rsaquo; ${esc(d.name)}</nav>
     <h1>${esc(d.name)}</h1>
     <div class="hmeta">${starHtml}${ratingHtml}<span><i class="ph-fill ph-map-pin"></i> ${esc(address)}</span></div>
-    <a class="btn btn-coral" href="${bookHref}"><span>${low?`Check availability — from ${money(Math.round(low/nights))}/night`:'Check availability &amp; book'}</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></a>
+    <a class="btn btn-coral" href="${bookHref}"><span>${low?`Check availability - from ${money(Math.round(low/nights))}/night`:'Check availability &amp; book'}</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></a>
   </div>
 </header>
 <main class="wrap">

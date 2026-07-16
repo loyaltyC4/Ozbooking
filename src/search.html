@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Hotels — OzBookings</title>
+  <title>Search Hotels - OzBookings</title>
   <link rel="stylesheet" href="styles.css?v=20260703b">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="icon" href="/favicon.svg">
-  <meta property="og:title" content="OzBookings — Book direct across Australia">
+  <meta property="og:title" content="OzBookings - Book direct across Australia">
   <meta property="og:description" content="Compare hotel prices across Australia and book direct. Members save more.">
   <meta name="theme-color" content="#14171A">
   <style>
@@ -129,7 +129,7 @@
     document.getElementById('ci').value = ci;
     document.getElementById('co').value = co;
     document.getElementById('gu').value = gu;
-    document.title = `Hotels in ${BA.prettyCity(city)} — OzBookings`;
+    document.title = `Hotels in ${BA.prettyCity(city)} - OzBookings`;
     document.getElementById('resultsGrid').innerHTML = BA.skeletonCards(9);
 
     // Mobile compact search summary
@@ -137,7 +137,7 @@
     (function fillSummary(){
       const fd = s => { const d=new Date(s); return isNaN(d)?s:d.toLocaleDateString('en-AU',{day:'numeric',month:'short'}); };
       document.getElementById('sbTitle').textContent = BA.prettyCity(city);
-      document.getElementById('sbSub').textContent = `${fd(ci)} – ${fd(co)} · ${gu} guest${gu>1?'s':''}`;
+      document.getElementById('sbSub').textContent = `${fd(ci)} - ${fd(co)} · ${gu} guest${gu>1?'s':''}`;
     })();
 
     let lastMember = null;

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hotel Details — OzBookings</title>
+  <title>Hotel Details - OzBookings</title>
   <meta name="robots" content="noindex, follow">
   <link rel="stylesheet" href="styles.css?v=20260703b">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="icon" href="/favicon.svg">
-  <meta property="og:title" content="OzBookings — Book direct across Australia">
+  <meta property="og:title" content="OzBookings - Book direct across Australia">
   <meta property="og:description" content="Compare hotel prices across Australia and book direct. Members save more.">
   <meta name="theme-color" content="#14171A">
   <style>
@@ -245,7 +245,7 @@
     function setName(nm){
       document.getElementById('hotelName').textContent = nm;
       document.getElementById('crumbName').textContent = nm;
-      document.title = `${nm} — OzBookings`;
+      document.title = `${nm} - OzBookings`;
     }
     function starStr(n){ return n ? '★'.repeat(Math.round(n)) : ''; }
     function scoreLabel(r){ return r>=9?'Exceptional':r>=8?'Very good':r>=7?'Good':r>=6?'Pleasant':'Guest rated'; }
@@ -265,7 +265,7 @@
       let cells = '';
       for (let i=0;i<5;i++){
         if (have[i]) cells += `<div class="g" onclick="openLb(${i})"><img src="${have[i]}" alt="Photo ${i+1}" loading="lazy" onerror="this.closest('.g').classList.add('gskel');this.remove()"></div>`;
-        else if (loading) cells += `<div class="g gskel"></div>`;                       // shimmer while real photos load — never a fake hotel photo
+        else if (loading) cells += `<div class="g gskel"></div>`;                       // shimmer while real photos load - never a fake hotel photo
         else cells += `<div class="g"><img src="${uns(FB[i%FB.length],700)}" alt="Photo ${i+1}"></div>`; // last resort only if the API returned no photos at all
       }
       el.innerHTML = cells + (images.length>1?`<button class="gal-all" onclick="openLb(0)"><i class="ph-bold ph-images"></i> View all ${images.length} photos</button>`:'');
@@ -377,7 +377,7 @@
 
     function renderGtk(h){
       const items=[];
-      if(h.checkin||h.checkout) items.push(['ph-clock',`Check-in / Check-out`,`${h.checkin||'—'} → ${h.checkout||'—'}`]);
+      if(h.checkin||h.checkout) items.push(['ph-clock',`Check-in / Check-out`,`${h.checkin||'-'} → ${h.checkout||'-'}`]);
       if(h.childAllowed!=null) items.push(['ph-baby','Children',h.childAllowed?'Welcome':'Not permitted']);
       if(h.petsAllowed!=null) items.push(['ph-paw-print','Pets',h.petsAllowed?'Allowed (may incur a fee)':'Not allowed']);
       if(h.importantInfo) items.push(['ph-info','Before you go',h.importantInfo]);
@@ -456,13 +456,13 @@
         <div class="bk-total"><span>Total</span><span>A$${total}</span></div>
         <div style="margin-top:18px"><button class="btn btn-full btn-coral" onclick="goCheckout()"><span>Book now</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></button></div>
         ${(mp==null && !BA.isMember())?`<div style="margin-top:12px;text-align:center"><span class="unlock-pill" onclick="BA.openAuth('signup')"><i class="ph ph-lock-simple"></i> Sign in to unlock member rates</span></div>`:''}
-        <div class="alert alert-info" style="margin-top:14px"><i class="ph ph-shield-check"></i><span>${r.offerId?'Live rate — locked at checkout':'Sample rate'}</span></div>`;
+        <div class="alert alert-info" style="margin-top:14px"><i class="ph ph-shield-check"></i><span>${r.offerId?'Live rate - locked at checkout':'Sample rate'}</span></div>`;
       setBookBar(r, i, true);
     }
 
     function setBookBar(r, i, selected){
       const bar=document.getElementById('bookbar');
-      if(!r){ document.getElementById('bbP').innerHTML='No rooms available<br><b>&nbsp;</b>'; document.getElementById('bbTxt').textContent='—'; return; }
+      if(!r){ document.getElementById('bbP').innerHTML='No rooms available<br><b>&nbsp;</b>'; document.getElementById('bbTxt').textContent='-'; return; }
       const total = r.memberPrice!=null?r.memberPrice:r.retail;
       const per = Math.round(total/nights);
       document.getElementById('bbP').innerHTML = `${r.memberPrice!=null?'Member · ':''}from<br><b>A$${per}<span style="font-size:12px;font-weight:500;color:var(--tx2)">/nt</span></b>`;

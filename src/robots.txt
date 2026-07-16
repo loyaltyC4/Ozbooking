@@ -1,4 +1,4 @@
-# OzBookings — robots.txt
+# OzBookings - robots.txt
 # Humans and AI assistants are welcome. Public content is open; app/API endpoints are not.
 
 User-agent: *

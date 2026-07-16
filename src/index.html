@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OzBookings — Book Australian hotels direct & save | Stays + experiences</title>
-<meta name="description" content="Book hotels across Australia direct at live rates — Sydney, Melbourne, Cairns & more, plus top-rated experiences. See each hotel's typical selling price next to your direct price.">
+<title>OzBookings - Book Australian hotels direct & save | Stays + experiences</title>
+<meta name="description" content="Book hotels across Australia direct at live rates - Sydney, Melbourne, Cairns & more, plus top-rated experiences. See each hotel's typical selling price next to your direct price.">
 <link rel="canonical" href="https://ozbookings.com/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="stylesheet" href="styles.css?v=20260703b">
@@ -13,15 +13,15 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="OzBookings">
   <meta property="og:url" content="https://ozbookings.com/">
-  <meta property="og:title" content="Book Australian hotels direct & save — OzBookings">
+  <meta property="og:title" content="Book Australian hotels direct & save - OzBookings">
   <meta property="og:description" content="Book direct across Australia at live rates, and unlock member rates when you sign in. Stays + real experiences.">
   <meta property="og:image" content="https://pub.hyperagent.com/api/published/pbf01KWVH07P1_YSHJDMY05643K9FF/eb55320c-cad3-4125-b54c-1665e3028e3b.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Book Australian hotels direct & save — OzBookings">
+  <meta name="twitter:title" content="Book Australian hotels direct & save - OzBookings">
   <meta name="twitter:description" content="Book direct across Australia at live rates, and unlock member rates when you sign in. Stays + real experiences.">
   <meta name="twitter:image" content="https://pub.hyperagent.com/api/published/pbf01KWVH07P1_YSHJDMY05643K9FF/eb55320c-cad3-4125-b54c-1665e3028e3b.png">
   <meta name="theme-color" content="#14171A">
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://ozbookings.com/#org","name":"OzBookings","url":"https://ozbookings.com/","logo":"https://ozbookings.com/favicon.svg","description":"Australian hotel-booking service — book direct and save, plus top-rated experiences.","areaServed":"AU","sameAs":["https://www.instagram.com/ozbookings","https://www.tiktok.com/@ozbookings"]},{"@type":"WebSite","@id":"https://ozbookings.com/#website","url":"https://ozbookings.com/","name":"OzBookings","publisher":{"@id":"https://ozbookings.com/#org"},"inLanguage":["en-AU","zh-CN"],"potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://ozbookings.com/search.html?city={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://ozbookings.com/#org","name":"OzBookings","url":"https://ozbookings.com/","logo":"https://ozbookings.com/favicon.svg","description":"Australian hotel-booking service - book direct and save, plus top-rated experiences.","areaServed":"AU","sameAs":["https://www.instagram.com/ozbookings","https://www.tiktok.com/@ozbookings"]},{"@type":"WebSite","@id":"https://ozbookings.com/#website","url":"https://ozbookings.com/","name":"OzBookings","publisher":{"@id":"https://ozbookings.com/#org"},"inLanguage":["en-AU","zh-CN"],"potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://ozbookings.com/search.html?city={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 <style>
   /* ===== HERO ===== */
   .hero{position:relative;min-height:100dvh;display:flex;align-items:flex-end;overflow:hidden}
@@ -202,7 +202,7 @@
   <div class="hero-bg"><img src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=2400&q=82" alt="Sydney Opera House and harbour at sunset"></div>
   <div class="hero-inner wrap">
     <span class="eyebrow">Australia · Direct rates</span>
-    <button class="hero-offer" id="heroOffer" onclick="BA.claimOffer()"><span class="ho-badge" id="hoBadge">Members</span><span id="hoText">Join free — unlock member rates</span><i class="ph-bold ph-arrow-right"></i></button>
+    <button class="hero-offer" id="heroOffer" onclick="BA.claimOffer()"><span class="ho-badge" id="hoBadge">Members</span><span id="hoText">Join free - unlock member rates</span><i class="ph-bold ph-arrow-right"></i></button>
     <h1>Find your perfect <span class="u">stay in Australia</span></h1>
     <p class="hero-lead">Search live rates across Australia and book direct to save on the typical rate.</p>
     <form class="hsearch" id="searchForm" onsubmit="handleSearch(event)">
@@ -274,7 +274,7 @@
     <div><span class="eyebrow" id="hxEyebrow">Things to do</span><h2 id="hxTitle" style="font-size:clamp(30px,4.2vw,50px);margin-top:15px">More than a place to sleep</h2></div>
     <a href="experiences.html" class="btn btn-outline" id="hxAll"><span>All experiences</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></a>
   </div>
-  <p class="h-sub reveal" id="hxSub" style="margin:-22px 0 34px">Book unforgettable, top-rated tours and activities across Australia — reef cruises, food walks, day trips.</p>
+  <p class="h-sub reveal" id="hxSub" style="margin:-22px 0 34px">Book unforgettable, top-rated tours and activities across Australia - reef cruises, food walks, day trips.</p>
   <div class="hx-grid" id="homeExp"></div>
 </section>
 
@@ -362,10 +362,10 @@
   (function setExpLabels(){
     const ho=document.getElementById('hoBadge'), ht=document.getElementById('hoText');
     if(ho) ho.textContent = BA.t('Members','会员');
-    if(ht) ht.textContent = BA.t('Join free — unlock member rates','免费加入 — 解锁会员价');
+    if(ht) ht.textContent = BA.t('Join free - unlock member rates','免费加入 - 解锁会员价');
     document.getElementById('hxEyebrow').textContent = BA.t('Things to do','精彩体验');
     document.getElementById('hxTitle').textContent = BA.t('More than a place to sleep','不只是住宿');
-    document.getElementById('hxSub').textContent = BA.t('Book unforgettable, top-rated tours and activities across Australia — reef cruises, food walks, day trips.','预订澳大利亚各地高评分的难忘行程与活动——堡礁游船、美食漫步、一日游。');
+    document.getElementById('hxSub').textContent = BA.t('Book unforgettable, top-rated tours and activities across Australia - reef cruises, food walks, day trips.','预订澳大利亚各地高评分的难忘行程与活动--堡礁游船、美食漫步、一日游。');
     document.getElementById('hxAll').querySelector('span').textContent = BA.t('All experiences','全部体验');
   })();
   async function renderHomeExperiences(){

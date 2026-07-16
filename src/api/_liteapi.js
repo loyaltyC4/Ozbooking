@@ -1,4 +1,4 @@
-// Shared LiteAPI helper — key stays server-side (env var). Not a route (underscore prefix).
+// Shared LiteAPI helper - key stays server-side (env var). Not a route (underscore prefix).
 const KEY = process.env.LITEAPI_KEY || '';
 const DATA = 'https://api.liteapi.travel/v3.0';
 const BOOK = 'https://book.liteapi.travel/v3.0';

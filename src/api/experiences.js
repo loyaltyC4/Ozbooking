@@ -13,7 +13,7 @@ function durationText(d) {
   };
   if (d.fixedDurationInMinutes != null) return fmt(d.fixedDurationInMinutes);
   if (d.variableDurationFromMinutes != null && d.variableDurationToMinutes != null)
-    return `${fmt(d.variableDurationFromMinutes)}–${fmt(d.variableDurationToMinutes)}`;
+    return `${fmt(d.variableDurationFromMinutes)}-${fmt(d.variableDurationToMinutes)}`;
   if (d.unstructuredDuration) return d.unstructuredDuration;
   return null;
 }

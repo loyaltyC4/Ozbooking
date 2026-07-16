@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Booking Confirmed — OzBookings</title>
+  <title>Booking Confirmed - OzBookings</title>
   <link rel="stylesheet" href="styles.css?v=20260703b">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="icon" href="/favicon.svg">
-  <meta property="og:title" content="OzBookings — Book direct across Australia">
+  <meta property="og:title" content="OzBookings - Book direct across Australia">
   <meta property="og:description" content="Compare hotel prices across Australia and book direct. Members save more.">
   <meta name="theme-color" content="#14171A">
   <style>
@@ -86,7 +86,7 @@
     const booking = BA.getBooking();
     if (booking) {
       document.getElementById('bookingRef').innerHTML = `<i class="ph ph-hash"></i> ${booking.bookingId}`;
-      document.title = `Booking ${booking.bookingId} — OzBookings`;
+      document.title = `Booking ${booking.bookingId} - OzBookings`;
       document.getElementById('hotelDetails').innerHTML = `
         <div class="cc-row"><span>Hotel</span><strong>${booking.hotel}</strong></div>
         <div class="cc-row"><span>Room</span><strong>${booking.room}</strong></div>

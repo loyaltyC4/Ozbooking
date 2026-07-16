@@ -1,11 +1,11 @@
-/* BookAustralia — Shared JS (v3: server-proxied LiteAPI + optional Supabase member login)
+/* BookAustralia - Shared JS (v3: server-proxied LiteAPI + optional Supabase member login)
    Guest checkout always works. Login is optional and unlocks member prices + saved trips. */
 
 const BA = {
   // ---- Supabase (publishable key is client-safe by design) ----
   SUPA_URL: 'https://fuaommqybyqsiayzofmb.supabase.co',
   SUPA_KEY: 'sb_publishable_Ab3q7O7GPpOA_pleL8nMQQ_VMyRNEEJ',
-  MEMBER_EXTRA: 0.08, // legacy client estimate — no longer shown in UI; real member pricing is applied server-side via MEMBER_MARGIN in api/_liteapi.js
+  MEMBER_EXTRA: 0.08, // legacy client estimate - no longer shown in UI; real member pricing is applied server-side via MEMBER_MARGIN in api/_liteapi.js
   _sb: null, user: null, saved: [], authMode: 'signup',
 
   // ---- i18n (EN / 简体中文). Language switch persists + reloads so every page renders in one language. ----
@@ -34,7 +34,7 @@ const BA = {
 
   storeHotel(d){ if(typeof d==='string'){ try{ d=JSON.parse(d); }catch(e){} } try{ sessionStorage.setItem('ba_hotel',JSON.stringify(d)); }catch(e){} },
   getHotel(){ try{ let v=JSON.parse(sessionStorage.getItem('ba_hotel')); if(typeof v==='string'){ try{ v=JSON.parse(v); }catch(e){} } return v; }catch{return null} },
-  money(n){ return (n==null||isNaN(n))?'—':'A$'+Math.round(n).toLocaleString(); },
+  money(n){ return (n==null||isNaN(n))?'-':'A$'+Math.round(n).toLocaleString(); },
   storeBooking(d){sessionStorage.setItem('ba_booking',JSON.stringify(d))},
   getBooking(){try{return JSON.parse(sessionStorage.getItem('ba_booking'))}catch{return null}},
   storeSearch(d){sessionStorage.setItem('ba_search',JSON.stringify(d))},
@@ -65,7 +65,7 @@ const BA = {
   },
   getRetailPrice(h){return h&&h.retail!=null?h.retail:null},
   getSuggestedPrice(h){return h&&h.suggested!=null?h.suggested:null},
-  MIN_SAVE: 5, // don't show a "save %" badge below this — "Save 1%" is meaningless
+  MIN_SAVE: 5, // don't show a "save %" badge below this - "Save 1%" is meaningless
   getSavings(h){const rp=this.getRetailPrice(h),sp=this.getSuggestedPrice(h);if(!(rp&&sp&&sp>rp))return null;const p=Math.round((1-rp/sp)*100);return p>=this.MIN_SAVE?p:null;},
 
   // ---- Member pricing ----
@@ -244,7 +244,7 @@ const BA = {
         if(data.session){ BA.closeAuth(); BA.toast('Welcome! Member prices unlocked'); }
         else{ BA.setOk('Account created. Check your email to confirm, then sign in.'); BA.switchAuth('login'); }
       }else{
-        await BA.auth.signIn(email,pass); BA.closeAuth(); BA.toast('Signed in — member prices unlocked');
+        await BA.auth.signIn(email,pass); BA.closeAuth(); BA.toast('Signed in - member prices unlocked');
       }
     }catch(e){ BA.setErr(e.message||'Something went wrong.'); }
   },
@@ -287,12 +287,12 @@ const BA = {
       <button class="offer-x" onclick="BA.closeOffer()" aria-label="Close"><i class="ph-bold ph-x"></i></button>
       <div class="offer-visual"><img src="${img}" alt="" onerror="this.style.display='none'"><span class="offer-badge">${T('Member offer','会员优惠')}</span></div>
       <div class="offer-body">
-        <div class="offer-kicker">${T('Join OzBookings — free','加入 OzBookings · 免费')}</div>
+        <div class="offer-kicker">${T('Join OzBookings - free','加入 OzBookings · 免费')}</div>
         <h3>${T('Unlock member rates on your stay','解锁会员专享直订价')}</h3>
-        <p>${T('Create a free account and unlock member-only direct rates — below the public price, on this booking and every stay after.','创建免费账户，解锁会员专享直订价——低于公开价格，首单及此后每一单均享。')}</p>
+        <p>${T('Create a free account and unlock member-only direct rates - below the public price, on this booking and every stay after.','创建免费账户，解锁会员专享直订价--低于公开价格，首单及此后每一单均享。')}</p>
         <ul class="offer-perks">
           <li><i class="ph-fill ph-tag"></i>${T('Member-only rates on eligible stays','符合条件住宿的会员专享价')}</li>
-          <li><i class="ph-fill ph-lock-simple-open"></i>${T('Free forever — no booking fees','永久免费 · 无预订手续费')}</li>
+          <li><i class="ph-fill ph-lock-simple-open"></i>${T('Free forever - no booking fees','永久免费 · 无预订手续费')}</li>
           <li><i class="ph-fill ph-heart"></i>${T('Save your trips and rebook in a tap','收藏行程，一键再订')}</li>
         </ul>
         <button class="btn btn-coral btn-full" onclick="BA.claimOffer()"><span>${T('Unlock my member rate','解锁我的会员价')}</span><span class="btn-i"><i class="ph-bold ph-arrow-right"></i></span></button>
@@ -311,7 +311,7 @@ const BA = {
     try{ document.documentElement.lang = this.lang==='zh' ? 'zh-CN' : 'en'; }catch(e){}
     // Vercel Web Analytics + Speed Insights (same-origin proxied scripts; injected once)
     try{ ['/_vercel/insights/script.js','/_vercel/speed-insights/script.js'].forEach(src=>{ if(document.querySelector('script[data-va="'+src+'"]')) return; const s=document.createElement('script'); s.defer=true; s.src=src; s.setAttribute('data-va',src); document.head.appendChild(s); }); }catch(e){}
-    // Google Analytics 4 (gtag) — injected once, on every page
+    // Google Analytics 4 (gtag) - injected once, on every page
     try{ if(!window.__ga4){ window.__ga4=1; var gj=document.createElement('script'); gj.async=true; gj.src='https://www.googletagmanager.com/gtag/js?id=G-5TTGG45RS7'; document.head.appendChild(gj); window.dataLayer=window.dataLayer||[]; window.gtag=function(){dataLayer.push(arguments);}; gtag('js', new Date()); gtag('config','G-5TTGG45RS7'); } }catch(e){}
     this.loadCJK();
     const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');ro.unobserve(x.target)}})},{threshold:.1,rootMargin:'0px 0px -8% 0px'});
@@ -329,7 +329,7 @@ const BA = {
       window.addEventListener('scroll',()=>{const n=document.getElementById('nav');if(n)n.classList.toggle('scrolled',window.scrollY>40)},{passive:true});
       document.addEventListener('keydown',e=>{if(e.key==='Escape'){this.closeMenu();this.closeAuth();this.closeSaved();document.getElementById('navLangWrap')?.classList.remove('open');}});
       document.addEventListener('click',e=>{const w=document.getElementById('navLangWrap');if(w&&!e.target.closest('#navLangWrap'))w.classList.remove('open');});
-      // Member offer: show on genuine intent (exit-intent or ~50% scroll), once — not an on-load interstitial
+      // Member offer: show on genuine intent (exit-intent or ~50% scroll), once - not an on-load interstitial
       (function armOffer(){
         try{ if(/checkout|confirmation/i.test(location.pathname)) return;
              if(localStorage.getItem('ba_offer_seen')||sessionStorage.getItem('ba_offer_dismissed')) return; }catch(e){}

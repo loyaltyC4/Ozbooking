@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Experience — OzBookings</title>
+  <title>Experience - OzBookings</title>
   <link rel="stylesheet" href="styles.css?v=20260703b">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="icon" href="/favicon.svg">
@@ -110,7 +110,7 @@
   </main>
 
   <div class="xd-bar" id="bar">
-    <div class="p" id="barP"><span id="barFrom">From</span><br><b id="barPrice">—</b></div>
+    <div class="p" id="barP"><span id="barFrom">From</span><br><b id="barPrice">-</b></div>
     <a class="btn btn-coral" id="barBtn" href="#" target="_blank" rel="noopener noreferrer"><span id="barTxt">Reserve</span><span class="btn-i"><i class="ph-bold ph-arrow-up-right"></i></span></a>
   </div>
 
@@ -148,7 +148,7 @@
     document.getElementById('reserveTxt').textContent=L('Reserve on Viator','在 Viator 预订');
     document.getElementById('barTxt').textContent=L('Reserve','预订');
     document.getElementById('barFrom').textContent=L('From','起价');
-    document.getElementById('secure').textContent=L('You complete your booking securely on Viator, a Tripadvisor company. Prices are the same — OzBookings earns a small commission.','您将在 Tripadvisor 旗下的 Viator 上安全完成预订。价格相同——OzBookings 仅赚取少量佣金。');
+    document.getElementById('secure').textContent=L('You complete your booking securely on Viator, a Tripadvisor company. Prices are the same - OzBookings earns a small commission.','您将在 Tripadvisor 旗下的 Viator 上安全完成预订。价格相同--OzBookings 仅赚取少量佣金。');
 
     if(price){ setPrice(price); }
     function setPrice(v){
@@ -178,7 +178,7 @@
       let p=null;
       try{ const r=await fetch(`/api/experiences?code=${encodeURIComponent(code)}`); const j=await r.json(); p=j.product; }catch(e){}
       if(!p){ document.getElementById('title').textContent=L('This experience is unavailable right now.','该体验暂时不可用。'); return; }
-      document.title=`${p.title} — OzBookings`;
+      document.title=`${p.title} - OzBookings`;
       document.getElementById('title').textContent=p.title;
       document.getElementById('crumb').textContent=p.title;
       // meta
