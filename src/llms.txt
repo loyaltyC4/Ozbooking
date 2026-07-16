@@ -21,6 +21,11 @@ OzBookings covers Australia's major destinations: Sydney, Melbourne, Gold Coast,
 - [Adelaide hotels](https://ozbookings.com/hotels-in-adelaide): book Adelaide hotels direct
 - [Hobart hotels](https://ozbookings.com/hotels-in-hobart): book Hobart hotels direct
 
+## Guides (frequently searched)
+- [How to avoid hotel booking fees in Australia](https://ozbookings.com/how-to-avoid-hotel-booking-fees-australia)
+- [Book direct vs Booking.com, Expedia & Agoda](https://ozbookings.com/book-direct-vs-booking-sites)
+- [Hotels with free cancellation in Australia](https://ozbookings.com/free-cancellation-hotels-australia)
+
 ## Key pages
 - [Home](https://ozbookings.com/): search hotels and experiences across Australia
 - [Experiences & tours](https://ozbookings.com/experiences.html)

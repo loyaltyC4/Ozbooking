@@ -1,7 +1,10 @@
 {
   "rewrites": [
     { "source": "/hotel/:id", "destination": "/api/hotel-page?hotelId=:id" },
-    { "source": "/hotels-in-:city", "destination": "/hotels-in-:city.html" }
+    { "source": "/hotels-in-:city", "destination": "/hotels-in-:city.html" },
+    { "source": "/how-to-avoid-hotel-booking-fees-australia", "destination": "/how-to-avoid-hotel-booking-fees-australia.html" },
+    { "source": "/book-direct-vs-booking-sites", "destination": "/book-direct-vs-booking-sites.html" },
+    { "source": "/free-cancellation-hotels-australia", "destination": "/free-cancellation-hotels-australia.html" }
   ],
   "headers": [
     {
@@ -11,7 +14,7 @@
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
-        { "key": "Content-Security-Policy-Report-Only", "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://payment-wrapper.liteapi.travel https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdn.fontshare.com https://api.fontshare.com https://unpkg.com; connect-src 'self' https://fuaommqybyqsiayzofmb.supabase.co wss://fuaommqybyqsiayzofmb.supabase.co https://payment-wrapper.liteapi.travel https://*.liteapi.travel https://va.vercel-scripts.com; frame-src 'self' https://payment-wrapper.liteapi.travel https://*.liteapi.travel https://www.openstreetmap.org; upgrade-insecure-requests" }
+        { "key": "Content-Security-Policy-Report-Only", "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://payment-wrapper.liteapi.travel https://va.vercel-scripts.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdn.fontshare.com https://api.fontshare.com https://unpkg.com; connect-src 'self' https://fuaommqybyqsiayzofmb.supabase.co wss://fuaommqybyqsiayzofmb.supabase.co https://payment-wrapper.liteapi.travel https://*.liteapi.travel https://va.vercel-scripts.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src 'self' https://payment-wrapper.liteapi.travel https://*.liteapi.travel https://www.openstreetmap.org; upgrade-insecure-requests" }
       ]
     },
     {

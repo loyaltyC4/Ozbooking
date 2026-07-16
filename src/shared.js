@@ -311,6 +311,8 @@ const BA = {
     try{ document.documentElement.lang = this.lang==='zh' ? 'zh-CN' : 'en'; }catch(e){}
     // Vercel Web Analytics + Speed Insights (same-origin proxied scripts; injected once)
     try{ ['/_vercel/insights/script.js','/_vercel/speed-insights/script.js'].forEach(src=>{ if(document.querySelector('script[data-va="'+src+'"]')) return; const s=document.createElement('script'); s.defer=true; s.src=src; s.setAttribute('data-va',src); document.head.appendChild(s); }); }catch(e){}
+    // Google Analytics 4 (gtag) — injected once, on every page
+    try{ if(!window.__ga4){ window.__ga4=1; var gj=document.createElement('script'); gj.async=true; gj.src='https://www.googletagmanager.com/gtag/js?id=G-5TTGG45RS7'; document.head.appendChild(gj); window.dataLayer=window.dataLayer||[]; window.gtag=function(){dataLayer.push(arguments);}; gtag('js', new Date()); gtag('config','G-5TTGG45RS7'); } }catch(e){}
     this.loadCJK();
     const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');ro.unobserve(x.target)}})},{threshold:.1,rootMargin:'0px 0px -8% 0px'});
     document.querySelectorAll('.reveal:not(.visible)').forEach(el=>ro.observe(el));
@@ -350,8 +352,8 @@ const BA = {
         <div class="ft-g">
           <div class="ft-brand"><h3><span>Oz</span>Bookings</h3><p>Compare hotel prices across Australia and book direct. Members save even more.</p></div>
           <div class="ft-col"><h4>Destinations</h4><a href="/hotels-in-sydney">Sydney</a><a href="/hotels-in-melbourne">Melbourne</a><a href="/hotels-in-gold-coast">Gold Coast</a><a href="/hotels-in-cairns">Cairns</a><a href="/hotels-in-brisbane">Brisbane</a><a href="/hotels-in-perth">Perth</a><a href="/hotels-in-adelaide">Adelaide</a><a href="/hotels-in-hobart">Hobart</a></div>
-          <div class="ft-col"><h4>Company</h4><a href="about.html">About us</a><a href="index.html#how-it-works">How it works</a><a href="index.html#value">Why book direct</a><a href="contact.html">Contact</a></div>
-          <div class="ft-col"><h4>${this.t('Support','支持')}</h4><a href="help.html">${this.t('Help centre','帮助中心')}</a><a href="terms.html#cancellation">${this.t('Cancellation policy','取消政策')}</a><a href="privacy.html">${this.t('Privacy policy','隐私政策')}</a><a href="contact.html">${this.t('Contact','联系我们')}</a></div>
+          <div class="ft-col"><h4>Company</h4><a href="about.html">About us</a><a href="index.html#how-it-works">How it works</a><a href="index.html#value">Why book direct</a><a href="/book-direct-vs-booking-sites">Book direct vs OTAs</a><a href="/how-to-avoid-hotel-booking-fees-australia">Avoid booking fees</a><a href="contact.html">Contact</a></div>
+          <div class="ft-col"><h4>${this.t('Support','支持')}</h4><a href="help.html">${this.t('Help centre','帮助中心')}</a><a href="/free-cancellation-hotels-australia">${this.t('Free cancellation','免费取消')}</a><a href="terms.html#cancellation">${this.t('Cancellation policy','取消政策')}</a><a href="privacy.html">${this.t('Privacy policy','隐私政策')}</a><a href="contact.html">${this.t('Contact','联系我们')}</a></div>
         </div>
         <div class="ft-bot"><span>&copy; 2026 OzBookings</span><span>Rates powered by LiteAPI</span></div>
       </div>
