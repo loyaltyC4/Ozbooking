@@ -4,7 +4,11 @@
     { "source": "/hotels-in-:city", "destination": "/hotels-in-:city.html" },
     { "source": "/how-to-avoid-hotel-booking-fees-australia", "destination": "/how-to-avoid-hotel-booking-fees-australia.html" },
     { "source": "/book-direct-vs-booking-sites", "destination": "/book-direct-vs-booking-sites.html" },
-    { "source": "/free-cancellation-hotels-australia", "destination": "/free-cancellation-hotels-australia.html" }
+    { "source": "/free-cancellation-hotels-australia", "destination": "/free-cancellation-hotels-australia.html" },
+    { "source": "/luxury-hotels-sydney", "destination": "/luxury-hotels-sydney.html" },
+    { "source": "/boutique-hotels-sydney", "destination": "/boutique-hotels-sydney.html" },
+    { "source": "/cheap-hotels-sydney", "destination": "/cheap-hotels-sydney.html" },
+    { "source": "/hotels-near-sydney-airport", "destination": "/hotels-near-sydney-airport.html" }
   ],
   "headers": [
     {

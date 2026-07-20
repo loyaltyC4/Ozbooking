@@ -306,13 +306,35 @@ const BA = {
   closeOffer(){ const m=document.getElementById('offerModal'); if(m){ m.classList.remove('show'); setTimeout(()=>{ try{m.remove();}catch(e){} },500); } try{ sessionStorage.setItem('ba_offer_dismissed','1'); }catch(e){} },
   claimOffer(){ try{ localStorage.setItem('ba_offer_seen','1'); }catch(e){} this.closeOffer(); this.openAuth('signup'); },
 
+  // ---- cookie consent (POPIA/GDPR): gate analytics cookies behind explicit consent ----
+  consentState(){ try{ return localStorage.getItem('ba_consent') || ''; }catch(e){ return ''; } },
+  loadGA4(){ try{ if(window.__ga4) return; window.__ga4=1; var gj=document.createElement('script'); gj.async=true; gj.src='https://www.googletagmanager.com/gtag/js?id=G-5TTGG45RS7'; document.head.appendChild(gj); window.dataLayer=window.dataLayer||[]; window.gtag=function(){dataLayer.push(arguments);}; gtag('js', new Date()); gtag('config','G-5TTGG45RS7'); }catch(e){} },
+  setConsent(v){ try{ localStorage.setItem('ba_consent', v); }catch(e){} var b=document.getElementById('cookieBanner'); if(b){ b.classList.remove('show'); setTimeout(function(){ try{ b.remove(); }catch(e){} }, 400); } if(v==='granted') BA.loadGA4(); },
+  openCookieSettings(){ try{ localStorage.removeItem('ba_consent'); }catch(e){} var b=document.getElementById('cookieBanner'); if(b){ try{ b.remove(); }catch(e){} } BA.cookieConsent(); },
+  cookieConsent(){
+    if(this.consentState()) return;
+    if(document.getElementById('cookieBanner')) return;
+    if(!document.getElementById('cookieBannerCss')){
+      var st=document.createElement('style'); st.id='cookieBannerCss';
+      st.textContent='.cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;z-index:400;background:#14171A;color:#fff;border-radius:16px;box-shadow:0 20px 60px -20px rgba(0,0,0,.55);opacity:0;transform:translateY(20px);transition:opacity .35s,transform .35s;max-width:760px;margin:0 auto}.cookie-banner.show{opacity:1;transform:none}.cookie-banner .cb-in{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:18px 22px}.cookie-banner .cb-txt{flex:1;min-width:240px}.cookie-banner .cb-txt strong{font-family:var(--display);font-size:15px}.cookie-banner .cb-txt p{color:rgba(255,255,255,.8);font-size:13px;margin-top:4px;line-height:1.5}.cookie-banner .cb-txt a{color:#fff;text-decoration:underline}.cookie-banner .cb-act{display:flex;gap:10px;flex-shrink:0}.cookie-banner .cb-btn{font-weight:600;font-size:14px;padding:11px 20px;border-radius:999px;cursor:pointer;border:none;font-family:inherit}.cookie-banner .cb-decline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3)}.cookie-banner .cb-accept{background:var(--ac,#E4572E);color:#fff}@media(max-width:560px){.cookie-banner .cb-act{width:100%}.cookie-banner .cb-btn{flex:1}}';
+      document.head.appendChild(st);
+    }
+    var d=document.createElement('div'); d.id='cookieBanner'; d.className='cookie-banner';
+    d.innerHTML='<div class="cb-in"><div class="cb-txt"><strong>We value your privacy</strong><p>We use essential cookies to run OzBookings and, with your consent, analytics cookies to see how the site is used. See our <a href="/privacy.html">Privacy Policy</a>.</p></div><div class="cb-act"><button class="cb-btn cb-decline" id="cbDecline">Decline</button><button class="cb-btn cb-accept" id="cbAccept">Accept all</button></div></div>';
+    document.body.appendChild(d);
+    document.getElementById('cbAccept').addEventListener('click', function(){ BA.setConsent('granted'); });
+    document.getElementById('cbDecline').addEventListener('click', function(){ BA.setConsent('denied'); });
+    requestAnimationFrame(function(){ d.classList.add('show'); });
+  },
+
   // ---- common init ----
   init(){
     try{ document.documentElement.lang = this.lang==='zh' ? 'zh-CN' : 'en'; }catch(e){}
     // Vercel Web Analytics + Speed Insights (same-origin proxied scripts; injected once)
     try{ ['/_vercel/insights/script.js','/_vercel/speed-insights/script.js'].forEach(src=>{ if(document.querySelector('script[data-va="'+src+'"]')) return; const s=document.createElement('script'); s.defer=true; s.src=src; s.setAttribute('data-va',src); document.head.appendChild(s); }); }catch(e){}
-    // Google Analytics 4 (gtag) - injected once, on every page
-    try{ if(!window.__ga4){ window.__ga4=1; var gj=document.createElement('script'); gj.async=true; gj.src='https://www.googletagmanager.com/gtag/js?id=G-5TTGG45RS7'; document.head.appendChild(gj); window.dataLayer=window.dataLayer||[]; window.gtag=function(){dataLayer.push(arguments);}; gtag('js', new Date()); gtag('config','G-5TTGG45RS7'); } }catch(e){}
+    // Google Analytics 4 (gtag) - ONLY after cookie consent (POPIA/GDPR). Loader + banner live in BA below.
+    try{ if(BA.consentState()==='granted') BA.loadGA4(); }catch(e){}
+    try{ BA.cookieConsent(); }catch(e){}
     this.loadCJK();
     const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');ro.unobserve(x.target)}})},{threshold:.1,rootMargin:'0px 0px -8% 0px'});
     document.querySelectorAll('.reveal:not(.visible)').forEach(el=>ro.observe(el));
@@ -353,7 +375,7 @@ const BA = {
           <div class="ft-brand"><h3><span>Oz</span>Bookings</h3><p>Compare hotel prices across Australia and book direct. Members save even more.</p><div class="ft-social" style="display:flex;gap:12px;margin-top:18px"><a href="https://www.instagram.com/ozbookings/" target="_blank" rel="noopener noreferrer" aria-label="OzBookings on Instagram" style="width:40px;height:40px;border:1px solid var(--bd);border-radius:50%;display:grid;place-items:center;color:var(--tx2);font-size:19px;text-decoration:none"><i class="ph ph-instagram-logo"></i></a><a href="https://www.tiktok.com/@ozbookings" target="_blank" rel="noopener noreferrer" aria-label="OzBookings on TikTok" style="width:40px;height:40px;border:1px solid var(--bd);border-radius:50%;display:grid;place-items:center;color:var(--tx2);font-size:19px;text-decoration:none"><i class="ph ph-tiktok-logo"></i></a></div></div>
           <div class="ft-col"><h4>Destinations</h4><a href="/hotels-in-sydney">Sydney</a><a href="/hotels-in-melbourne">Melbourne</a><a href="/hotels-in-gold-coast">Gold Coast</a><a href="/hotels-in-cairns">Cairns</a><a href="/hotels-in-brisbane">Brisbane</a><a href="/hotels-in-perth">Perth</a><a href="/hotels-in-adelaide">Adelaide</a><a href="/hotels-in-hobart">Hobart</a></div>
           <div class="ft-col"><h4>Company</h4><a href="about.html">About us</a><a href="index.html#how-it-works">How it works</a><a href="index.html#value">Why book direct</a><a href="/book-direct-vs-booking-sites">Book direct vs OTAs</a><a href="/how-to-avoid-hotel-booking-fees-australia">Avoid booking fees</a><a href="contact.html">Contact</a></div>
-          <div class="ft-col"><h4>${this.t('Support','支持')}</h4><a href="help.html">${this.t('Help centre','帮助中心')}</a><a href="/free-cancellation-hotels-australia">${this.t('Free cancellation','免费取消')}</a><a href="terms.html#cancellation">${this.t('Cancellation policy','取消政策')}</a><a href="privacy.html">${this.t('Privacy policy','隐私政策')}</a><a href="contact.html">${this.t('Contact','联系我们')}</a></div>
+          <div class="ft-col"><h4>${this.t('Support','支持')}</h4><a href="help.html">${this.t('Help centre','帮助中心')}</a><a href="/free-cancellation-hotels-australia">${this.t('Free cancellation','免费取消')}</a><a href="terms.html#cancellation">${this.t('Cancellation policy','取消政策')}</a><a href="privacy.html">${this.t('Privacy policy','隐私政策')}</a><a href="#" onclick="BA.openCookieSettings();return false">${this.t('Cookie preferences','Cookie 设置')}</a><a href="contact.html">${this.t('Contact','联系我们')}</a></div>
         </div>
         <div class="ft-bot"><span>&copy; 2026 OzBookings</span><span>Rates powered by LiteAPI</span></div>
       </div>

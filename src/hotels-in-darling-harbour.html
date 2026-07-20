@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotels in Darling Harbour - Book Direct | OzBookings</title>
+<meta name="description" content="Book Darling Harbour hotels direct, in AUD. Family attractions and waterfront dining on your doorstep, free cancellation on most stays.">
+<link rel="canonical" href="https://ozbookings.com/hotels-in-darling-harbour">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="stylesheet" href="styles.css?v=20260703b">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="icon" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OzBookings">
+<meta property="og:url" content="https://ozbookings.com/hotels-in-darling-harbour">
+<meta property="og:title" content="Hotels in Darling Harbour - OzBookings">
+<meta property="og:description" content="Book Darling Harbour hotels direct, in AUD. Family attractions and waterfront dining on your doorstep, free cancellation on most stays.">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg/1280px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hotels in Darling Harbour - OzBookings">
+<meta name="twitter:description" content="Book Darling Harbour hotels direct, in AUD. Family attractions and waterfront dining on your doorstep, free cancellation on most stays.">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg/1280px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg">
+<meta name="theme-color" content="#14171A">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","@id":"https://ozbookings.com/hotels-in-darling-harbour#bc","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://ozbookings.com/"},{"@type":"ListItem","position":2,"name":"Hotels in Sydney","item":"https://ozbookings.com/hotels-in-sydney"},{"@type":"ListItem","position":3,"name":"Hotels in Darling Harbour","item":"https://ozbookings.com/hotels-in-darling-harbour"}]},{"@type":"CollectionPage","@id":"https://ozbookings.com/hotels-in-darling-harbour#page","url":"https://ozbookings.com/hotels-in-darling-harbour","name":"Hotels in Darling Harbour - Book Direct | OzBookings","description":"Book Darling Harbour hotels direct, in AUD. Family attractions and waterfront dining on your doorstep, free cancellation on most stays.","isPartOf":{"@id":"https://ozbookings.com/#website"},"about":{"@type":"City","name":"Sydney, Australia"},"breadcrumb":{"@id":"https://ozbookings.com/hotels-in-darling-harbour#bc"},"inLanguage":"en-AU","primaryImageOfPage":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg/1280px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg"},{"@type":"FAQPage","@id":"https://ozbookings.com/hotels-in-darling-harbour#faq","mainEntity":[{"@type":"Question","name":"Is Darling Harbour good for families?","acceptedAnswer":{"@type":"Answer","text":"Very. The aquarium, WILD LIFE zoo, maritime museum and Tumbalong Park playground are all walkable, with plenty of casual waterfront dining."}},{"@type":"Question","name":"How far is Darling Harbour from the CBD?","acceptedAnswer":{"@type":"Answer","text":"It is on the western edge of the CBD, a short walk to Town Hall and Chinatown, and a light-rail or ferry ride to Circular Quay."}},{"@type":"Question","name":"Are Darling Harbour hotels expensive?","acceptedAnswer":{"@type":"Answer","text":"They span mid-range to upmarket. OzBookings shows the direct rate next to the typical price so you can compare value, with no hidden booking fees."}},{"@type":"Question","name":"Do these hotels offer free cancellation?","acceptedAnswer":{"@type":"Answer","text":"Most rooms do. Check the refundable label and deadline before you pay."}}]}]}</script>
+<style>
+  .cityhero{position:relative;min-height:56vh;display:flex;align-items:flex-end;color:#fff;padding:0 0 44px;margin-bottom:8px}
+  .cityhero .bg{position:absolute;inset:0;overflow:hidden}
+  .cityhero .bg img{width:100%;height:100%;object-fit:cover}
+  .cityhero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,18,.25) 0%,rgba(10,13,18,.82) 92%)}
+  .cityhero .inner{position:relative;z-index:2}
+  .crumb{font-size:13px;color:rgba(255,255,255,.82);margin-bottom:14px}
+  .crumb a{color:rgba(255,255,255,.82);text-decoration:none}
+  .cityhero h1{font-family:var(--display,'Space Grotesk',sans-serif);font-weight:700;font-size:clamp(34px,6vw,60px);line-height:1.03;letter-spacing:-.02em;margin:0 0 14px}
+  .cityhero p.lead{font-size:clamp(16px,2vw,20px);max-width:60ch;color:rgba(255,255,255,.92);margin:0 0 22px}
+  .sec{padding:44px 0}
+  .sec h2{font-family:var(--display,'Space Grotesk',sans-serif);font-weight:700;font-size:clamp(24px,3.4vw,36px);letter-spacing:-.01em;margin:0 0 8px}
+  .sec .sub{color:var(--tx3,#697079);margin:0 0 26px;max-width:70ch}
+  .prose p{color:var(--tx2,#3a4048);max-width:74ch;font-size:16.5px;line-height:1.7;margin:0 0 14px}
+  .areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .area{background:var(--bg-el,#fff);border:1px solid var(--bd,#e5e2db);border-radius:14px;padding:18px 20px}
+  .area h3{font-family:var(--display,'Space Grotesk',sans-serif);font-size:17px;margin:0 0 6px}
+  .area p{color:var(--tx2,#3a4048);font-size:14.5px;margin:0;line-height:1.55}
+  .rates{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:8px}
+  .cc{display:block;background:var(--bg-el,#fff);border:1px solid var(--bd,#e5e2db);border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .2s,box-shadow .2s}
+  .cc:hover{transform:translateY(-3px);box-shadow:0 18px 40px -24px rgba(20,23,26,.5)}
+  .cc-img{position:relative;aspect-ratio:16/11;background:var(--bg-sub,#f0efeb)}
+  .cc-img img{width:100%;height:100%;object-fit:cover}
+  .cc-rate{position:absolute;top:12px;right:12px;background:#14171A;color:#fff;font-weight:700;font-size:13px;padding:3px 8px;border-radius:8px}
+  .cc-b{padding:15px 17px}
+  .cc-b h3{font-family:var(--display,'Space Grotesk',sans-serif);font-size:16.5px;margin:0 0 4px}
+  .cc-loc{color:var(--tx3,#697079);font-size:13px;margin:0 0 12px}
+  .cc-pr{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .cc-pr .po{color:var(--tx3,#697079);text-decoration:line-through;font-size:13px}
+  .cc-pr .pn{font-family:var(--display,'Space Grotesk',sans-serif);font-weight:700;font-size:19px}
+  .cc-pr .pn small{font-weight:500;font-size:12px;color:var(--tx3,#697079)}
+  .cc-pr .sv{margin-left:auto;background:#FDEDE7;color:#B23F1C;font-weight:700;font-size:12px;padding:3px 8px;border-radius:999px}
+  .muted{color:var(--tx3,#697079)}
+  .band{background:var(--bg-sub,#f5f4f1);border-radius:20px;padding:34px 30px;margin:8px 0}
+  .why{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;margin-top:18px}
+  .why h3{font-family:var(--display,'Space Grotesk',sans-serif);font-size:17px;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+  .why p{color:var(--tx2,#3a4048);font-size:14.5px;margin:0;line-height:1.55}
+  .why i{color:var(--ac,#E4572E)}
+  .faq{border:1px solid var(--bd,#e5e2db);border-radius:12px;padding:2px 18px;margin-bottom:12px;background:var(--bg-el,#fff)}
+  .faq summary{cursor:pointer;font-weight:600;font-family:var(--display,'Space Grotesk',sans-serif);font-size:16px;padding:16px 0;list-style:none}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";float:right;color:var(--ac,#E4572E);font-weight:700}
+  .faq[open] summary::after{content:"-"}
+  .faq-a p{color:var(--tx2,#3a4048);margin:0 0 16px;line-height:1.6}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .pill{display:inline-block;padding:9px 16px;border:1px solid var(--bd,#e5e2db);border-radius:999px;text-decoration:none;color:var(--tx,#14171A);font-weight:600;font-size:14px;background:var(--bg-el,#fff)}
+  .pill:hover{border-color:var(--ac,#E4572E);color:var(--ac-ink,#B23F1C)}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body>
+<div id="nav-mount"></div>
+
+<header class="cityhero">
+  <div class="bg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg/1280px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg" alt="Hotels in Darling Harbour, Australia"></div>
+  <div class="inner wrap">
+    <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/hotels-in-sydney">Sydney</a> &rsaquo; Hotels in Darling Harbour</nav>
+    <h1>Hotels in Darling Harbour</h1>
+    <p class="lead">Waterfront hotels by the aquarium, convention centre and family attractions.</p>
+    <div class="cta-row">
+      <a class="btn btn-coral" id="cityCta" href="search.html?city=Sydney"><span>Search live rates</span><span class="btn-i"><i class="ph-bold ph-magnifying-glass"></i></span></a>
+      <span style="color:rgba(255,255,255,.85);font-size:14px"><i class="ph-bold ph-check"></i> Free cancellation on most stays</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="sec prose">
+    <p>Darling Harbour is Sydney's waterfront playground: the aquarium, the WILD LIFE zoo, the maritime museum, the ICC convention centre and rows of waterfront restaurants, all walkable and a short stroll from the CBD and Chinatown. It is a favourite for families and conference-goers. Book direct through OzBookings, in Australian dollars, with the direct rate shown next to the typical price and free cancellation on most stays.</p>
+      <p>Hotels range from high-rise towers with harbour views to modern apartments around Cockle Bay, Pyrmont and Tumbalong Park.</p>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <h2>Featured stays</h2>
+    <p class="sub">Live rates, updated in real time. Your direct price is shown next to the hotel's typical selling price, not a quote from any third-party site.</p>
+    <div class="rates" id="liveRates"><p class="muted">Loading live rates...</p></div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <h2>Where to stay</h2>
+    <p class="sub">Popular areas to help you choose the right base.</p>
+    <div class="areas">
+        <div class="area"><h3>Cockle Bay &amp; Tumbalong</h3><p>Central to the restaurants, aquarium and Tumbalong Park.</p></div>
+        <div class="area"><h3>Pyrmont</h3><p>Apartments and hotels near The Star and the fish market.</p></div>
+        <div class="area"><h3>ICC &amp; Convention</h3><p>Best for conference-goers, steps from the centre.</p></div>
+        <div class="area"><h3>CBD edge</h3><p>Towers a short walk from both Darling Harbour and Town Hall.</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="band">
+      <h2>Tired of surprise booking fees?</h2>
+      <p class="sub" style="margin-bottom:0">The big booking sites often add a markup and drip fees at the end. OzBookings shows you the direct rate up front, next to the hotel's typical selling price, so you can see exactly what you would save, with no hidden booking fees and free cancellation on most stays.</p>
+      <div class="why">
+        <div><h3><i class="ph-fill ph-scales"></i> Transparent pricing</h3><p>Every room shows the direct rate beside the typical price. No inflated "was" prices.</p></div>
+        <div><h3><i class="ph-fill ph-shield-check"></i> Free cancellation</h3><p>Most stays can be cancelled free up to the deadline shown before you pay.</p></div>
+        <div><h3><i class="ph-fill ph-tag"></i> Member rates</h3><p>Create a free account and sign in to unlock lower, member-only rates on eligible stays.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <h2>Hotels in Darling Harbour: frequently asked questions</h2>
+    <div style="max-width:800px">
+        <details class="faq"><summary>Is Darling Harbour good for families?</summary><div class="faq-a"><p>Very. The aquarium, WILD LIFE zoo, maritime museum and Tumbalong Park playground are all walkable, with plenty of casual waterfront dining.</p></div></details>
+        <details class="faq"><summary>How far is Darling Harbour from the CBD?</summary><div class="faq-a"><p>It is on the western edge of the CBD, a short walk to Town Hall and Chinatown, and a light-rail or ferry ride to Circular Quay.</p></div></details>
+        <details class="faq"><summary>Are Darling Harbour hotels expensive?</summary><div class="faq-a"><p>They span mid-range to upmarket. OzBookings shows the direct rate next to the typical price so you can compare value, with no hidden booking fees.</p></div></details>
+        <details class="faq"><summary>Do these hotels offer free cancellation?</summary><div class="faq-a"><p>Most rooms do. Check the refundable label and deadline before you pay.</p></div></details>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <h2>More Sydney stays by area &amp; style</h2>
+    <div class="pills">
+        <a class="pill" href="/hotels-in-sydney-cbd">Hotels in Sydney CBD</a>
+        <a class="pill" href="/luxury-hotels-sydney">Luxury hotels in Sydney</a>
+        <a class="pill" href="/boutique-hotels-sydney">Boutique hotels in Sydney</a>
+        <a class="pill" href="/cheap-hotels-sydney">Cheap hotels in Sydney</a>
+        <a class="pill" href="/hotels-near-sydney-airport">Hotels near Sydney Airport</a>
+        <a class="pill" href="/hotels-in-parramatta">Hotels in Parramatta</a>
+        <a class="pill" href="/hotels-in-sydney">All Sydney hotels</a>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <h2>Explore other Australian cities</h2>
+    <div class="pills">
+        <a class="pill" href="/hotels-in-sydney">Sydney</a>
+        <a class="pill" href="/hotels-in-melbourne">Melbourne</a>
+        <a class="pill" href="/hotels-in-gold-coast">Gold Coast</a>
+        <a class="pill" href="/hotels-in-brisbane">Brisbane</a>
+        <a class="pill" href="/hotels-in-cairns">Cairns</a>
+        <a class="pill" href="/hotels-in-perth">Perth</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="shared.js?v=20260703b"></script>
+<script>
+  document.getElementById('nav-mount').innerHTML = BA.renderNav('search');
+  document.getElementById('footer-mount').innerHTML = BA.renderFooter();
+  BA.init();
+  var CITY="Sydney", FB="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80";
+  var ci=BA.defaultCheckin(), co=BA.defaultCheckout(), nights=BA.nightsBetween(ci,co)||1;
+  document.getElementById('cityCta').href='search.html?city='+encodeURIComponent(CITY)+'&ci='+ci+'&co='+co+'&gu=2';
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function card(h){
+    var per=h.retail?Math.round(h.retail/nights):null;
+    var typ=(h.suggested&&h.suggested>h.retail)?Math.round(h.suggested/nights):null;
+    var sv=(h.retail&&h.suggested&&h.suggested>h.retail)?Math.round((1-h.retail/h.suggested)*100):null;
+    var href='/hotel/'+encodeURIComponent(h.hotelId);
+    return '<a class="cc" href="'+href+'">'+
+      '<div class="cc-img"><img loading="lazy" alt="'+esc(h.hotelName)+'" src="'+(h.mainPhoto||FB)+'" onerror="this.src=FB">'+(h.rating?'<span class="cc-rate">'+h.rating+'</span>':'')+'</div>'+
+      '<div class="cc-b"><h3>'+esc(h.hotelName)+'</h3><p class="cc-loc">'+esc(h.address||CITY)+'</p>'+
+      '<div class="cc-pr">'+(typ?'<span class="po">A$'+typ.toLocaleString()+' typical</span>':'')+(per?'<span class="pn">A$'+per.toLocaleString()+'<small>/night</small></span>':'<span class="pn">Check rates</span>')+(sv?'<span class="sv">Save '+sv+'%</span>':'')+'</div></div></a>';
+  }
+  (async function(){
+    var el=document.getElementById('liveRates');
+    try{
+      var hotels=await BA.searchHotels({city:CITY,checkin:ci,checkout:co,guests:2});
+      if(hotels&&hotels.length){ el.innerHTML=hotels.slice(0,6).map(card).join(''); }
+      else{ el.innerHTML='<p class="muted">Live rates load when you search. <a href="'+document.getElementById('cityCta').href+'">See all '+esc(CITY)+' stays</a></p>'; }
+    }catch(e){ el.innerHTML='<p class="muted"><a href="'+document.getElementById('cityCta').href+'">See all '+esc(CITY)+' stays</a></p>'; }
+  })();
+</script>
+</body>
+</html>

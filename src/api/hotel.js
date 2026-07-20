@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'private, no-store, max-age=0');
   res.setHeader('Vary', 'Authorization');
 
-  const { hotelId, checkin, checkout, guests = '2' } = req.query || {};
+  const { hotelId, checkin, checkout, guests = '2', currency = 'AUD', nat = 'AU' } = req.query || {};
   if (!hotelId) return res.status(400).json({ error: 'hotelId required' });
   if (!hasKey) return res.status(200).json({ hotel: null, rooms: [], member: false, source: 'no_key' });
 
@@ -68,7 +68,7 @@ module.exports = async (req, res) => {
   let rooms = [];
   if (checkin && checkout) {
     const body = {
-      checkin, checkout, currency: 'AUD', guestNationality: 'AU',
+      checkin, checkout, currency, guestNationality: nat,
       hotelIds: [hotelId],
       occupancies: [{ adults: Math.max(1, parseInt(guests, 10) || 2) }],
       timeout: 10, margin

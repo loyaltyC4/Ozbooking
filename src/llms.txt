@@ -26,6 +26,16 @@ OzBookings covers Australia's major destinations: Sydney, Melbourne, Gold Coast,
 - [Book direct vs Booking.com, Expedia & Agoda](https://ozbookings.com/book-direct-vs-booking-sites)
 - [Hotels with free cancellation in Australia](https://ozbookings.com/free-cancellation-hotels-australia)
 
+
+## Sydney hotels by area & style
+- [Hotels in Sydney CBD](https://ozbookings.com/hotels-in-sydney-cbd)
+- [Luxury hotels in Sydney](https://ozbookings.com/luxury-hotels-sydney)
+- [Boutique hotels in Sydney](https://ozbookings.com/boutique-hotels-sydney)
+- [Cheap hotels in Sydney](https://ozbookings.com/cheap-hotels-sydney)
+- [Hotels near Sydney Airport](https://ozbookings.com/hotels-near-sydney-airport)
+- [Hotels in Parramatta](https://ozbookings.com/hotels-in-parramatta)
+- [Hotels in Darling Harbour](https://ozbookings.com/hotels-in-darling-harbour)
+
 ## Key pages
 - [Home](https://ozbookings.com/): search hotels and experiences across Australia
 - [Experiences & tours](https://ozbookings.com/experiences.html)
